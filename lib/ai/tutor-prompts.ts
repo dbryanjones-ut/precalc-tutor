@@ -565,11 +565,14 @@ export function generateFewShotPrompt(
     ? RESPONSE_EXAMPLES.socratic
     : RESPONSE_EXAMPLES.explanation;
 
+  const getPromptText = (example: typeof examples.good | typeof examples.bad) =>
+    'student' in example ? example.student : example.question;
+
   const exampleText = `
 # RESPONSE QUALITY EXAMPLES
 
 ## Good Response Example:
-Student/Question: ${examples.good.student || examples.good.question}
+Student/Question: ${getPromptText(examples.good)}
 
 Your Response Should Be Like:
 ${examples.good.tutor}
@@ -577,7 +580,7 @@ ${examples.good.tutor}
 Why This Is Good: ${examples.good.reasoning}
 
 ## Bad Response Example (DO NOT DO THIS):
-Student/Question: ${examples.bad.student || examples.bad.question}
+Student/Question: ${getPromptText(examples.bad)}
 
 Bad Response:
 ${examples.bad.tutor}

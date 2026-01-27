@@ -96,7 +96,7 @@ export class EnhancedResponseValidator {
     }
 
     // Pattern: Specific formulas in LaTeX
-    const latexPattern = /\\[(\\(.*?\\)|[^\]]+)\\]/g;
+    const latexPattern = /\\\[(\\\(.*?\\\)|[^\]]+)\\\]/g;
     while ((match = latexPattern.exec(content)) !== null) {
       // Check if this looks like a named formula
       const prevText = content.substring(
@@ -189,7 +189,7 @@ export class EnhancedResponseValidator {
         if (claimLower.includes(notationLower) || claim.context.includes(entry.notation)) {
           // Check if meaning aligns
           const meaningWords = entry.meaning.toLowerCase().split(/\s+/);
-          const matchingWords = meaningWords.filter((word) =>
+          const matchingWords = meaningWords.filter((word: string) =>
             claimLower.includes(word)
           );
 

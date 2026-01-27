@@ -119,9 +119,10 @@ describe("AIResponseValidator", () => {
         content: "By the Pythagorean theorem, a^2 + b^2 = c^2.",
         citations: [
           {
-            source: "Pythagorean Theorem",
-            url: "https://example.com",
-            relevance: "high",
+            type: "reference",
+            title: "Pythagorean Theorem",
+            content: "In a right triangle, a^2 + b^2 = c^2",
+            link: "https://example.com",
           },
         ],
       });

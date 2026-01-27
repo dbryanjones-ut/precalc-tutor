@@ -302,9 +302,6 @@ export async function POST(request: NextRequest) {
       id: sessionId,
       timestamp: now,
       lastUpdated: now,
-      completed: false,
-      hintsGiven: 0,
-      tags: [],
       ...validatedData,
     };
 
