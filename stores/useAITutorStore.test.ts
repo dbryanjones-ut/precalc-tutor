@@ -458,9 +458,12 @@ describe("useAITutorStore", () => {
     });
 
     it("should handle switching modes mid-session", () => {
-      const { startSession, setMode, currentSession } = useAITutorStore.getState();
+      const { startSession, setMode } = useAITutorStore.getState();
 
       startSession();
+
+      // Get currentSession after startSession is called
+      let currentSession = useAITutorStore.getState().currentSession;
       expect(currentSession?.mode).toBe("socratic");
 
       setMode("explanation");
