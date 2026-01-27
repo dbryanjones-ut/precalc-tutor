@@ -463,7 +463,7 @@ describe("useAITutorStore", () => {
       startSession();
 
       // Get currentSession after startSession is called
-      let currentSession = useAITutorStore.getState().currentSession;
+      const currentSession = useAITutorStore.getState().currentSession;
       expect(currentSession?.mode).toBe("socratic");
 
       setMode("explanation");

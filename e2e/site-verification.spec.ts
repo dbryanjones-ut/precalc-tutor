@@ -634,7 +634,7 @@ test.describe("Interactive Elements Tests", () => {
     // Check various pages for focus timer
     await page.goto("/");
 
-    let focusTimer = page.locator('text=/focus timer/i, [data-testid*="timer"]');
+    const focusTimer = page.locator('text=/focus timer/i, [data-testid*="timer"]');
     let hasTimer = await focusTimer.count() > 0;
 
     if (!hasTimer) {
