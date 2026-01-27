@@ -13,16 +13,21 @@ import { Button } from "@/components/ui/button";
 
 interface AngleData {
   degrees: number;
-  radians: number;
-  radiansDisplay: string;
+  radians: string;
+  radiansNumeric: number;
   x: number;
   y: number;
   sin: string;
   cos: string;
   tan: string;
+  csc: string;
+  sec: string;
+  cot: string;
+  familyColor: string;
   family: string;
   quadrant: number;
-  reference: number;
+  referenceAngle: string;
+  mnemonic: string;
 }
 
 interface UnitCircleVisualizerProps {
@@ -56,21 +61,21 @@ export function UnitCircleVisualizer({ className = "" }: UnitCircleVisualizerPro
   // Find closest standard angle or calculate custom values
   const displayAngle = useMemo(() => {
     const closest = angles.reduce((prev, curr) => {
-      const prevDiff = Math.abs(prev.radians - currentRadians);
-      const currDiff = Math.abs(curr.radians - currentRadians);
+      const prevDiff = Math.abs(prev.radiansNumeric - currentRadians);
+      const currDiff = Math.abs(curr.radiansNumeric - currentRadians);
       return currDiff < prevDiff ? curr : prev;
     });
 
     // If close enough to a standard angle, use it
-    if (Math.abs(closest.radians - currentRadians) < 0.05) {
+    if (Math.abs(closest.radiansNumeric - currentRadians) < 0.05) {
       return closest;
     }
 
     // Otherwise, calculate custom values
     return {
       degrees: (currentRadians * 180) / Math.PI,
-      radians: currentRadians,
-      radiansDisplay: `${currentRadians.toFixed(3)}`,
+      radians: `${currentRadians.toFixed(3)}`,
+      radiansNumeric: currentRadians,
       x: Math.cos(currentRadians),
       y: Math.sin(currentRadians),
       sin: Math.sin(currentRadians).toFixed(3),
@@ -79,9 +84,14 @@ export function UnitCircleVisualizer({ className = "" }: UnitCircleVisualizerPro
         Math.abs(Math.cos(currentRadians)) < 0.001
           ? "undefined"
           : (Math.sin(currentRadians) / Math.cos(currentRadians)).toFixed(3),
+      csc: Math.abs(Math.sin(currentRadians)) < 0.001 ? "undefined" : (1 / Math.sin(currentRadians)).toFixed(3),
+      sec: Math.abs(Math.cos(currentRadians)) < 0.001 ? "undefined" : (1 / Math.cos(currentRadians)).toFixed(3),
+      cot: Math.abs(Math.sin(currentRadians)) < 0.001 ? "undefined" : (Math.cos(currentRadians) / Math.sin(currentRadians)).toFixed(3),
+      familyColor: "special",
       family: "custom",
       quadrant: Math.floor((currentRadians % (2 * Math.PI)) / (Math.PI / 2)) + 1,
-      reference: 0,
+      referenceAngle: "0",
+      mnemonic: "",
     } as AngleData;
   }, [currentRadians, angles]);
 
@@ -212,9 +222,9 @@ export function UnitCircleVisualizer({ className = "" }: UnitCircleVisualizerPro
               {/* Standard angle markers */}
               {showAllAngles &&
                 angles.map((angle, idx) => {
-                  const point = getPoint(angle.radians);
-                  const color = FAMILY_COLORS[angle.family as keyof typeof FAMILY_COLORS] || FAMILY_COLORS.special;
-                  const isActive = activeAngle?.radians === angle.radians;
+                  const point = getPoint(angle.radiansNumeric);
+                  const color = FAMILY_COLORS[angle.familyColor as keyof typeof FAMILY_COLORS] || FAMILY_COLORS.special;
+                  const isActive = activeAngle?.radiansNumeric === angle.radiansNumeric;
 
                   return (
                     <g key={idx}>
@@ -345,7 +355,7 @@ export function UnitCircleVisualizer({ className = "" }: UnitCircleVisualizerPro
                   <div className="p-3 bg-muted rounded-lg">
                     <div className="text-sm text-muted-foreground mb-1">Radians</div>
                     <div className="text-2xl font-bold">
-                      {activeAngle.radiansDisplay}
+                      {activeAngle.radians}
                     </div>
                   </div>
 
@@ -391,7 +401,7 @@ export function UnitCircleVisualizer({ className = "" }: UnitCircleVisualizerPro
 
                   <div className="text-xs text-muted-foreground">
                     Quadrant {activeAngle.quadrant}
-                    {activeAngle.reference > 0 && ` • Reference: ${activeAngle.reference}°`}
+                    {activeAngle.referenceAngle !== "0" && ` • Reference: ${activeAngle.referenceAngle}`}
                   </div>
                 </div>
               </>

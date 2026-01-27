@@ -198,7 +198,7 @@ export async function POST(request: NextRequest) {
     // 3. Build context for AI
     const contextString = buildContext(
       validatedData.context?.extractedProblem,
-      validatedData.context?.messageHistory,
+      validatedData.context?.messageHistory as ChatMessage[] | undefined,
       validatedData.context?.referenceMaterials
     );
 

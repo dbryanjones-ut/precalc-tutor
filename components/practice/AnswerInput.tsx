@@ -248,7 +248,7 @@ export function AnswerInput({
           {/* Submit button */}
           <Button
             type="submit"
-            disabled={disabled || isValidating || !inputValue.trim() || (latexValidation && !latexValidation.valid)}
+            disabled={disabled || isValidating || !inputValue.trim() || Boolean(latexValidation && !latexValidation.valid)}
             className="w-full"
           >
             {isValidating ? (

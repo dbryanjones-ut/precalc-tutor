@@ -2,7 +2,7 @@ import { LatexValidator } from "@/lib/math/latex-validator";
 import { AnswerValidator } from "@/lib/math/answer-validator";
 import type { ChatMessage, Citation } from "@/types";
 
-interface AIResponseValidation {
+export interface AIResponseValidation {
   valid: boolean;
   errors: string[];
   warnings: string[];
@@ -16,14 +16,14 @@ interface AIResponseValidation {
   riskLevel: "low" | "medium" | "high";
 }
 
-interface MathematicalStep {
+export interface MathematicalStep {
   from: string;
   to: string;
   reason: string;
   valid?: boolean;
 }
 
-interface StepVerificationResult {
+export interface StepVerificationResult {
   valid: boolean;
   invalidSteps: number[];
   details: Array<{

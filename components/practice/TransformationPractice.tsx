@@ -18,7 +18,17 @@ interface TransformationParams {
   k: number; // Vertical shift
 }
 
-const FUNCTION_FAMILIES = {
+interface FunctionFamilyConfig {
+  name: string;
+  parent: string;
+  parentLatex: string;
+  transformed: (a: number, h: number, k: number) => string;
+  transformedLatex: (a: number, h: number, k: number) => string;
+  domain: string | ((h: number) => string);
+  range: (a: number, k: number) => string;
+}
+
+const FUNCTION_FAMILIES: Record<FunctionFamily, FunctionFamilyConfig> = {
   quadratic: {
     name: "Quadratic",
     parent: "f(x) = x^2",
@@ -84,6 +94,17 @@ const FUNCTION_FAMILIES = {
       `f(x) = ${a !== 1 ? a : ""} \\cdot 2^{x ${h >= 0 ? "-" : "+"} ${Math.abs(h)}} ${k >= 0 ? "+" : "-"} ${Math.abs(k)}`,
     domain: "(-\\infty, \\infty)",
     range: (a: number, k: number) => a > 0 ? `(${k}, \\infty)` : `(-\\infty, ${k})`,
+  },
+  log: {
+    name: "Logarithm",
+    parent: "f(x) = log₂(x)",
+    parentLatex: "f(x) = \\log_2(x)",
+    transformed: (a: number, h: number, k: number) =>
+      `f(x) = ${a !== 1 ? a : ""}log₂(x ${h >= 0 ? "-" : "+"} ${Math.abs(h)}) ${k >= 0 ? "+" : "-"} ${Math.abs(k)}`,
+    transformedLatex: (a: number, h: number, k: number) =>
+      `f(x) = ${a !== 1 ? a : ""}\\log_2(x ${h >= 0 ? "-" : "+"} ${Math.abs(h)}) ${k >= 0 ? "+" : "-"} ${Math.abs(k)}`,
+    domain: (h: number) => `(${h}, \\infty)`,
+    range: () => "(-\\infty, \\infty)",
   },
 };
 

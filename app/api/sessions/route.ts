@@ -33,9 +33,11 @@ const sessionStore = new Map<string, AITutoringSession>();
 /**
  * Filter and paginate sessions
  */
+type SessionFilter = Required<Pick<z.infer<typeof sessionFilterSchema>, 'page' | 'limit' | 'sortBy' | 'sortOrder'>> & Omit<z.infer<typeof sessionFilterSchema>, 'page' | 'limit' | 'sortBy' | 'sortOrder'>;
+
 function filterSessions(
   sessions: AITutoringSession[],
-  filter: z.infer<typeof sessionFilterSchema>
+  filter: SessionFilter
 ): {
   data: AITutoringSession[];
   total: number;
@@ -204,7 +206,8 @@ export async function GET(request: NextRequest) {
     const allSessions = Array.from(sessionStore.values());
 
     // 4. Apply filters and pagination
-    const result = filterSessions(allSessions, filter);
+    // Type assertion safe because schema defaults ensure required fields
+    const result = filterSessions(allSessions, filter as SessionFilter);
 
     // 5. Calculate statistics if requested
     const includeStats = searchParams.get("includeStats") === "true";
@@ -299,6 +302,9 @@ export async function POST(request: NextRequest) {
       id: sessionId,
       timestamp: now,
       lastUpdated: now,
+      completed: false,
+      hintsGiven: 0,
+      tags: [],
       ...validatedData,
     };
 

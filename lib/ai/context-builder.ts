@@ -72,7 +72,7 @@ export class ContextBuilder {
       const response = await fetch("/data/reference/notation-table.json");
       const data = await response.json();
       this.notationCache = data.notations || [];
-      return this.notationCache;
+      return this.notationCache!; // Non-null assertion since we just set it
     } catch (error) {
       console.error("Failed to load notation table:", error);
       return [];
