@@ -129,7 +129,7 @@ export function ChatInterface({ className = "" }: ChatInterfaceProps) {
             `}
           >
             <div className="prose prose-sm dark:prose-invert max-w-none">
-              {message.content.split("\n").map((line, i) => {
+              {(message.content || "").split("\n").map((line, i) => {
                 // Check if line contains math delimiters
                 const mathMatch = line.match(/\$(.*?)\$/g);
                 if (mathMatch) {
@@ -150,7 +150,7 @@ export function ChatInterface({ className = "" }: ChatInterfaceProps) {
             </div>
 
             {/* LaTeX expressions */}
-            {message.latex && message.latex.length > 0 && (
+            {message.latex && Array.isArray(message.latex) && message.latex.length > 0 && (
               <div className="mt-3 space-y-2">
                 {message.latex.map((latex, i) => (
                   <div key={i} className="p-3 rounded-lg bg-background/50 border border-border/50">
@@ -190,7 +190,7 @@ export function ChatInterface({ className = "" }: ChatInterfaceProps) {
                 )}
               </Button>
               <span className="text-xs text-muted-foreground">
-                {new Date(message.timestamp).toLocaleTimeString([], {
+                {message.timestamp && new Date(message.timestamp).toLocaleTimeString([], {
                   hour: "2-digit",
                   minute: "2-digit",
                 })}

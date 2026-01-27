@@ -97,7 +97,8 @@ export const useAITutorStore = create<AITutorStore>((set, get) => ({
         throw new Error("Failed to get response from AI tutor");
       }
 
-      const data = await response.json();
+      const responseData = await response.json();
+      const data = responseData.data; // API wraps response in { data: {...} }
 
       const assistantMessage: ChatMessage = {
         role: "assistant",
