@@ -221,9 +221,9 @@ export function ChatInterface({ className = "" }: ChatInterfaceProps) {
   }
 
   return (
-    <Card className={`${className} flex flex-col h-[600px]`}>
+    <Card className={`${className} flex flex-col`}>
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-border">
+      <div className="flex items-center justify-between p-4 border-b border-border flex-shrink-0">
         <div className="flex items-center gap-2">
           <Bot className="w-5 h-5 text-primary" />
           <h3 className="font-semibold">AI Tutor Chat</h3>
@@ -243,7 +243,7 @@ export function ChatInterface({ className = "" }: ChatInterfaceProps) {
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div className="flex-1 overflow-y-auto p-4 space-y-4 min-h-[400px] max-h-[600px]">
         {messages.length === 0 ? (
           <div className="flex items-center justify-center h-full text-center">
             <div className="space-y-3 max-w-md">
@@ -292,7 +292,7 @@ export function ChatInterface({ className = "" }: ChatInterfaceProps) {
       </div>
 
       {/* Input */}
-      <div className="p-4 border-t border-border">
+      <div className="p-4 border-t border-border flex-shrink-0 bg-background">
         <div className="flex gap-2">
           <textarea
             ref={inputRef}
@@ -300,7 +300,7 @@ export function ChatInterface({ className = "" }: ChatInterfaceProps) {
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Ask a question..."
-            className="flex-1 min-h-[44px] max-h-[120px] px-4 py-3 rounded-lg bg-background border border-input resize-none focus:outline-none focus:ring-2 focus:ring-ring"
+            className="flex-1 min-h-[44px] max-h-[88px] px-4 py-3 rounded-lg bg-background border border-input resize-none focus:outline-none focus:ring-2 focus:ring-ring overflow-y-auto"
             disabled={isLoading}
             aria-label="Chat message input"
             rows={1}
