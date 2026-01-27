@@ -11,11 +11,13 @@ import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAITutorStore } from "@/stores/useAITutorStore";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 import type { AITutoringSession } from "@/types";
 
 export default function AITutorPage() {
   const [activeTab, setActiveTab] = useState<"tutor" | "history">("tutor");
   const [showSettings, setShowSettings] = useState(false);
+  const [welcomeDismissed, setWelcomeDismissed] = useLocalStorage("ai-tutor-welcome-dismissed", false);
   const { currentSession, startSession } = useAITutorStore();
 
   // Save sessions to localStorage when they change
@@ -248,14 +250,14 @@ export default function AITutorPage() {
         )}
 
         {/* Welcome Modal (First Visit) */}
-        {!currentSession && activeTab === "tutor" && !localStorage.getItem("ai-tutor-welcome-dismissed") && (
-          <div className="fixed inset-0 z-40 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm" onClick={() => localStorage.setItem("ai-tutor-welcome-dismissed", "true")}>
+        {!currentSession && activeTab === "tutor" && !welcomeDismissed && (
+          <div className="fixed inset-0 z-40 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm" onClick={() => setWelcomeDismissed(true)}>
             <div className="max-w-md p-6 rounded-lg bg-card border border-border shadow-lg text-center" onClick={(e) => e.stopPropagation()}>
               <div className="flex justify-end mb-2">
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => localStorage.setItem("ai-tutor-welcome-dismissed", "true")}
+                  onClick={() => setWelcomeDismissed(true)}
                   aria-label="Dismiss welcome message"
                 >
                   ✕
@@ -284,7 +286,7 @@ export default function AITutorPage() {
                 </div>
               </div>
               <Button
-                onClick={() => localStorage.setItem("ai-tutor-welcome-dismissed", "true")}
+                onClick={() => setWelcomeDismissed(true)}
                 className="w-full"
               >
                 Get Started
