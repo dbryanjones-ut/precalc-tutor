@@ -18,7 +18,7 @@ export default function AITutorPage() {
   const [activeTab, setActiveTab] = useState<"tutor" | "history">("tutor");
   const [showSettings, setShowSettings] = useState(false);
   const [welcomeDismissed, setWelcomeDismissed] = useLocalStorage("ai-tutor-welcome-dismissed", false);
-  const { currentSession, startSession } = useAITutorStore();
+  const { currentSession, resumeSession } = useAITutorStore();
 
   // Save sessions to localStorage when they change
   useEffect(() => {
@@ -41,8 +41,8 @@ export default function AITutorPage() {
   }, [currentSession]);
 
   const handleResumeSession = (session: AITutoringSession) => {
-    // Restore session to store
-    startSession(session.uploadedImage, session.extractedProblem);
+    // Restore full session to store (including message history)
+    resumeSession(session);
     setActiveTab("tutor");
   };
 

@@ -9,6 +9,7 @@ interface AITutorStore {
 
   // Actions
   startSession: (uploadedImage?: string, extractedProblem?: string) => void;
+  resumeSession: (session: AITutoringSession) => void;
   sendMessage: (content: string) => Promise<void>;
   addAssistantMessage: (message: ChatMessage) => void;
   toggleMode: () => void;
@@ -44,6 +45,15 @@ export const useAITutorStore = create<AITutorStore>((set, get) => ({
     };
 
     set({ currentSession: newSession, error: null });
+  },
+
+  resumeSession: (session) => {
+    // Restore the full session including all message history
+    set({
+      currentSession: session,
+      mode: session.mode,
+      error: null
+    });
   },
 
   sendMessage: async (content: string) => {
