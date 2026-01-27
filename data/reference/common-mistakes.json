@@ -1,0 +1,624 @@
+{
+  "version": "2.0.0",
+  "lastUpdated": "2026-01-27",
+  "description": "Comprehensive common mistakes from AP Precalculus exam data - 50+ critical errors organized by unit and topic",
+  "purpose": "Proactive error prevention, targeted intervention, and self-verification for AI tutor responses",
+  "units": {
+    "unit1-functions": {
+      "name": "Unit 1: Polynomial and Rational Functions",
+      "mistakes": [
+        {
+          "id": "composition-order",
+          "mistake": "(f \\circ g)(x) = (g \\circ f)(x)",
+          "correct": "(f \\circ g)(x) = f(g(x)) \\neq (g \\circ f)(x) = g(f(x))",
+          "why": "Function composition is not commutative. Order matters critically - must apply inner function first.",
+          "frequency": "very-common",
+          "remedy": "Always work from inside out. Read f(g(x)) as 'f of g of x' - apply g first, then f to the result. Mnemonic: read composition right to left.",
+          "example": "If f(x) = x^2 and g(x) = x+1: (f \\circ g)(2) = f(g(2)) = f(3) = 9, but (g \\circ f)(2) = g(f(2)) = g(4) = 5",
+          "apUnit": 1,
+          "severity": "high"
+        },
+        {
+          "id": "inverse-reciprocal",
+          "mistake": "f^{-1}(x) = \\frac{1}{f(x)}",
+          "correct": "f^{-1}(x) \\text{ is the inverse function that undoes f, NOT the reciprocal } \\frac{1}{f(x)}",
+          "why": "The notation f^{-1} means inverse function (reverses the operation), not reciprocal. These are completely different concepts.",
+          "frequency": "very-common",
+          "remedy": "Remember: inverse function undoes the operation. If f doubles, f^{-1} halves. The reciprocal 1/f(x) should be written as [f(x)]^{-1}. To find inverse: swap x and y, then solve for y.",
+          "example": "If f(x) = 2x + 1, then f^{-1}(x) = \\frac{x-1}{2} (undoes the operation), NOT \\frac{1}{2x+1}. Verify: f(f^{-1}(5)) = f(2) = 5 \\checkmark",
+          "apUnit": 1,
+          "severity": "high"
+        },
+        {
+          "id": "function-distribution",
+          "mistake": "f(x+y) = f(x) + f(y) \\text{ or } f(2x) = 2f(x)",
+          "correct": "\\text{Generally } f(x+y) \\neq f(x) + f(y) \\text{ (only true for linear } f(x) = mx \\text{ with no constant)}",
+          "why": "Functions don't distribute over addition unless they are linear with zero y-intercept. Must substitute the entire input.",
+          "frequency": "very-common",
+          "remedy": "Substitute the entire input as one unit. f(2x) means replace every x with 2x in the formula. Only linear functions f(x)=mx distribute this way.",
+          "example": "If f(x) = x^2 + 1, then f(2x) = (2x)^2 + 1 = 4x^2 + 1 \\neq 2(x^2 + 1) = 2f(x). Test: f(4) = 17, but 2f(2) = 2(5) = 10 \\neq 17",
+          "apUnit": 1,
+          "severity": "high"
+        },
+        {
+          "id": "horizontal-shift-sign",
+          "mistake": "f(x-2) \\text{ shifts the graph LEFT 2 units}",
+          "correct": "f(x-2) \\text{ shifts the graph RIGHT 2 units (opposite of intuition)}",
+          "why": "Inside transformations work opposite: subtracting shifts right, adding shifts left. Think: to get the same output earlier, x must be larger.",
+          "frequency": "very-common",
+          "remedy": "Method 1: Set the inside equal to zero: x-2=0 gives x=2, so the origin moves to x=2 (right). Method 2: Think 'opposite day' for horizontal shifts.",
+          "example": "f(x-2) = (x-2)^2 has vertex at x=2 (2 units right), not x=-2. For f(x+3), vertex is at x=-3 (3 units left).",
+          "apUnit": 1,
+          "severity": "high"
+        },
+        {
+          "id": "vertical-horizontal-confusion",
+          "mistake": "\\text{Confusing vertical stretch with horizontal compression}",
+          "correct": "2f(x) \\text{ is vertical stretch by 2, } f(2x) \\text{ is horizontal compression by factor of 2}",
+          "why": "Multiplying output stretches vertically (makes taller); multiplying input compresses horizontally (makes narrower). Factors work opposite directions horizontally.",
+          "frequency": "common",
+          "remedy": "Outside the function affects y (vertical), inside affects x (horizontal). For horizontal: larger coefficient means narrower graph (opposite of vertical).",
+          "example": "f(2x) makes graph half as wide (compressed), not stretched. If f(x) = x^2, then f(2x) = 4x^2 is narrower.",
+          "apUnit": 1,
+          "severity": "high"
+        },
+        {
+          "id": "domain-after-composition",
+          "mistake": "\\text{Domain of } (f \\circ g)(x) \\text{ is just the domain of } f",
+          "correct": "\\text{Domain is all } x \\text{ where } g(x) \\text{ is defined AND } g(x) \\in \\text{domain of } f",
+          "why": "Must check both conditions: (1) g must accept x as input, and (2) f must accept g(x) as input.",
+          "frequency": "common",
+          "remedy": "Two-step check: (1) What x values can g handle? (2) For those x, does g(x) land in f's domain?",
+          "example": "If f(x) = \\sqrt{x} (domain [0,\\infty)) and g(x) = x-5, then domain of f(g(x)) is [5, \\infty), not [0, \\infty). Need x-5 \\geq 0.",
+          "apUnit": 1,
+          "severity": "medium"
+        },
+        {
+          "id": "even-odd-definition",
+          "mistake": "\\text{Even function means } f(2), f(4), f(6) \\text{ are defined}",
+          "correct": "\\text{Even function means } f(-x) = f(x) \\text{ for all x (y-axis symmetry)}",
+          "why": "Even/odd refers to symmetry properties, not which inputs work. It's about the algebraic relationship f(-x) vs f(x).",
+          "frequency": "common",
+          "remedy": "Test with negative inputs: if f(-x) = f(x) for all x → even (mirror across y-axis). If f(-x) = -f(x) → odd (rotate 180° around origin).",
+          "example": "f(x) = x^2 is even because f(-3) = 9 = f(3). f(x) = x^3 is odd because f(-2) = -8 = -f(2).",
+          "apUnit": 1,
+          "severity": "medium"
+        },
+        {
+          "id": "polynomial-zeros-multiplicity",
+          "mistake": "\\text{Zero of multiplicity 2 means graph crosses x-axis twice}",
+          "correct": "\\text{Even multiplicity: graph touches but doesn't cross. Odd multiplicity: graph crosses}",
+          "why": "Multiplicity describes behavior at one zero. Even = bounce off, odd = pass through.",
+          "frequency": "common",
+          "remedy": "Think of it like bouncing: even multiplicity bounces off x-axis without crossing. Odd multiplicity passes straight through.",
+          "example": "f(x) = (x-2)^2(x+1) has multiplicity 2 at x=2 (touches), multiplicity 1 at x=-1 (crosses).",
+          "apUnit": 1,
+          "severity": "medium"
+        },
+        {
+          "id": "rational-hole-vs-asymptote",
+          "mistake": "\\text{Cancelled factors in rational functions create vertical asymptotes}",
+          "correct": "\\text{Cancelled factors create holes. Non-cancelled zeros in denominator create asymptotes}",
+          "why": "Cancellation removes the discontinuity from simplified form, leaving only a hole (removable discontinuity).",
+          "frequency": "common",
+          "remedy": "Factor completely, then: (1) Cancel common factors → holes at those x-values. (2) Remaining zeros in denominator → vertical asymptotes.",
+          "example": "f(x) = \\frac{(x-2)(x+1)}{(x-2)(x-3)} = \\frac{x+1}{x-3} has hole at x=2, vertical asymptote at x=3.",
+          "apUnit": 1,
+          "severity": "high"
+        },
+        {
+          "id": "end-behavior-rational",
+          "mistake": "\\text{All rational functions have horizontal asymptote } y=0",
+          "correct": "\\text{Compare degrees: top < bottom } \\to y=0; \\text{ top = bottom } \\to y = \\frac{\\text{leading coefficients}}{\\text{...}}; \\text{ top > bottom } \\to \\text{ no HA}",
+          "why": "End behavior depends on growth rates of numerator vs denominator as x→±∞.",
+          "frequency": "common",
+          "remedy": "Degree comparison: (1) numerator smaller → HA at y=0. (2) equal → HA at ratio of leading coefficients. (3) numerator larger → no HA (may have slant asymptote).",
+          "example": "f(x) = \\frac{2x^2+1}{x^2-3} has HA y=2 (ratio 2/1). g(x) = \\frac{x^3}{x^2+1} has no HA (top degree larger).",
+          "apUnit": 1,
+          "severity": "medium"
+        },
+        {
+          "id": "absolute-value-splitting",
+          "mistake": "|x-2| < 3 \\text{ means } x-2 < 3",
+          "correct": "|x-2| < 3 \\text{ means } -3 < x-2 < 3, \\text{ so } -1 < x < 5",
+          "why": "Absolute value inequality |A| < B means -B < A < B (distance from zero less than B).",
+          "frequency": "common",
+          "remedy": "For |expr| < k: write -k < expr < k. For |expr| > k: write expr > k OR expr < -k (two separate regions).",
+          "example": "|x+1| \\leq 4 means -4 \\leq x+1 \\leq 4, so -5 \\leq x \\leq 3.",
+          "apUnit": 1,
+          "severity": "medium"
+        }
+      ]
+    },
+    "unit2-trigonometry": {
+      "name": "Unit 2: Trigonometric Functions",
+      "mistakes": [
+        {
+          "id": "inverse-trig-reciprocal",
+          "mistake": "\\sin^{-1}(x) = \\csc(x) = \\frac{1}{\\sin(x)}",
+          "correct": "\\sin^{-1}(x) = \\arcsin(x) \\text{ (returns an angle)}, \\text{ while } \\csc(x) = \\frac{1}{\\sin(x)}",
+          "why": "The -1 exponent for trig functions means inverse function (arcsin), NOT reciprocal. This is the #1 trig notation error.",
+          "frequency": "very-common",
+          "remedy": "Use arcsin notation to avoid confusion. Remember: sin^{-1}(0.5) asks 'what angle has sine = 0.5?' Answer: 30° or π/6. Compare: csc(30°) = 1/sin(30°) = 2.",
+          "example": "\\sin^{-1}(1/2) = \\pi/6 \\text{ (an angle)}, while \\csc(\\pi/6) = \\frac{1}{\\sin(\\pi/6)} = 2 \\text{ (a ratio)}. Totally different!",
+          "apUnit": 2,
+          "severity": "high"
+        },
+        {
+          "id": "radian-degree-confusion",
+          "mistake": "\\sin(30) = 0.5 \\text{ when calculator is in radian mode}",
+          "correct": "\\sin(30°) = 0.5, \\text{ but } \\sin(30 \\text{ radians}) \\approx -0.988",
+          "why": "30 radians ≈ 1718°, a completely different angle. Must convert units or set calculator to correct mode.",
+          "frequency": "very-common",
+          "remedy": "Always specify units explicitly. Use π for radians (sin(π/6) not sin(30)). Check calculator mode before computing. AP Precalc primarily uses radians.",
+          "example": "\\sin(\\pi/6) = 0.5 \\text{ (radian mode)}. \\sin(30°) = 0.5 \\text{ (degree mode)}. \\sin(30) \\approx -0.988 \\text{ (30 radians!)}",
+          "apUnit": 2,
+          "severity": "high"
+        },
+        {
+          "id": "period-formula-error",
+          "mistake": "\\text{Period of } y = \\sin(2x-\\pi) \\text{ is } 2\\pi-\\pi = \\pi",
+          "correct": "\\text{Period} = \\frac{2\\pi}{|B|} \\text{ where B is coefficient of x, so period } = \\frac{2\\pi}{2} = \\pi",
+          "why": "Period depends ONLY on the coefficient of x (frequency), NOT on phase shift or vertical shift.",
+          "frequency": "very-common",
+          "remedy": "For y = A·sin(Bx + C) + D, period = 2π/|B|. Ignore A, C, and D when finding period. Only B matters.",
+          "example": "y = 5\\sin(3x - 7) + 2 has period 2\\pi/3. The 5, -7, and +2 don't affect period at all.",
+          "apUnit": 2,
+          "severity": "high"
+        },
+        {
+          "id": "phase-shift-without-factoring",
+          "mistake": "\\text{Phase shift of } y = \\sin(2x-\\pi) \\text{ is } -\\pi \\text{ (left)}",
+          "correct": "\\text{Must factor: } y = \\sin(2(x-\\pi/2)), \\text{ so phase shift is } \\pi/2 \\text{ to the RIGHT}",
+          "why": "Must factor out coefficient of x to find true phase shift. Formula: y = A·sin(B(x - C/B)).",
+          "frequency": "very-common",
+          "remedy": "Factor out B: y = A·sin(B(x - h)) + D where h = -C/B is phase shift. Positive h = right, negative h = left.",
+          "example": "y = \\cos(3x + 6) = \\cos(3(x + 2)), phase shift is 2 LEFT (not 6 left). y = \\sin(2x - \\pi) = \\sin(2(x - \\pi/2)), phase shift is \\pi/2 RIGHT.",
+          "apUnit": 2,
+          "severity": "high"
+        },
+        {
+          "id": "amplitude-sign",
+          "mistake": "\\text{Amplitude of } y = -3\\sin(x) \\text{ is } -3",
+          "correct": "\\text{Amplitude is } |A| = 3 \\text{ (always positive). Negative A reflects across x-axis}",
+          "why": "Amplitude measures distance from midline, which is always positive. The sign of A determines reflection, not amplitude.",
+          "frequency": "common",
+          "remedy": "Amplitude = |A| in y = A·sin(Bx + C) + D. Always take absolute value. Negative A flips the graph vertically.",
+          "example": "y = -5\\cos(x) + 2 has amplitude 5, midline y=2, and is reflected (starts at minimum instead of maximum).",
+          "apUnit": 2,
+          "severity": "low"
+        },
+        {
+          "id": "unit-circle-quadrant-signs",
+          "mistake": "\\text{All trig values are positive in Quadrant II}",
+          "correct": "\\text{Q1: all positive, Q2: sin positive only, Q3: tan positive only, Q4: cos positive only}",
+          "why": "Mnemonic: 'All Students Take Calculus' - Q1: All, Q2: Sin, Q3: Tan, Q4: Cos are positive.",
+          "frequency": "common",
+          "remedy": "Remember ASTC starting from Q1 going counterclockwise. Or think: Q2 is upper-left (y>0, x<0), so sin=y is +, cos=x is -, tan=y/x is -.",
+          "example": "At \\theta = 5\\pi/6 (Q2): \\sin(5\\pi/6) = 1/2 > 0, \\cos(5\\pi/6) = -\\sqrt{3}/2 < 0, \\tan(5\\pi/6) = -\\sqrt{3}/3 < 0.",
+          "apUnit": 2,
+          "severity": "medium"
+        },
+        {
+          "id": "reference-angle-calculation",
+          "mistake": "\\text{Reference angle for } 5\\pi/6 \\text{ is } 5\\pi/6",
+          "correct": "\\text{Reference angle is } \\pi - 5\\pi/6 = \\pi/6 \\text{ (acute angle to nearest x-axis)}",
+          "why": "Reference angle is always the acute angle (0 to π/2) to the x-axis. Used to find trig values by checking quadrant for signs.",
+          "frequency": "common",
+          "remedy": "Formulas: Q1: θ itself, Q2: π-θ, Q3: θ-π, Q4: 2π-θ. Result must be in [0, π/2].",
+          "example": "For 7\\pi/4 (Q4): reference = 2\\pi - 7\\pi/4 = \\pi/4. For 2\\pi/3 (Q2): reference = \\pi - 2\\pi/3 = \\pi/3.",
+          "apUnit": 2,
+          "severity": "medium"
+        },
+        {
+          "id": "inverse-trig-range",
+          "mistake": "\\sin^{-1}(1/2) = \\pi/6 \\text{ or } 5\\pi/6 \\text{ (both angles work)}",
+          "correct": "\\sin^{-1}(1/2) = \\pi/6 \\text{ only. Range of arcsin is } [-\\pi/2, \\pi/2]",
+          "why": "Inverse trig functions must return single values to be functions. Ranges are restricted: arcsin ∈ [-π/2, π/2], arccos ∈ [0, π], arctan ∈ (-π/2, π/2).",
+          "frequency": "common",
+          "remedy": "Memorize restricted ranges. arcsin and arctan return angles in [-π/2, π/2] (right side of circle). arccos returns angles in [0, π] (top half).",
+          "example": "\\sin(5\\pi/6) = 1/2 \\text{ (true)}, but \\sin^{-1}(1/2) = \\pi/6 \\text{ only (Q1)}. To get 5π/6, solve sin(x)=1/2 separately.",
+          "apUnit": 2,
+          "severity": "medium"
+        },
+        {
+          "id": "tangent-period",
+          "mistake": "\\text{Tangent has period } 2\\pi \\text{ like sine and cosine}",
+          "correct": "\\tan(x) \\text{ has period } \\pi, \\text{ not } 2\\pi \\text{ (repeats twice as fast)}",
+          "why": "tan(x) = sin(x)/cos(x). Both numerator and denominator change signs together after π, so tan repeats every π.",
+          "frequency": "common",
+          "remedy": "Period of tan(Bx) is π/|B|. For sin/cos it's 2π/|B|. Tangent completes full cycle in half the distance.",
+          "example": "\\tan(0) = 0, \\tan(\\pi) = 0, \\tan(2\\pi) = 0. Graph repeats every π, not 2π.",
+          "apUnit": 2,
+          "severity": "medium"
+        },
+        {
+          "id": "coterminal-vs-reference",
+          "mistake": "\\text{Coterminal angles and reference angles are the same thing}",
+          "correct": "\\text{Coterminal: same terminal side (differ by } 2\\pi). \\text{ Reference: acute angle to x-axis}",
+          "why": "Different concepts. Coterminal angles have same trig values. Reference angles help find trig values using acute angle and quadrant signs.",
+          "frequency": "common",
+          "remedy": "Coterminal: add/subtract 2π (360°). Reference: find acute angle to x-axis (always positive, ≤ π/2).",
+          "example": "5\\pi/6 and 17\\pi/6 are coterminal (differ by 2π). Both have reference angle π/6.",
+          "apUnit": 2,
+          "severity": "low"
+        },
+        {
+          "id": "trig-equation-all-solutions",
+          "mistake": "\\text{Solving } \\sin(x) = 1/2, \\text{ answer is } x = \\pi/6",
+          "correct": "\\text{General solution: } x = \\pi/6 + 2\\pi n \\text{ and } x = 5\\pi/6 + 2\\pi n \\text{ for integer } n",
+          "why": "Trig functions are periodic. Unless domain is restricted, must give all solutions using periodicity.",
+          "frequency": "common",
+          "remedy": "Find solutions in [0, 2π), then add 2πn for sine/cosine, or πn for tangent. Check if domain restricts answers.",
+          "example": "\\cos(x) = 0 gives x = \\pi/2 + \\pi n (includes π/2, 3π/2, 5π/2, -π/2, ...). If domain is [0, 2π), just x = π/2, 3π/2.",
+          "apUnit": 2,
+          "severity": "medium"
+        }
+      ]
+    },
+    "unit3-exponential-logarithmic": {
+      "name": "Unit 3: Exponential and Logarithmic Functions",
+      "mistakes": [
+        {
+          "id": "log-sum-property",
+          "mistake": "\\log(a+b) = \\log(a) + \\log(b)",
+          "correct": "\\log(ab) = \\log(a) + \\log(b) \\text{ (product rule, NOT sum rule!)}",
+          "why": "There is NO logarithm property for addition or subtraction inside the log. Only products, quotients, and powers have properties.",
+          "frequency": "very-common",
+          "remedy": "Remember: logs turn multiplication→addition, division→subtraction, powers→multiplication. They NEVER split sums or differences.",
+          "example": "\\log(2+3) = \\log(5) \\neq \\log(2) + \\log(3) = \\log(6). Test: log(5)≈0.699, log(6)≈0.778 - different!",
+          "apUnit": 3,
+          "severity": "high"
+        },
+        {
+          "id": "log-difference-property",
+          "mistake": "\\log(a-b) = \\log(a) - \\log(b)",
+          "correct": "\\log(a/b) = \\log(a) - \\log(b) \\text{ (quotient rule, NOT difference!)}",
+          "why": "Subtraction of logs means division inside, not subtraction inside. Logs don't distribute over subtraction.",
+          "frequency": "very-common",
+          "remedy": "Log properties: ×→+, ÷→-, power→×. Addition/subtraction inside log stays as-is.",
+          "example": "\\log(10-2) = \\log(8) \\neq \\log(10) - \\log(2) = \\log(5). Test: log(8)≈0.903, log(5)≈0.699.",
+          "apUnit": 3,
+          "severity": "high"
+        },
+        {
+          "id": "ln-vs-log-confusion",
+          "mistake": "\\ln(x) \\text{ and } \\log(x) \\text{ are the same function}",
+          "correct": "\\ln(x) \\text{ is base } e \\approx 2.718, \\log(x) \\text{ is usually base } 10",
+          "why": "Different bases give different values. ln is natural log (base e), log is common log (base 10) in most precalc contexts.",
+          "frequency": "common",
+          "remedy": "ln = loge (natural), log = log₁₀ (common) unless context specifies otherwise. In calculus, 'log' often means ln.",
+          "example": "\\ln(10) \\approx 2.303, \\text{ but } \\log(10) = 1. \\ln(e) = 1, \\log(e) \\approx 0.434.",
+          "apUnit": 3,
+          "severity": "medium"
+        },
+        {
+          "id": "log-domain-negative",
+          "mistake": "\\ln(-5) = -\\ln(5) \\text{ or } \\ln(x-5) \\text{ works for all } x",
+          "correct": "\\ln(-5) \\text{ is undefined. Domain of log is } (0, \\infty) \\text{ - positive numbers only}",
+          "why": "Cannot raise positive base to any real power and get negative result. Logs of negatives are undefined (in real numbers).",
+          "frequency": "common",
+          "remedy": "Always check domain: argument of log must be positive. For ln(x-5), need x-5>0, so x>5.",
+          "example": "To solve \\ln(x-3) = 2: get x-3 = e^2, so x = e^2+3 ≈ 10.39. Check: x=10.39>3 ✓. If we got x=1, reject (not in domain).",
+          "apUnit": 3,
+          "severity": "high"
+        },
+        {
+          "id": "exponential-solving-error",
+          "mistake": "\\text{To solve } 2^x = 8, \\text{ divide both sides by 2 to get } x = 4",
+          "correct": "\\text{Take log of both sides: } \\log(2^x) = \\log(8) \\Rightarrow x\\log(2) = \\log(8) \\Rightarrow x = 3",
+          "why": "Can't divide by base when variable is in exponent. Must use logarithms to 'bring down' the exponent using power rule.",
+          "frequency": "common",
+          "remedy": "For exponential equations: (1) Isolate exponential term. (2) Take log of both sides. (3) Use power rule to bring variable down. (4) Solve.",
+          "example": "3^x = 27: Take ln of both sides → x\\ln(3) = \\ln(27) → x = \\ln(27)/\\ln(3) = 3. Alternatively, recognize 27=3^3.",
+          "apUnit": 3,
+          "severity": "medium"
+        },
+        {
+          "id": "compound-interest-formulas",
+          "mistake": "\\text{Continuous compounding uses } A = P(1 + r)^t",
+          "correct": "\\text{Continuous: } A = Pe^{rt}. \\text{ Periodic: } A = P(1 + r/n)^{nt}",
+          "why": "Continuous compounding uses natural exponential e. Periodic compounding uses (1+r/n)^nt where n is compounds per year.",
+          "frequency": "common",
+          "remedy": "Memorize: Continuous uses e (A=Pe^rt). Annual: (1+r)^t. n times/year: (1+r/n)^nt. As n→∞, periodic approaches continuous.",
+          "example": "$1000 at 5% for 2 years. Continuous: A = 1000e^{0.05·2} ≈ $1105.17. Annual: A = 1000(1.05)^2 = $1102.50. Continuous is higher.",
+          "apUnit": 3,
+          "severity": "medium"
+        },
+        {
+          "id": "half-life-misconception",
+          "mistake": "\\text{After two half-lives, nothing remains (it's all gone)}",
+          "correct": "\\text{After two half-lives, } (1/2)^2 = 1/4 = 25\\% \\text{ remains}",
+          "why": "Each half-life cuts amount in half. It approaches zero exponentially but never reaches zero in finite time.",
+          "frequency": "common",
+          "remedy": "After n half-lives: fraction remaining = (1/2)^n. After 1: 50%, after 2: 25%, after 3: 12.5%, etc. Never fully decays.",
+          "example": "Radioactive sample with 10 year half-life. Start: 100g. After 10yr: 50g. After 20yr: 25g. After 30yr: 12.5g. Formula: A(t) = 100(1/2)^{t/10}.",
+          "apUnit": 3,
+          "severity": "low"
+        },
+        {
+          "id": "log-power-rule-misapplication",
+          "mistake": "\\log(x^2) = (\\log(x))^2",
+          "correct": "\\log(x^2) = 2\\log(x) \\text{ (exponent comes out front as coefficient)}",
+          "why": "Power rule brings exponent out as multiplier, doesn't apply it to the log itself.",
+          "frequency": "common",
+          "remedy": "Power rule: log(a^n) = n·log(a). Exponent multiplies log, doesn't exponentiate it. This is how we solve exponential equations.",
+          "example": "\\ln(e^3) = 3\\ln(e) = 3·1 = 3, \\text{ NOT } (\\ln(e))^3 = 1^3 = 1. Also: \\log(\\sqrt{x}) = \\log(x^{1/2}) = \\frac{1}{2}\\log(x).",
+          "apUnit": 3,
+          "severity": "medium"
+        },
+        {
+          "id": "change-of-base-formula",
+          "mistake": "\\log_2(8) = \\log(8)/2 \\text{ or } = 2\\log(8)",
+          "correct": "\\log_2(8) = \\frac{\\log(8)}{\\log(2)} \\text{ or } \\frac{\\ln(8)}{\\ln(2)} \\text{ (change of base)}",
+          "why": "To convert logarithm to different base: divide by log of the base. Formula: log_b(x) = log_c(x)/log_c(b).",
+          "frequency": "common",
+          "remedy": "Change of base: log_b(x) = ln(x)/ln(b) or log(x)/log(b). Denominator is log of the BASE.",
+          "example": "\\log_2(10) = \\frac{\\ln(10)}{\\ln(2)} \\approx \\frac{2.303}{0.693} \\approx 3.322. Verify: 2^{3.322} ≈ 10 ✓.",
+          "apUnit": 3,
+          "severity": "medium"
+        },
+        {
+          "id": "exponential-base-confusion",
+          "mistake": "e \\approx 10 \\text{ or thinking } e^x \\text{ and } 10^x \\text{ are interchangeable}",
+          "correct": "e \\approx 2.71828... \\text{ is a specific mathematical constant, different from 10}",
+          "why": "e is the natural base for continuous growth, unique because derivative of e^x equals e^x. It's not 10.",
+          "frequency": "common",
+          "remedy": "e is like π - a specific important constant. e ≈ 2.718, appears in calculus, continuous growth, probability, etc.",
+          "example": "e^2 \\approx 7.389, \\text{ but } 10^2 = 100. e^1 \\approx 2.718, but 10^1 = 10. Very different!",
+          "apUnit": 3,
+          "severity": "low"
+        },
+        {
+          "id": "logarithm-of-one-zero",
+          "mistake": "\\log(0) = 0 \\text{ or } \\ln(1) = 0 \\text{ is undefined}",
+          "correct": "\\log(0) \\text{ is undefined, but } \\ln(1) = 0 \\text{ (and } \\log(1) = 0)",
+          "why": "log_b(1) = 0 for any base because b^0=1. log_b(0) is undefined because no power gives 0.",
+          "frequency": "common",
+          "remedy": "Remember: log_b(b)=1 (b^1=b) and log_b(1)=0 (b^0=1). log_b(0) doesn't exist.",
+          "example": "\\ln(1) = 0, \\ln(e) = 1, \\ln(e^3) = 3. Also: \\log(1) = 0, \\log(10) = 1, \\log(100) = 2.",
+          "apUnit": 3,
+          "severity": "low"
+        }
+      ]
+    },
+    "unit4-calculus-intro": {
+      "name": "Unit 4: Rational Functions and Introduction to Calculus",
+      "mistakes": [
+        {
+          "id": "limit-equals-value-always",
+          "mistake": "\\lim_{x \\to a} f(x) = f(a) \\text{ always}",
+          "correct": "\\text{Limit at a may exist even when f(a) is undefined or has different value}",
+          "why": "Limits describe approaching behavior, not value at the point. Function can have hole, jump, or be undefined at a.",
+          "frequency": "very-common",
+          "remedy": "Limit asks 'where is f headed as x→a?' not 'what is f(a)?' Check three separately: left limit, right limit, function value.",
+          "example": "\\lim_{x \\to 0} \\frac{\\sin(x)}{x} = 1, \\text{ but } f(0) \\text{ is undefined (0/0)}. Limit exists without function value existing.",
+          "apUnit": 4,
+          "severity": "high"
+        },
+        {
+          "id": "continuous-means-smooth",
+          "mistake": "\\text{Continuous means smooth (no sharp corners or cusps)}",
+          "correct": "\\text{Continuous means no breaks/jumps/holes. Can have corners (e.g., } |x|)",
+          "why": "Continuity: can draw without lifting pencil. Smoothness (differentiability) is stronger - requires no corners. Smooth ⊂ Continuous.",
+          "frequency": "common",
+          "remedy": "Three types: (1) Continuous and smooth (x²). (2) Continuous but not smooth (|x| at 0). (3) Not continuous (1/x at 0).",
+          "example": "f(x) = |x| is continuous everywhere (no breaks) but not differentiable at x=0 (sharp corner). g(x) = x^2 is both continuous and smooth everywhere.",
+          "apUnit": 4,
+          "severity": "medium"
+        },
+        {
+          "id": "average-vs-instantaneous-rate",
+          "mistake": "\\text{Average rate of change equals instantaneous rate of change}",
+          "correct": "\\text{Average: } \\frac{f(b)-f(a)}{b-a} \\text{ (secant). Instantaneous: } f'(x) \\text{ (tangent)}",
+          "why": "Average is over interval (slope of secant line). Instantaneous is at a point (slope of tangent, limit as interval→0).",
+          "frequency": "common",
+          "remedy": "Average: slope between two points. Instantaneous: limit of average as interval shrinks to zero (derivative).",
+          "example": "For f(x)=x^2 from x=1 to x=3: average = (9-1)/(3-1) = 4. But instantaneous at x=2 is f'(2)=4. They happen to equal here!",
+          "apUnit": 4,
+          "severity": "medium"
+        },
+        {
+          "id": "derivative-notation-as-fraction",
+          "mistake": "\\frac{dy}{dx} \\text{ is a fraction, so } dy = \\frac{something}{dx}",
+          "correct": "\\frac{dy}{dx} \\text{ is ONE symbol (Leibniz notation) for derivative, not a fraction}",
+          "why": "It's differential notation representing instantaneous rate. In basic differentiation, treat as atomic symbol, not manipulable fraction.",
+          "frequency": "common",
+          "remedy": "At precalc level, dy/dx is one symbol meaning 'derivative of y with respect to x.' In calc, it CAN sometimes be manipulated, but not arbitrarily.",
+          "example": "If y = x^2, then dy/dx = 2x. This doesn't mean dy = 2x/dx or dx/dy = 1/(2x) at precalc level.",
+          "apUnit": 4,
+          "severity": "medium"
+        },
+        {
+          "id": "asymptote-crossing",
+          "mistake": "\\text{Function can NEVER cross its horizontal asymptote}",
+          "correct": "\\text{Functions CAN cross horizontal asymptotes (but not vertical ones)}",
+          "why": "Horizontal asymptote describes end behavior as x→±∞. Function can cross in the middle. Vertical asymptote means undefined, so can't cross.",
+          "frequency": "common",
+          "remedy": "Horizontal asymptote: end behavior only, can cross anywhere. Vertical asymptote: function undefined there, cannot exist at that x.",
+          "example": "f(x) = \\frac{x\\sin(x)}{x^2+1} has HA y=0 but crosses it infinitely often. But VA at x=a means f(a) undefined forever.",
+          "apUnit": 4,
+          "severity": "low"
+        },
+        {
+          "id": "one-sided-limit-sign",
+          "mistake": "\\lim_{x \\to 2^+} f(x) \\text{ means the limit value is positive}",
+          "correct": "x \\to 2^+ \\text{ means approaching from RIGHT (x>2), not that result is positive}",
+          "why": "Superscript ± indicates direction of approach (from which side), NOT the sign of the limit value.",
+          "frequency": "common",
+          "remedy": "+ means from right (larger x). - means from left (smaller x). The result can be any value, including negative or zero.",
+          "example": "\\lim_{x \\to 0^-} \\frac{1}{x} = -\\infty (approaching from left gives negative infinity, not positive).",
+          "apUnit": 4,
+          "severity": "medium"
+        },
+        {
+          "id": "hole-vs-asymptote-confusion",
+          "mistake": "\\text{All discontinuities in rational functions are vertical asymptotes}",
+          "correct": "\\text{Holes are removable (cancelled factors). Asymptotes are non-removable (denominator zero)}",
+          "why": "If factor cancels: limit exists, finite, but function undefined → hole. If denominator zero after simplification → vertical asymptote.",
+          "frequency": "common",
+          "remedy": "Factor and simplify. Cancelled factors → holes (removable discontinuity). Remaining denominator zeros → VAs (non-removable).",
+          "example": "f(x) = \\frac{x^2-4}{x-2} = \\frac{(x-2)(x+2)}{x-2} = x+2 \\text{ for } x \\neq 2. Hole at x=2, not asymptote. lim_{x\\to 2}f(x)=4 exists.",
+          "apUnit": 4,
+          "severity": "high"
+        },
+        {
+          "id": "increasing-means-positive",
+          "mistake": "\\text{Increasing function means } f(x) > 0",
+          "correct": "\\text{Increasing means as x increases, f(x) increases (positive slope, not positive value)}",
+          "why": "Increasing describes trend (slope), not sign of output. Function can be negative and still increasing.",
+          "frequency": "common",
+          "remedy": "Increasing: moving right, graph goes up (f'(x)>0). Positive: f(x)>0 (above x-axis). Independent properties.",
+          "example": "f(x) = x - 10 is increasing everywhere (slope=1>0) but negative for x<10. At x=5: f(5)=-5 (negative value) but still increasing.",
+          "apUnit": 4,
+          "severity": "medium"
+        },
+        {
+          "id": "concavity-vs-increasing",
+          "mistake": "\\text{Concave up means function is increasing}",
+          "correct": "\\text{Concave up means rate of change is increasing (second derivative positive)}",
+          "why": "Concavity describes how slope changes, not slope itself. Can be decreasing and concave up (slope negative but getting less negative).",
+          "frequency": "common",
+          "remedy": "Concave up: holds water, slope increasing (f''>0). Can have f' positive (increasing), negative (decreasing), or zero (flat momentarily).",
+          "example": "f(x) = x^2 - 10x on [0,5]: concave up everywhere (f''=2>0) but decreasing (f'=2x-10<0 for x<5). Slope goes from -10 to 0.",
+          "apUnit": 4,
+          "severity": "medium"
+        },
+        {
+          "id": "infinity-arithmetic",
+          "mistake": "\\infty - \\infty = 0, \\frac{\\infty}{\\infty} = 1, \\frac{5}{\\infty} = 0",
+          "correct": "\\infty - \\infty \\text{ and } \\frac{\\infty}{\\infty} \\text{ are indeterminate. } \\frac{c}{\\infty} = 0 \\text{ for finite c}",
+          "why": "Infinity is not a number. ∞-∞ and ∞/∞ are indeterminate forms needing further analysis. But c/∞=0 for constants.",
+          "frequency": "common",
+          "remedy": "Cannot do arithmetic with ∞. Indeterminate forms (0/0, ∞/∞, ∞-∞, etc.) need limits, algebra, or L'Hôpital's rule. c/∞→0, c·∞→∞.",
+          "example": "\\lim_{x\\to\\infty}(x^2-x) is ∞-∞ form but = ∞ (factor: x(x-1)→∞). \\lim_{x\\to\\infty}\\frac{x}{x^2} is ∞/∞ form but = 0.",
+          "apUnit": 4,
+          "severity": "medium"
+        }
+      ]
+    },
+    "general-algebra": {
+      "name": "General Algebraic Errors (All Units)",
+      "mistakes": [
+        {
+          "id": "fraction-addition-error",
+          "mistake": "\\frac{a}{b} + \\frac{c}{d} = \\frac{a+c}{b+d}",
+          "correct": "\\frac{a}{b} + \\frac{c}{d} = \\frac{ad + bc}{bd} \\text{ (common denominator required)}",
+          "why": "Cannot add fractions by adding numerators and denominators. Must find common denominator first.",
+          "frequency": "common",
+          "remedy": "Find LCD (least common denominator), convert both fractions, then add numerators only. Denominators stay the same.",
+          "example": "\\frac{1}{2} + \\frac{1}{3} \\neq \\frac{2}{5}. Correct: \\frac{3}{6} + \\frac{2}{6} = \\frac{5}{6}. Test: 5/6≈0.833, but 2/5=0.4.",
+          "apUnit": "all",
+          "severity": "high"
+        },
+        {
+          "id": "square-root-distribution",
+          "mistake": "\\sqrt{a+b} = \\sqrt{a} + \\sqrt{b}",
+          "correct": "\\sqrt{a+b} \\neq \\sqrt{a} + \\sqrt{b} \\text{ (root doesn't distribute over addition)}",
+          "why": "Square root only distributes over multiplication (√(ab)=√a·√b), NEVER over addition. If it did, Pythagorean theorem would be trivial.",
+          "frequency": "common",
+          "remedy": "Only distribute roots over products and quotients: √(ab)=√a·√b, √(a/b)=√a/√b. Sums and differences stay inside.",
+          "example": "\\sqrt{9+16} = \\sqrt{25} = 5, \\text{ but } \\sqrt{9}+\\sqrt{16} = 3+4 = 7 \\neq 5. Pythagorean: c=√(a²+b²) can't simplify.",
+          "apUnit": "all",
+          "severity": "high"
+        },
+        {
+          "id": "binomial-square-error",
+          "mistake": "(a+b)^2 = a^2 + b^2",
+          "correct": "(a+b)^2 = a^2 + 2ab + b^2 \\text{ (FOIL or binomial formula)}",
+          "why": "Squaring a sum isn't same as summing squares. The cross term 2ab is critical and often forgotten.",
+          "frequency": "very-common",
+          "remedy": "Remember: (a+b)²=(a+b)(a+b), FOIL gives a²+ab+ba+b²=a²+2ab+b². Or memorize formula. Never drop middle term.",
+          "example": "(x+3)^2 \\neq x^2+9. Correct: x^2+6x+9. Test with x=1: (1+3)²=16, but 1²+9=10 ≠ 16.",
+          "apUnit": "all",
+          "severity": "high"
+        },
+        {
+          "id": "negative-exponent-sign",
+          "mistake": "x^{-2} = -x^2",
+          "correct": "x^{-2} = \\frac{1}{x^2} \\text{ (negative exponent means reciprocal, not negative)}",
+          "why": "Negative exponent flips to denominator, doesn't make value negative. a^{-n}=1/a^n.",
+          "frequency": "common",
+          "remedy": "a^{-n} = 1/a^n. Move between numerator/denominator and flip sign of exponent. Doesn't make result negative.",
+          "example": "2^{-3} = \\frac{1}{2^3} = \\frac{1}{8} = 0.125, \\text{ NOT } -2^3 = -8. Also: \\frac{1}{x^{-2}} = x^2.",
+          "apUnit": "all",
+          "severity": "medium"
+        },
+        {
+          "id": "cancellation-error",
+          "mistake": "\\frac{x+3}{x+5} = \\frac{3}{5} \\text{ (cancelling x)}",
+          "correct": "\\text{Cannot cancel terms in addition. Can only cancel common FACTORS}",
+          "why": "Cancellation works for factors (multiplication), not terms (addition). Must factor first.",
+          "frequency": "very-common",
+          "remedy": "Only cancel factors: \\frac{x(x+3)}{x(x+5)} = \\frac{x+3}{x+5}. Never cancel terms: \\frac{x+3}{x+5} cannot simplify.",
+          "example": "\\frac{5+3}{5+5} \\neq \\frac{3}{5}. It equals 8/10=4/5. Test: 4/5=0.8, but 3/5=0.6 ≠ 0.8.",
+          "apUnit": "all",
+          "severity": "high"
+        },
+        {
+          "id": "order-of-operations",
+          "mistake": "2 + 3 \\times 4 = 5 \\times 4 = 20",
+          "correct": "2 + 3 \\times 4 = 2 + 12 = 14 \\text{ (multiply before adding - PEMDAS)}",
+          "why": "Order of operations: Parentheses, Exponents, Multiplication/Division (left to right), Addition/Subtraction (left to right).",
+          "frequency": "common",
+          "remedy": "PEMDAS (or BODMAS). Do multiplication/division before addition/subtraction unless parentheses say otherwise.",
+          "example": "10 - 2 \\times 3 = 10 - 6 = 4, \\text{ NOT } (10-2) \\times 3 = 24. Also: 10/2×3 = 5×3 = 15 (left to right).",
+          "apUnit": "all",
+          "severity": "medium"
+        },
+        {
+          "id": "zero-exponent",
+          "mistake": "x^0 = 0 \\text{ or is undefined}",
+          "correct": "x^0 = 1 \\text{ for any } x \\neq 0",
+          "why": "By exponent rules: x^0 = x^{n-n} = x^n/x^n = 1. It's a definition that makes exponent laws consistent.",
+          "frequency": "common",
+          "remedy": "Any non-zero number to the zero power is 1. Only exception: 0^0 is indeterminate.",
+          "example": "5^0 = 1, (-7)^0 = 1, (x+3)^0 = 1 \\text{ (if } x \\neq -3). Also: x^3 \\cdot x^0 = x^3 \\cdot 1 = x^3.",
+          "apUnit": "all",
+          "severity": "low"
+        },
+        {
+          "id": "exponent-of-product",
+          "mistake": "(ab)^n = a^n b^n \\text{ is wrong}",
+          "correct": "(ab)^n = a^n b^n \\text{ IS correct (exponent distributes over products)}",
+          "why": "This one actually works! Exponents distribute over multiplication, just not over addition.",
+          "frequency": "common",
+          "remedy": "Correct distributions: (ab)^n = a^n·b^n, (a/b)^n = a^n/b^n. Incorrect: (a+b)^n ≠ a^n + b^n.",
+          "example": "(2·3)^2 = 6^2 = 36, and 2^2·3^2 = 4·9 = 36 ✓. But (2+3)^2 = 25 ≠ 2^2+3^2 = 13.",
+          "apUnit": "all",
+          "severity": "low"
+        }
+      ]
+    }
+  },
+  "verificationRules": {
+    "description": "Self-check rules for AI to avoid making these mistakes in responses",
+    "rules": [
+      "Before stating any algebraic simplification, verify with a numerical example",
+      "When using logarithm properties, explicitly state which property and verify it only applies to products/quotients/powers",
+      "Always specify angle units (degrees or radians) when giving trigonometric values",
+      "Check domain restrictions before and after any algebraic manipulation - note if factors were cancelled",
+      "Verify each equation step maintains mathematical equivalence - use ⇒ for implications, ⇔ for equivalences",
+      "Never distribute operations that don't distribute: roots over sums, logs over sums, exponents over sums",
+      "For function notation: clearly distinguish f^{-1}(x) (inverse) from [f(x)]^{-1} (reciprocal)",
+      "When stating trig identities or solving trig equations, verify using unit circle or known values",
+      "For limits, separately check: (1) left limit, (2) right limit, (3) function value, (4) do they match?",
+      "Cross-reference solutions with notation table and golden words for correct terminology",
+      "When in doubt, leave expressions in exact form rather than simplifying incorrectly",
+      "For rational functions, factor completely first, then identify holes vs asymptotes"
+    ]
+  },
+  "pedagogicalNotes": {
+    "description": "Teaching strategies for common mistake patterns",
+    "strategies": [
+      "For notation confusions (f^{-1} vs 1/f): Use verbal descriptions alongside symbols",
+      "For distribution errors: Show counterexamples with numbers before algebraic work",
+      "For trig mistakes: Always connect to unit circle and right triangle meanings",
+      "For log errors: Emphasize logs turn operations into simpler operations (× → +, etc.)",
+      "For limit mistakes: Use graphical intuition and tables of values",
+      "For transformation errors: Use test points to verify direction of shifts",
+      "Encourage exact answers (√2, π, e) over decimals to avoid precision issues",
+      "Use dimensional analysis and unit checking as error-detection tool"
+    ]
+  }
+}

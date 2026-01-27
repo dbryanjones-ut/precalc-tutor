@@ -1,65 +1,136 @@
-import Image from "next/image";
+import Link from "next/link";
+import { Brain, Sparkles, Target, BookOpen, Zap } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="flex flex-col items-center gap-12 py-12">
+      {/* Hero Section */}
+      <div className="text-center space-y-4 max-w-3xl">
+        <div className="flex justify-center mb-4">
+          <Brain className="h-16 w-16 text-primary" />
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+        <h1 className="text-5xl font-bold tracking-tight">
+          Master AP Precalculus
+        </h1>
+        <p className="text-xl text-muted-foreground">
+          AI-powered tutoring platform designed for students with dyslexia and ADHD
+        </p>
+        <div className="flex gap-4 justify-center pt-4">
+          <Button asChild size="lg">
+            <Link href="/dashboard">Get Started</Link>
+          </Button>
+          <Button asChild variant="outline" size="lg">
+            <Link href="/ai-tutor">Try AI Tutor</Link>
+          </Button>
         </div>
-      </main>
+      </div>
+
+      {/* Features Grid */}
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl">
+        <Card>
+          <CardHeader>
+            <Sparkles className="h-8 w-8 text-primary mb-2" />
+            <CardTitle>AI Tutor</CardTitle>
+            <CardDescription>
+              Upload any problem and ask questions in natural language
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ul className="text-sm space-y-1 text-muted-foreground">
+              <li>• Upload handwritten or printed problems</li>
+              <li>• Socratic or explanation modes</li>
+              <li>• Save and review sessions</li>
+            </ul>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <Target className="h-8 w-8 text-primary mb-2" />
+            <CardTitle>Practice Tools</CardTitle>
+            <CardDescription>
+              Targeted drills for Q4 symbolic manipulation & more
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ul className="text-sm space-y-1 text-muted-foreground">
+              <li>• Q4 symbolic drills (the "5-maker")</li>
+              <li>• Unit circle practice</li>
+              <li>• Daily 4-question warm-ups</li>
+            </ul>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <BookOpen className="h-8 w-8 text-primary mb-2" />
+            <CardTitle>Interactive Lessons</CardTitle>
+            <CardDescription>
+              CRA-based instruction with multi-sensory learning
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ul className="text-sm space-y-1 text-muted-foreground">
+              <li>• Concrete-Representational-Abstract phases</li>
+              <li>• Step-by-step solutions</li>
+              <li>• Multiple solution paths</li>
+            </ul>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <Zap className="h-8 w-8 text-primary mb-2" />
+            <CardTitle>Visual Tools</CardTitle>
+            <CardDescription>
+              Color-coded references and interactive visualizations
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ul className="text-sm space-y-1 text-muted-foreground">
+              <li>• Notation Translation Table</li>
+              <li>• Unit Circle Visualizer (color families)</li>
+              <li>• Transformation Explorer</li>
+            </ul>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <Brain className="h-8 w-8 text-primary mb-2" />
+            <CardTitle>ADHD Support</CardTitle>
+            <CardDescription>
+              Executive function scaffolds and focus tools
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ul className="text-sm space-y-1 text-muted-foreground">
+              <li>• S.O.S. Protocol checklist</li>
+              <li>• Break reminders & timers</li>
+              <li>• Minimize distractions mode</li>
+            </ul>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <Target className="h-8 w-8 text-primary mb-2" />
+            <CardTitle>Spaced Repetition</CardTitle>
+            <CardDescription>
+              Smart review scheduling for long-term mastery
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ul className="text-sm space-y-1 text-muted-foreground">
+              <li>• Adaptive difficulty</li>
+              <li>• Review queue management</li>
+              <li>• Streak tracking</li>
+            </ul>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }

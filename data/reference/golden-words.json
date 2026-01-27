@@ -1,0 +1,610 @@
+{
+  "version": "2.0.0",
+  "lastUpdated": "2026-01-27",
+  "description": "Golden Words - 60+ precise mathematical vocabulary terms that replace vague student language",
+  "purpose": "Train students to communicate mathematics with clarity and precision",
+  "categories": {
+    "functions": {
+      "name": "Functions & Relations",
+      "terms": [
+        {
+          "term": "The function is increasing",
+          "vagueTerm": "The graph goes up",
+          "context": "Describing function behavior",
+          "examples": [
+            "On the interval [0, 3], f(x) = x² is increasing.",
+            "The function f is increasing wherever f'(x) > 0.",
+            "As x increases, the function values increase."
+          ],
+          "apUnit": 1
+        },
+        {
+          "term": "The function is decreasing",
+          "vagueTerm": "The graph goes down",
+          "context": "Describing function behavior",
+          "examples": [
+            "On the interval (-∞, 0], f(x) = x² is decreasing.",
+            "The population function is decreasing exponentially.",
+            "Where the derivative is negative, the function is decreasing."
+          ],
+          "apUnit": 1
+        },
+        {
+          "term": "f(2) = 5",
+          "vagueTerm": "The point (2, 5) or at (2, 5)",
+          "context": "Stating function values",
+          "examples": [
+            "Given f(x) = x² + 1, we find f(2) = 5.",
+            "The function satisfies f(0) = 3.",
+            "If f(a) = b, then the point (a, b) is on the graph."
+          ],
+          "apUnit": 1
+        },
+        {
+          "term": "The domain is [0, ∞)",
+          "vagueTerm": "x starts at 0 and goes to infinity",
+          "context": "Specifying domain",
+          "examples": [
+            "For f(x) = √x, the domain is [0, ∞).",
+            "The natural domain of this function is all real numbers except x = 2.",
+            "We restrict the domain to [-1, 1] to make the function one-to-one."
+          ],
+          "apUnit": 1
+        },
+        {
+          "term": "The range is [-3, 7]",
+          "vagueTerm": "y goes from -3 to 7",
+          "context": "Specifying range",
+          "examples": [
+            "The range of f(x) = sin(x) is [-1, 1].",
+            "For this quadratic function, the range is [−4, ∞).",
+            "The output values span from 0 to 10, so the range is [0, 10]."
+          ],
+          "apUnit": 1
+        },
+        {
+          "term": "As x approaches a, f(x) approaches L",
+          "vagueTerm": "When x gets close to a, f gets close to L",
+          "context": "Describing limits",
+          "examples": [
+            "As x approaches 0, sin(x)/x approaches 1.",
+            "As x approaches infinity, 1/x approaches 0.",
+            "As x approaches 2 from the left, f(x) approaches 5."
+          ],
+          "apUnit": 4
+        },
+        {
+          "term": "f is continuous at x = 3",
+          "vagueTerm": "The graph doesn't break at x = 3",
+          "context": "Describing continuity",
+          "examples": [
+            "Polynomial functions are continuous everywhere.",
+            "f is continuous on the interval [0, 5].",
+            "The function has a discontinuity at x = 2."
+          ],
+          "apUnit": 4
+        },
+        {
+          "term": "f has a vertical asymptote at x = 2",
+          "vagueTerm": "The graph shoots up/down at x = 2",
+          "context": "Describing asymptotes",
+          "examples": [
+            "The function f(x) = 1/(x−2) has a vertical asymptote at x = 2.",
+            "There are vertical asymptotes wherever the denominator is zero.",
+            "As x approaches the asymptote, the function values become unbounded."
+          ],
+          "apUnit": 4
+        },
+        {
+          "term": "The horizontal asymptote is y = 3",
+          "vagueTerm": "It levels out at 3 or flattens at y = 3",
+          "context": "Describing end behavior",
+          "examples": [
+            "As x approaches infinity, f(x) approaches the horizontal asymptote y = 3.",
+            "The function has a horizontal asymptote at y = 0.",
+            "There is no horizontal asymptote because the function grows without bound."
+          ],
+          "apUnit": 4
+        },
+        {
+          "term": "The rate of change is increasing",
+          "vagueTerm": "The slope is getting bigger or steeper",
+          "context": "Describing concavity",
+          "examples": [
+            "Where f is concave up, the rate of change is increasing.",
+            "The rate of change of the population is increasing over time.",
+            "When f''(x) > 0, the rate of change is increasing."
+          ],
+          "apUnit": 4
+        },
+        {
+          "term": "The function is concave up",
+          "vagueTerm": "It curves upward or looks like a cup",
+          "context": "Describing concavity",
+          "examples": [
+            "On the interval [0, ∞), f(x) = x² is concave up.",
+            "Where the second derivative is positive, the function is concave up.",
+            "A concave up function holds water."
+          ],
+          "apUnit": 4
+        },
+        {
+          "term": "The function is concave down",
+          "vagueTerm": "It curves downward or looks like a frown",
+          "context": "Describing concavity",
+          "examples": [
+            "On the interval (-∞, 0], f(x) = -x² is concave down.",
+            "Where f''(x) < 0, the function is concave down.",
+            "A concave down function spills water."
+          ],
+          "apUnit": 4
+        },
+        {
+          "term": "f has a local maximum at x = 2",
+          "vagueTerm": "The graph peaks at x = 2 or tops out at 2",
+          "context": "Describing extrema",
+          "examples": [
+            "The function has a local maximum at x = 2 where f(2) = 7.",
+            "At critical points where f'(x) = 0, there may be local maxima.",
+            "This is a local maximum, not necessarily the global maximum."
+          ],
+          "apUnit": 4
+        },
+        {
+          "term": "The average rate of change from x = a to x = b",
+          "vagueTerm": "The slope between two points",
+          "context": "Describing rates",
+          "examples": [
+            "The average rate of change is [f(b) − f(a)]/(b − a).",
+            "Over the interval [1, 3], the average rate of change is 4.",
+            "The average rate of change equals the slope of the secant line."
+          ],
+          "apUnit": 4
+        },
+        {
+          "term": "The instantaneous rate of change at x = 2",
+          "vagueTerm": "The slope at a point",
+          "context": "Describing derivatives",
+          "examples": [
+            "The instantaneous rate of change is given by f'(2).",
+            "At x = 2, the instantaneous rate of change is 3 units per unit.",
+            "This equals the slope of the tangent line."
+          ],
+          "apUnit": 4
+        }
+      ]
+    },
+    "transformations": {
+      "name": "Function Transformations",
+      "terms": [
+        {
+          "term": "f(x − 2) is a horizontal shift 2 units right",
+          "vagueTerm": "Move the graph right 2",
+          "context": "Describing horizontal shifts",
+          "examples": [
+            "The graph of y = (x − 2)² is the graph of y = x² shifted right 2 units.",
+            "Replacing x with x − h shifts the graph h units to the right.",
+            "f(x − 2) means input values are 2 larger to achieve the same output."
+          ],
+          "apUnit": 1
+        },
+        {
+          "term": "f(x + 3) is a horizontal shift 3 units left",
+          "vagueTerm": "Move the graph left 3",
+          "context": "Describing horizontal shifts",
+          "examples": [
+            "The function f(x + 3) represents a horizontal shift 3 units left.",
+            "To shift left, replace x with x + h.",
+            "Inside the function, the opposite happens: + shifts left."
+          ],
+          "apUnit": 1
+        },
+        {
+          "term": "f(x) + 2 is a vertical shift 2 units up",
+          "vagueTerm": "Move the graph up 2",
+          "context": "Describing vertical shifts",
+          "examples": [
+            "Adding 2 to the output shifts the graph up 2 units.",
+            "The function y = x² + 2 is y = x² shifted up 2 units.",
+            "f(x) + k shifts the graph vertically by k units."
+          ],
+          "apUnit": 1
+        },
+        {
+          "term": "2f(x) is a vertical stretch by a factor of 2",
+          "vagueTerm": "Make the graph taller",
+          "context": "Describing vertical stretches",
+          "examples": [
+            "Multiplying the output by 2 stretches the graph vertically.",
+            "The amplitude of y = 2sin(x) is twice that of y = sin(x).",
+            "2f(x) multiplies all y-coordinates by 2."
+          ],
+          "apUnit": 1
+        },
+        {
+          "term": "f(2x) is a horizontal compression by a factor of 2",
+          "vagueTerm": "Squeeze the graph",
+          "context": "Describing horizontal compression",
+          "examples": [
+            "Replacing x with 2x compresses the graph horizontally by a factor of 2.",
+            "The period of y = sin(2x) is half the period of y = sin(x).",
+            "f(2x) makes the function change twice as fast."
+          ],
+          "apUnit": 1
+        },
+        {
+          "term": "−f(x) is a reflection across the x-axis",
+          "vagueTerm": "Flip the graph upside down",
+          "context": "Describing reflections",
+          "examples": [
+            "Negating the output reflects the graph across the x-axis.",
+            "The graph of y = −x² opens downward.",
+            "−f(x) changes the sign of all y-coordinates."
+          ],
+          "apUnit": 1
+        },
+        {
+          "term": "f(−x) is a reflection across the y-axis",
+          "vagueTerm": "Flip the graph left to right",
+          "context": "Describing reflections",
+          "examples": [
+            "Replacing x with −x reflects the graph across the y-axis.",
+            "f(−x) reverses the left and right sides of the graph.",
+            "For even functions, f(−x) = f(x), so reflection has no effect."
+          ],
+          "apUnit": 1
+        }
+      ]
+    },
+    "trigonometry": {
+      "name": "Trigonometric Language",
+      "terms": [
+        {
+          "term": "The angle θ in standard position",
+          "vagueTerm": "The angle starting from the right",
+          "context": "Describing angles",
+          "examples": [
+            "An angle in standard position has its initial side on the positive x-axis.",
+            "The terminal side of θ lies in the second quadrant.",
+            "Measure the angle counterclockwise from the positive x-axis."
+          ],
+          "apUnit": 2
+        },
+        {
+          "term": "The reference angle is π/6",
+          "vagueTerm": "The small angle to the x-axis",
+          "context": "Working with reference angles",
+          "examples": [
+            "For θ = 5π/6, the reference angle is π/6.",
+            "The reference angle is always between 0 and π/2.",
+            "Use the reference angle to find trig values in any quadrant."
+          ],
+          "apUnit": 2
+        },
+        {
+          "term": "The period of f is 2π",
+          "vagueTerm": "It repeats every 2π",
+          "context": "Describing periodic functions",
+          "examples": [
+            "The sine and cosine functions have period 2π.",
+            "The tangent function has period π.",
+            "For y = sin(bx), the period is 2π/|b|."
+          ],
+          "apUnit": 2
+        },
+        {
+          "term": "The amplitude is 3",
+          "vagueTerm": "The graph goes up to 3",
+          "context": "Describing sinusoidal functions",
+          "examples": [
+            "For y = 3sin(x), the amplitude is 3.",
+            "The amplitude is the distance from the midline to the maximum.",
+            "Amplitude is always non-negative."
+          ],
+          "apUnit": 2
+        },
+        {
+          "term": "The midline is y = 2",
+          "vagueTerm": "The middle is at y = 2",
+          "context": "Describing vertical shift of sinusoids",
+          "examples": [
+            "For y = sin(x) + 2, the midline is y = 2.",
+            "The midline is the average of the maximum and minimum values.",
+            "The function oscillates above and below the midline."
+          ],
+          "apUnit": 2
+        },
+        {
+          "term": "θ is a coterminal angle",
+          "vagueTerm": "Another angle in the same spot",
+          "context": "Describing coterminal angles",
+          "examples": [
+            "Angles θ and θ + 2π are coterminal.",
+            "Coterminal angles have the same terminal side.",
+            "Add or subtract 2π to find coterminal angles."
+          ],
+          "apUnit": 2
+        },
+        {
+          "term": "sin(θ) = opposite/hypotenuse",
+          "vagueTerm": "Sine is the up-down side over the long side",
+          "context": "Defining sine",
+          "examples": [
+            "In a right triangle, sin(θ) equals the opposite side divided by the hypotenuse.",
+            "On the unit circle, sin(θ) is the y-coordinate.",
+            "The sine function ranges from -1 to 1."
+          ],
+          "apUnit": 2
+        },
+        {
+          "term": "The equation has solutions in the interval [0, 2π)",
+          "vagueTerm": "The answers between 0 and 2π",
+          "context": "Solving trig equations",
+          "examples": [
+            "Find all solutions to sin(x) = 1/2 in [0, 2π).",
+            "The principal solutions are x = π/6 and x = 5π/6.",
+            "General solutions add 2πn for any integer n."
+          ],
+          "apUnit": 2
+        }
+      ]
+    },
+    "exponential-logarithmic": {
+      "name": "Exponential & Logarithmic Language",
+      "terms": [
+        {
+          "term": "The function grows exponentially",
+          "vagueTerm": "The function grows really fast",
+          "context": "Describing growth",
+          "examples": [
+            "Population grows exponentially at a rate of 5% per year.",
+            "Exponential growth is characterized by a constant percentage increase.",
+            "The function f(t) = 2^t exhibits exponential growth."
+          ],
+          "apUnit": 3
+        },
+        {
+          "term": "The half-life is 10 years",
+          "vagueTerm": "It takes 10 years to get to half",
+          "context": "Describing decay",
+          "examples": [
+            "The radioactive substance has a half-life of 10 years.",
+            "After one half-life, 50% of the original amount remains.",
+            "The decay function is A(t) = A₀(1/2)^(t/10)."
+          ],
+          "apUnit": 3
+        },
+        {
+          "term": "The base of the exponential is e",
+          "vagueTerm": "Using e in the exponent",
+          "context": "Natural exponential",
+          "examples": [
+            "The natural exponential function has base e ≈ 2.718.",
+            "Continuous compound interest uses base e.",
+            "The function e^x has the property that its derivative equals itself."
+          ],
+          "apUnit": 3
+        },
+        {
+          "term": "ln(x) is the exponent to which e must be raised to get x",
+          "vagueTerm": "ln undoes e to the x",
+          "context": "Defining natural log",
+          "examples": [
+            "If e^y = x, then y = ln(x).",
+            "The natural logarithm is the inverse of the natural exponential.",
+            "ln(e^x) = x and e^(ln x) = x."
+          ],
+          "apUnit": 3
+        },
+        {
+          "term": "Apply the power rule: log(a^n) = n·log(a)",
+          "vagueTerm": "Bring the exponent down",
+          "context": "Using logarithm properties",
+          "examples": [
+            "To solve for x in 2^x = 8, we write log(2^x) = x·log(2).",
+            "Using the power rule, ln(x³) = 3ln(x).",
+            "The power rule helps linearize exponential equations."
+          ],
+          "apUnit": 3
+        },
+        {
+          "term": "The logarithm of a product equals the sum of the logarithms",
+          "vagueTerm": "Split up multiplication with logs",
+          "context": "Product rule for logs",
+          "examples": [
+            "log(ab) = log(a) + log(b).",
+            "ln(2·3) = ln(2) + ln(3).",
+            "This property does NOT apply to sums: log(a+b) ≠ log(a) + log(b)."
+          ],
+          "apUnit": 3
+        },
+        {
+          "term": "The asymptote is y = 0",
+          "vagueTerm": "It gets close to zero but never touches",
+          "context": "End behavior of exponential",
+          "examples": [
+            "The function f(x) = 2^x has a horizontal asymptote at y = 0 as x → −∞.",
+            "Exponential decay functions approach zero asymptotically.",
+            "The graph approaches but never reaches the asymptote."
+          ],
+          "apUnit": 3
+        }
+      ]
+    },
+    "polynomials-rational": {
+      "name": "Polynomials & Rational Functions",
+      "terms": [
+        {
+          "term": "The degree of the polynomial is 3",
+          "vagueTerm": "It's a cubic or x cubed function",
+          "context": "Describing polynomials",
+          "examples": [
+            "f(x) = 2x³ − 5x + 1 is a polynomial of degree 3.",
+            "The degree determines the maximum number of turning points.",
+            "The leading term is the term with the highest degree."
+          ],
+          "apUnit": 1
+        },
+        {
+          "term": "The leading coefficient is negative",
+          "vagueTerm": "There's a minus on the biggest term",
+          "context": "Describing end behavior",
+          "examples": [
+            "For f(x) = −2x⁴ + 3x² − 1, the leading coefficient is −2.",
+            "A negative leading coefficient means the right end goes down (for even degree).",
+            "The sign of the leading coefficient affects end behavior."
+          ],
+          "apUnit": 1
+        },
+        {
+          "term": "x = 2 is a zero of multiplicity 3",
+          "vagueTerm": "x = 2 happens three times",
+          "context": "Describing zeros",
+          "examples": [
+            "If f(x) = (x − 2)³(x + 1), then x = 2 is a zero of multiplicity 3.",
+            "Odd multiplicity means the graph crosses the x-axis.",
+            "Even multiplicity means the graph touches but doesn't cross."
+          ],
+          "apUnit": 1
+        },
+        {
+          "term": "The rational function has a hole at x = 2",
+          "vagueTerm": "There's a gap in the graph at x = 2",
+          "context": "Describing removable discontinuities",
+          "examples": [
+            "If f(x) = (x−2)(x+1)/(x−2), there is a hole at x = 2.",
+            "The hole occurs where a factor cancels from numerator and denominator.",
+            "At the hole, the function is undefined but the limit exists."
+          ],
+          "apUnit": 4
+        },
+        {
+          "term": "As x approaches infinity, f(x) approaches 2",
+          "vagueTerm": "It goes to 2 on the right",
+          "context": "End behavior of rational functions",
+          "examples": [
+            "For f(x) = (2x² + 1)/(x² − 3), as x → ∞, f(x) → 2.",
+            "The horizontal asymptote is determined by the ratio of leading coefficients.",
+            "Compare degrees: if equal, ratio of leading coefficients gives the asymptote."
+          ],
+          "apUnit": 4
+        }
+      ]
+    },
+    "precision-language": {
+      "name": "General Precision",
+      "terms": [
+        {
+          "term": "For all x in the domain",
+          "vagueTerm": "For every x",
+          "context": "Universal statements",
+          "examples": [
+            "For all x in the domain, f(x) ≥ 0.",
+            "The property holds for all real numbers.",
+            "This is true for all x such that x > 0."
+          ],
+          "apUnit": 1
+        },
+        {
+          "term": "There exists an x such that",
+          "vagueTerm": "There's some x where",
+          "context": "Existential statements",
+          "examples": [
+            "There exists an x in [0, 1] such that f(x) = 0.",
+            "There is at least one solution.",
+            "There exists a value c where f(c) = 5."
+          ],
+          "apUnit": 1
+        },
+        {
+          "term": "The value of the expression",
+          "vagueTerm": "What you get or the answer",
+          "context": "Referring to results",
+          "examples": [
+            "The value of the expression 2x + 3 when x = 2 is 7.",
+            "Evaluate the expression to find its value.",
+            "Simplify to determine the value."
+          ],
+          "apUnit": 1
+        },
+        {
+          "term": "Substitute x = 3 into the equation",
+          "vagueTerm": "Plug in 3 for x",
+          "context": "Evaluation",
+          "examples": [
+            "Substitute x = 3 to get f(3) = 9.",
+            "Replace x with 3 in the formula.",
+            "By substitution, we find the value."
+          ],
+          "apUnit": 1
+        },
+        {
+          "term": "The solution to the equation is x = 5",
+          "vagueTerm": "x equals 5 or the answer is 5",
+          "context": "Stating solutions",
+          "examples": [
+            "The solution to 2x − 3 = 7 is x = 5.",
+            "Solving the equation yields x = 5.",
+            "The solution set is {5}."
+          ],
+          "apUnit": 1
+        },
+        {
+          "term": "The graph of the function",
+          "vagueTerm": "The curve or the picture",
+          "context": "Referring to graphs",
+          "examples": [
+            "The graph of f consists of all points (x, f(x)).",
+            "Sketch the graph of the function.",
+            "The graph shows the relationship between x and y."
+          ],
+          "apUnit": 1
+        },
+        {
+          "term": "The x-intercept is at x = 3",
+          "vagueTerm": "It crosses the x-axis at 3",
+          "context": "Describing intercepts",
+          "examples": [
+            "The x-intercept occurs where f(x) = 0.",
+            "At the x-intercept, y = 0.",
+            "The x-intercept is also called a zero or root."
+          ],
+          "apUnit": 1
+        },
+        {
+          "term": "The y-intercept is at y = 4 or the point (0, 4)",
+          "vagueTerm": "It starts at 4",
+          "context": "Describing y-intercept",
+          "examples": [
+            "The y-intercept occurs where x = 0.",
+            "For this function, f(0) = 4, so the y-intercept is 4.",
+            "The y-intercept is the constant term in a linear function."
+          ],
+          "apUnit": 1
+        },
+        {
+          "term": "Solve the equation algebraically",
+          "vagueTerm": "Do the algebra or work it out",
+          "context": "Methods of solution",
+          "examples": [
+            "Solve algebraically by isolating the variable.",
+            "An algebraic solution provides exact values.",
+            "Solving algebraically often requires factoring or using properties."
+          ],
+          "apUnit": 1
+        },
+        {
+          "term": "The relationship is linear",
+          "vagueTerm": "It's a straight line",
+          "context": "Types of relationships",
+          "examples": [
+            "A linear relationship has constant rate of change.",
+            "The equation y = mx + b represents a linear relationship.",
+            "Linear functions have degree 1."
+          ],
+          "apUnit": 1
+        }
+      ]
+    }
+  }
+}

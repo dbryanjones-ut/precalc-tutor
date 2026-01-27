@@ -1,0 +1,16 @@
+# Robots.txt for PreCalc Tutor
+
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /dashboard/
+Disallow: /_next/
+
+# Sitemap
+Sitemap: https://precalc-tutor.vercel.app/sitemap.xml
+
+# Crawl-delay for respectful crawling
+Crawl-delay: 10
+
+# Security
+Disallow: /.well-known/security.txt

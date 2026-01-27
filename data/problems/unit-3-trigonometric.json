@@ -1,0 +1,1830 @@
+{
+  "problems": [
+    {
+      "id": "u3-p001",
+      "type": "unit-circle",
+      "unit": "unit-3-trigonometric-polar",
+      "topic": "unit-circle",
+      "prompt": "\\text{Find the exact value: } \\sin\\left(\\frac{5\\pi}{6}\\right)",
+      "correctAnswer": "\\frac{1}{2}",
+      "solutions": [
+        {
+          "id": "sol-u3-p001-1",
+          "strategy": "Reference angle method",
+          "steps": [
+            {
+              "stepNumber": 1,
+              "latex": "\\frac{5\\pi}{6} \\text{ is in Quadrant II}",
+              "explanation": "Angle between π/2 and π.",
+              "goldenWord": "quadrant",
+              "sosPhase": "scan"
+            },
+            {
+              "stepNumber": 2,
+              "latex": "\\text{Reference angle: } \\pi - \\frac{5\\pi}{6} = \\frac{\\pi}{6}",
+              "explanation": "Distance from x-axis in Quadrant II.",
+              "goldenWord": "reference angle",
+              "colorHighlight": "#4169E1",
+              "sosPhase": "organize"
+            },
+            {
+              "stepNumber": 3,
+              "latex": "\\sin\\left(\\frac{\\pi}{6}\\right) = \\frac{1}{2}",
+              "explanation": "Standard angle value from π/6 family.",
+              "goldenWord": "π/6 family",
+              "sosPhase": "solve"
+            },
+            {
+              "stepNumber": 4,
+              "latex": "\\text{In Q-II: sine is positive} \\implies \\sin\\left(\\frac{5\\pi}{6}\\right) = \\frac{1}{2}",
+              "explanation": "ASTC: All Students Take Calculus (sine positive in Q-II).",
+              "goldenWord": "ASTC",
+              "sosPhase": "store"
+            }
+          ],
+          "whenToUse": "Universal method for any angle using reference angles.",
+          "difficultyLevel": "facile"
+        }
+      ],
+      "commonMistakes": [
+        {
+          "mistake": "\\sin\\left(\\frac{5\\pi}{6}\\right) = -\\frac{1}{2}",
+          "correct": "\\text{Sine is positive in Quadrant II, so } +\\frac{1}{2}",
+          "why": "ASTC rule: sine positive in Quadrants I and II.",
+          "frequency": "very-common"
+        },
+        {
+          "mistake": "\\text{Using } \\frac{5\\pi}{6} \\text{ directly instead of reference angle}",
+          "correct": "\\text{Find reference angle } \\frac{\\pi}{6}, \\text{ then apply sign}",
+          "why": "Reference angle gives magnitude; quadrant gives sign.",
+          "frequency": "common"
+        },
+        {
+          "mistake": "\\sin\\left(\\frac{5\\pi}{6}\\right) = \\frac{\\sqrt{3}}{2}",
+          "correct": "\\sin(\\pi/6) = 1/2, \\text{ not } \\sqrt{3}/2 \\text{ (that's cosine)}",
+          "why": "Must memorize correct values for π/6 family.",
+          "frequency": "common"
+        }
+      ],
+      "prerequisites": [],
+      "goldenWords": ["unit circle", "reference angle", "quadrant", "ASTC", "π/6 family"],
+      "difficulty": "facile",
+      "estimatedTimeSeconds": 120,
+      "apSection": "mc-no-calc",
+      "calculatorRequired": false,
+      "isQ4Style": false,
+      "colorCoding": {
+        "familyColor": "blue",
+        "highlightParts": {
+          "\\frac{\\pi}{6}": "#4169E1",
+          "\\frac{1}{2}": "#4169E1"
+        }
+      },
+      "practiceCount": 0,
+      "successRate": 0,
+      "dyslexiaMode": {
+        "simplifiedPrompt": "Find exact value: sin(5π/6)",
+        "chunkedSteps": [
+          "5π/6 is in Quadrant II",
+          "Reference angle: π - 5π/6 = π/6",
+          "sin(π/6) = 1/2",
+          "Sine positive in Q-II → answer: 1/2"
+        ]
+      },
+      "adhd": {
+        "estimatedFocusMinutes": 2,
+        "sosReminder": true
+      },
+      "tags": ["trigonometry", "unit-circle", "sine", "quadrant-2", "pi6-family"],
+      "examFrequency": "high"
+    },
+    {
+      "id": "u3-p002",
+      "type": "unit-circle",
+      "unit": "unit-3-trigonometric-polar",
+      "topic": "unit-circle",
+      "prompt": "\\text{Find the exact value: } \\cos\\left(\\frac{7\\pi}{4}\\right)",
+      "correctAnswer": "\\frac{\\sqrt{2}}{2}",
+      "solutions": [
+        {
+          "id": "sol-u3-p002-1",
+          "strategy": "Reference angle with quadrant",
+          "steps": [
+            {
+              "stepNumber": 1,
+              "latex": "\\frac{7\\pi}{4} \\text{ is in Quadrant IV}",
+              "explanation": "Angle between 3π/2 and 2π.",
+              "goldenWord": "Quadrant IV",
+              "sosPhase": "scan"
+            },
+            {
+              "stepNumber": 2,
+              "latex": "\\text{Reference angle: } 2\\pi - \\frac{7\\pi}{4} = \\frac{\\pi}{4}",
+              "explanation": "Distance from positive x-axis.",
+              "goldenWord": "reference angle",
+              "colorHighlight": "#DC143C",
+              "sosPhase": "organize"
+            },
+            {
+              "stepNumber": 3,
+              "latex": "\\cos\\left(\\frac{\\pi}{4}\\right) = \\frac{\\sqrt{2}}{2}",
+              "explanation": "Standard π/4 family value.",
+              "goldenWord": "π/4 family",
+              "sosPhase": "solve"
+            },
+            {
+              "stepNumber": 4,
+              "latex": "\\text{In Q-IV: cosine is positive} \\implies \\cos\\left(\\frac{7\\pi}{4}\\right) = \\frac{\\sqrt{2}}{2}",
+              "explanation": "ASTC: cosine positive in Quadrants I and IV.",
+              "goldenWord": "ASTC",
+              "sosPhase": "store"
+            }
+          ],
+          "whenToUse": "Standard method for unit circle values.",
+          "difficultyLevel": "facile"
+        }
+      ],
+      "commonMistakes": [
+        {
+          "mistake": "\\cos\\left(\\frac{7\\pi}{4}\\right) = -\\frac{\\sqrt{2}}{2}",
+          "correct": "\\text{Cosine is positive in Q-IV}",
+          "why": "ASTC: All (Q-I), Sine (Q-II), Tangent (Q-III), Cosine (Q-IV).",
+          "frequency": "very-common"
+        },
+        {
+          "mistake": "\\text{Reference angle } = \\frac{7\\pi}{4} - \\frac{3\\pi}{2} = \\frac{\\pi}{4}",
+          "correct": "\\text{Use } 2\\pi - \\frac{7\\pi}{4} = \\frac{\\pi}{4} \\text{ (from x-axis)}",
+          "why": "Reference angle is always from x-axis, not nearest axis.",
+          "frequency": "occasional"
+        }
+      ],
+      "prerequisites": ["u3-p001"],
+      "goldenWords": ["unit circle", "reference angle", "Quadrant IV", "π/4 family", "ASTC"],
+      "difficulty": "facile",
+      "estimatedTimeSeconds": 120,
+      "apSection": "mc-no-calc",
+      "calculatorRequired": false,
+      "isQ4Style": false,
+      "colorCoding": {
+        "familyColor": "red",
+        "highlightParts": {
+          "\\frac{\\pi}{4}": "#DC143C",
+          "\\frac{\\sqrt{2}}{2}": "#DC143C"
+        }
+      },
+      "practiceCount": 0,
+      "successRate": 0,
+      "dyslexiaMode": {
+        "simplifiedPrompt": "Find exact value: cos(7π/4)",
+        "chunkedSteps": [
+          "7π/4 is in Quadrant IV",
+          "Reference: 2π - 7π/4 = π/4",
+          "cos(π/4) = √2/2",
+          "Cosine positive in Q-IV → answer: √2/2"
+        ]
+      },
+      "adhd": {
+        "estimatedFocusMinutes": 2,
+        "sosReminder": true
+      },
+      "tags": ["trigonometry", "unit-circle", "cosine", "quadrant-4", "pi4-family"],
+      "examFrequency": "high"
+    },
+    {
+      "id": "u3-p003",
+      "type": "unit-circle",
+      "unit": "unit-3-trigonometric-polar",
+      "topic": "unit-circle",
+      "prompt": "\\text{Find the exact value: } \\tan\\left(\\frac{4\\pi}{3}\\right)",
+      "correctAnswer": "\\sqrt{3}",
+      "solutions": [
+        {
+          "id": "sol-u3-p003-1",
+          "strategy": "Reference angle method",
+          "steps": [
+            {
+              "stepNumber": 1,
+              "latex": "\\frac{4\\pi}{3} \\text{ is in Quadrant III}",
+              "explanation": "Angle between π and 3π/2.",
+              "goldenWord": "Quadrant III",
+              "sosPhase": "scan"
+            },
+            {
+              "stepNumber": 2,
+              "latex": "\\text{Reference angle: } \\frac{4\\pi}{3} - \\pi = \\frac{\\pi}{3}",
+              "explanation": "Distance from negative x-axis in Q-III.",
+              "goldenWord": "reference angle",
+              "colorHighlight": "#228B22",
+              "sosPhase": "organize"
+            },
+            {
+              "stepNumber": 3,
+              "latex": "\\tan\\left(\\frac{\\pi}{3}\\right) = \\sqrt{3}",
+              "explanation": "Standard π/3 family value.",
+              "goldenWord": "π/3 family",
+              "sosPhase": "solve"
+            },
+            {
+              "stepNumber": 4,
+              "latex": "\\text{In Q-III: tangent is positive} \\implies \\tan\\left(\\frac{4\\pi}{3}\\right) = \\sqrt{3}",
+              "explanation": "ASTC: tangent positive in Quadrants I and III.",
+              "goldenWord": "ASTC",
+              "sosPhase": "store"
+            }
+          ],
+          "whenToUse": "Standard approach for tangent values.",
+          "difficultyLevel": "facile"
+        },
+        {
+          "id": "sol-u3-p003-2",
+          "strategy": "Using sine and cosine",
+          "steps": [
+            {
+              "stepNumber": 1,
+              "latex": "\\tan\\theta = \\frac{\\sin\\theta}{\\cos\\theta}",
+              "explanation": "Tangent definition.",
+              "sosPhase": "organize"
+            },
+            {
+              "stepNumber": 2,
+              "latex": "\\sin\\left(\\frac{4\\pi}{3}\\right) = -\\frac{\\sqrt{3}}{2}, \\quad \\cos\\left(\\frac{4\\pi}{3}\\right) = -\\frac{1}{2}",
+              "explanation": "Both negative in Q-III.",
+              "sosPhase": "solve"
+            },
+            {
+              "stepNumber": 3,
+              "latex": "\\tan\\left(\\frac{4\\pi}{3}\\right) = \\frac{-\\sqrt{3}/2}{-1/2} = \\sqrt{3}",
+              "explanation": "Negatives cancel.",
+              "sosPhase": "solve"
+            }
+          ],
+          "whenToUse": "When you want to verify or use ratio definition.",
+          "difficultyLevel": "medio"
+        }
+      ],
+      "commonMistakes": [
+        {
+          "mistake": "\\tan\\left(\\frac{4\\pi}{3}\\right) = -\\sqrt{3}",
+          "correct": "\\text{Tangent is positive in Q-III (both sin and cos negative)}",
+          "why": "Tangent = sin/cos; two negatives make a positive.",
+          "frequency": "very-common"
+        },
+        {
+          "mistake": "\\tan(\\pi/3) = \\frac{\\sqrt{3}}{2}",
+          "correct": "\\tan(\\pi/3) = \\sqrt{3} \\text{ (not the same as sin or cos)}",
+          "why": "Tangent has different values than sine and cosine.",
+          "frequency": "common"
+        }
+      ],
+      "prerequisites": ["u3-p001", "u3-p002"],
+      "goldenWords": ["unit circle", "tangent", "reference angle", "Quadrant III", "π/3 family"],
+      "difficulty": "facile",
+      "estimatedTimeSeconds": 150,
+      "apSection": "mc-no-calc",
+      "calculatorRequired": false,
+      "isQ4Style": false,
+      "colorCoding": {
+        "familyColor": "green",
+        "highlightParts": {
+          "\\frac{\\pi}{3}": "#228B22",
+          "\\sqrt{3}": "#228B22"
+        }
+      },
+      "practiceCount": 0,
+      "successRate": 0,
+      "dyslexiaMode": {
+        "simplifiedPrompt": "Find exact value: tan(4π/3)",
+        "chunkedSteps": [
+          "4π/3 is in Quadrant III",
+          "Reference: 4π/3 - π = π/3",
+          "tan(π/3) = √3",
+          "Tangent positive in Q-III → answer: √3"
+        ]
+      },
+      "adhd": {
+        "estimatedFocusMinutes": 3,
+        "sosReminder": true
+      },
+      "tags": ["trigonometry", "unit-circle", "tangent", "quadrant-3", "pi3-family"],
+      "examFrequency": "high"
+    },
+    {
+      "id": "u3-p004",
+      "type": "unit-circle",
+      "unit": "unit-3-trigonometric-polar",
+      "topic": "unit-circle",
+      "prompt": "\\text{Find all angles } \\theta \\text{ in } [0, 2\\pi) \\text{ where } \\cos\\theta = -\\frac{1}{2}.",
+      "correctAnswer": "\\theta = \\frac{2\\pi}{3}, \\frac{4\\pi}{3}",
+      "solutions": [
+        {
+          "id": "sol-u3-p004-1",
+          "strategy": "Identify quadrants where cosine is negative",
+          "steps": [
+            {
+              "stepNumber": 1,
+              "latex": "\\text{Cosine is negative in Quadrants II and III}",
+              "explanation": "ASTC rule: cosine positive in Q-I and Q-IV only.",
+              "goldenWord": "ASTC",
+              "sosPhase": "scan"
+            },
+            {
+              "stepNumber": 2,
+              "latex": "\\text{Reference angle: } \\cos\\theta = \\frac{1}{2} \\implies \\theta_r = \\frac{\\pi}{3}",
+              "explanation": "Find reference angle where |cos| = 1/2.",
+              "goldenWord": "reference angle",
+              "colorHighlight": "#228B22",
+              "sosPhase": "organize"
+            },
+            {
+              "stepNumber": 3,
+              "latex": "\\text{Q-II: } \\theta = \\pi - \\frac{\\pi}{3} = \\frac{2\\pi}{3}",
+              "explanation": "π minus reference angle for Q-II.",
+              "sosPhase": "solve"
+            },
+            {
+              "stepNumber": 4,
+              "latex": "\\text{Q-III: } \\theta = \\pi + \\frac{\\pi}{3} = \\frac{4\\pi}{3}",
+              "explanation": "π plus reference angle for Q-III.",
+              "sosPhase": "solve"
+            }
+          ],
+          "whenToUse": "Finding all solutions in a given interval.",
+          "difficultyLevel": "medio"
+        }
+      ],
+      "commonMistakes": [
+        {
+          "mistake": "\\text{Only finding one angle: } \\theta = \\frac{2\\pi}{3}",
+          "correct": "\\text{Find both angles in Q-II and Q-III}",
+          "why": "Cosine = -1/2 at two locations on the unit circle.",
+          "frequency": "very-common"
+        },
+        {
+          "mistake": "\\text{Using reference angle } \\pi/6 \\text{ instead of } \\pi/3",
+          "correct": "\\cos(\\pi/3) = 1/2, \\text{ not } \\cos(\\pi/6)",
+          "why": "Must know correct π/3 and π/6 family values.",
+          "frequency": "common"
+        },
+        {
+          "mistake": "\\theta = \\frac{5\\pi}{3} \\text{ (using Q-IV where cosine is positive)}",
+          "correct": "\\text{Only Q-II and Q-III where cosine is negative}",
+          "why": "Must respect the sign of the given value.",
+          "frequency": "occasional"
+        }
+      ],
+      "prerequisites": ["u3-p001", "u3-p002", "u3-p003"],
+      "goldenWords": ["unit circle", "multiple solutions", "ASTC", "reference angle"],
+      "difficulty": "medio",
+      "estimatedTimeSeconds": 180,
+      "apSection": "mc-no-calc",
+      "calculatorRequired": false,
+      "isQ4Style": false,
+      "colorCoding": {
+        "familyColor": "green",
+        "highlightParts": {
+          "\\frac{\\pi}{3}": "#228B22",
+          "\\frac{2\\pi}{3}": "#228B22",
+          "\\frac{4\\pi}{3}": "#228B22"
+        }
+      },
+      "practiceCount": 0,
+      "successRate": 0,
+      "dyslexiaMode": {
+        "simplifiedPrompt": "Find all θ in [0, 2π) where cos θ = -1/2",
+        "chunkedSteps": [
+          "Cosine negative in Q-II and Q-III",
+          "Reference angle: π/3 (since |cos| = 1/2)",
+          "Q-II: θ = π - π/3 = 2π/3",
+          "Q-III: θ = π + π/3 = 4π/3"
+        ]
+      },
+      "adhd": {
+        "estimatedFocusMinutes": 3,
+        "sosReminder": true
+      },
+      "tags": ["trigonometry", "unit-circle", "multiple-solutions", "cosine"],
+      "examFrequency": "high"
+    },
+    {
+      "id": "u3-p005",
+      "type": "unit-circle",
+      "unit": "unit-3-trigonometric-polar",
+      "topic": "unit-circle",
+      "prompt": "\\text{Evaluate without a calculator: } \\sin\\left(-\\frac{\\pi}{3}\\right) + \\cos\\left(\\frac{5\\pi}{6}\\right)",
+      "correctAnswer": "-\\frac{\\sqrt{3}}{2} - \\frac{\\sqrt{3}}{2} = -\\sqrt{3}",
+      "solutions": [
+        {
+          "id": "sol-u3-p005-1",
+          "strategy": "Evaluate each term separately",
+          "steps": [
+            {
+              "stepNumber": 1,
+              "latex": "\\sin\\left(-\\frac{\\pi}{3}\\right) = -\\sin\\left(\\frac{\\pi}{3}\\right) = -\\frac{\\sqrt{3}}{2}",
+              "explanation": "Sine is an odd function: sin(-x) = -sin(x).",
+              "goldenWord": "odd function",
+              "colorHighlight": "#228B22",
+              "sosPhase": "solve"
+            },
+            {
+              "stepNumber": 2,
+              "latex": "\\cos\\left(\\frac{5\\pi}{6}\\right): \\text{ Q-II, reference } \\frac{\\pi}{6}",
+              "explanation": "Reference angle: π - 5π/6 = π/6.",
+              "colorHighlight": "#4169E1",
+              "sosPhase": "organize"
+            },
+            {
+              "stepNumber": 3,
+              "latex": "\\cos\\left(\\frac{\\pi}{6}\\right) = \\frac{\\sqrt{3}}{2}, \\text{ but negative in Q-II}",
+              "explanation": "Cosine negative in Q-II: -√3/2.",
+              "sosPhase": "solve"
+            },
+            {
+              "stepNumber": 4,
+              "latex": "-\\frac{\\sqrt{3}}{2} + \\left(-\\frac{\\sqrt{3}}{2}\\right) = -\\sqrt{3}",
+              "explanation": "Add the two terms.",
+              "sosPhase": "store"
+            }
+          ],
+          "whenToUse": "Evaluate each trig expression independently, then combine.",
+          "difficultyLevel": "medio"
+        }
+      ],
+      "commonMistakes": [
+        {
+          "mistake": "\\sin(-\\pi/3) = \\sin(\\pi/3) = \\sqrt{3}/2",
+          "correct": "\\sin(-x) = -\\sin(x) \\text{ (odd function)}",
+          "why": "Must apply odd function property for negative angles.",
+          "frequency": "very-common"
+        },
+        {
+          "mistake": "\\cos(5\\pi/6) = \\sqrt{3}/2 \\text{ (missing negative sign)}",
+          "correct": "\\text{In Q-II, cosine is negative: } -\\sqrt{3}/2",
+          "why": "Must check quadrant for sign.",
+          "frequency": "common"
+        }
+      ],
+      "prerequisites": ["u3-p001", "u3-p002"],
+      "goldenWords": ["odd function", "even function", "negative angles", "unit circle"],
+      "difficulty": "medio",
+      "estimatedTimeSeconds": 180,
+      "apSection": "mc-no-calc",
+      "calculatorRequired": false,
+      "isQ4Style": false,
+      "colorCoding": {
+        "familyColor": "green",
+        "highlightParts": {
+          "\\frac{\\pi}{3}": "#228B22",
+          "\\frac{\\pi}{6}": "#4169E1"
+        }
+      },
+      "practiceCount": 0,
+      "successRate": 0,
+      "dyslexiaMode": {
+        "simplifiedPrompt": "Evaluate: sin(-π/3) + cos(5π/6)",
+        "chunkedSteps": [
+          "sin(-π/3) = -sin(π/3) = -√3/2",
+          "cos(5π/6): Q-II, ref π/6",
+          "cos(π/6) = √3/2, negative in Q-II",
+          "So cos(5π/6) = -√3/2",
+          "Total: -√3/2 - √3/2 = -√3"
+        ]
+      },
+      "adhd": {
+        "estimatedFocusMinutes": 3,
+        "sosReminder": true
+      },
+      "tags": ["trigonometry", "unit-circle", "negative-angles", "combination"],
+      "examFrequency": "medium"
+    },
+    {
+      "id": "u3-p006",
+      "type": "unit-circle",
+      "unit": "unit-3-trigonometric-polar",
+      "topic": "unit-circle",
+      "prompt": "\\text{Without a calculator, find } \\sec\\left(\\frac{3\\pi}{4}\\right).",
+      "correctAnswer": "-\\sqrt{2}",
+      "solutions": [
+        {
+          "id": "sol-u3-p006-1",
+          "strategy": "Use reciprocal identity",
+          "steps": [
+            {
+              "stepNumber": 1,
+              "latex": "\\sec\\theta = \\frac{1}{\\cos\\theta}",
+              "explanation": "Secant is reciprocal of cosine.",
+              "goldenWord": "reciprocal identity",
+              "sosPhase": "scan"
+            },
+            {
+              "stepNumber": 2,
+              "latex": "\\frac{3\\pi}{4} \\text{ is in Q-II, reference angle } \\frac{\\pi}{4}",
+              "explanation": "π - 3π/4 = π/4.",
+              "colorHighlight": "#DC143C",
+              "sosPhase": "organize"
+            },
+            {
+              "stepNumber": 3,
+              "latex": "\\cos\\left(\\frac{3\\pi}{4}\\right) = -\\frac{\\sqrt{2}}{2} \\text{ (negative in Q-II)}",
+              "explanation": "Cosine of π/4 is √2/2, negative in Q-II.",
+              "sosPhase": "solve"
+            },
+            {
+              "stepNumber": 4,
+              "latex": "\\sec\\left(\\frac{3\\pi}{4}\\right) = \\frac{1}{-\\sqrt{2}/2} = -\\frac{2}{\\sqrt{2}} = -\\sqrt{2}",
+              "explanation": "Rationalize: multiply by √2/√2.",
+              "goldenWord": "rationalize",
+              "sosPhase": "store"
+            }
+          ],
+          "whenToUse": "For secant, cosecant, cotangent: use reciprocal identities.",
+          "difficultyLevel": "medio"
+        }
+      ],
+      "commonMistakes": [
+        {
+          "mistake": "\\sec(3\\pi/4) = \\sqrt{2} \\text{ (missing negative)}",
+          "correct": "\\text{In Q-II, cosine is negative, so secant is negative}",
+          "why": "Secant has same sign as cosine.",
+          "frequency": "very-common"
+        },
+        {
+          "mistake": "\\frac{1}{-\\sqrt{2}/2} = -\\frac{1}{\\sqrt{2}}",
+          "correct": "\\frac{1}{-\\sqrt{2}/2} = -\\frac{2}{\\sqrt{2}} = -\\sqrt{2}",
+          "why": "Dividing by a fraction means multiplying by its reciprocal.",
+          "frequency": "common"
+        }
+      ],
+      "prerequisites": ["u3-p002"],
+      "goldenWords": ["secant", "reciprocal identity", "rationalize", "unit circle"],
+      "difficulty": "medio",
+      "estimatedTimeSeconds": 180,
+      "apSection": "mc-no-calc",
+      "calculatorRequired": false,
+      "isQ4Style": false,
+      "colorCoding": {
+        "familyColor": "red",
+        "highlightParts": {
+          "\\frac{\\pi}{4}": "#DC143C",
+          "\\sqrt{2}": "#DC143C"
+        }
+      },
+      "practiceCount": 0,
+      "successRate": 0,
+      "dyslexiaMode": {
+        "simplifiedPrompt": "Find sec(3π/4)",
+        "chunkedSteps": [
+          "sec θ = 1/cos θ",
+          "3π/4 in Q-II, reference π/4",
+          "cos(3π/4) = -√2/2",
+          "sec(3π/4) = 1/(-√2/2) = -2/√2 = -√2"
+        ]
+      },
+      "adhd": {
+        "estimatedFocusMinutes": 3,
+        "sosReminder": true
+      },
+      "tags": ["trigonometry", "unit-circle", "secant", "reciprocal-identities"],
+      "examFrequency": "medium"
+    },
+    {
+      "id": "u3-p007",
+      "type": "symbolic-manipulation",
+      "unit": "unit-3-trigonometric-polar",
+      "topic": "trig-identities",
+      "prompt": "\\text{Simplify: } \\frac{\\sin^2 x}{1 - \\cos x}",
+      "correctAnswer": "1 + \\cos x",
+      "solutions": [
+        {
+          "id": "sol-u3-p007-1",
+          "strategy": "Use Pythagorean identity",
+          "steps": [
+            {
+              "stepNumber": 1,
+              "latex": "\\sin^2 x = 1 - \\cos^2 x",
+              "explanation": "Pythagorean identity: sin²x + cos²x = 1.",
+              "goldenWord": "Pythagorean identity",
+              "sosPhase": "organize"
+            },
+            {
+              "stepNumber": 2,
+              "latex": "\\frac{1 - \\cos^2 x}{1 - \\cos x}",
+              "explanation": "Substitute into numerator.",
+              "sosPhase": "solve"
+            },
+            {
+              "stepNumber": 3,
+              "latex": "\\frac{(1 - \\cos x)(1 + \\cos x)}{1 - \\cos x}",
+              "explanation": "Factor difference of squares: a² - b² = (a-b)(a+b).",
+              "goldenWord": "difference of squares",
+              "sosPhase": "solve"
+            },
+            {
+              "stepNumber": 4,
+              "latex": "= 1 + \\cos x",
+              "explanation": "Cancel common factor (1 - cos x).",
+              "sosPhase": "store"
+            }
+          ],
+          "whenToUse": "Standard approach for simplifying trig expressions.",
+          "difficultyLevel": "medio"
+        }
+      ],
+      "commonMistakes": [
+        {
+          "mistake": "\\frac{\\sin^2 x}{1 - \\cos x} = \\sin^2 x - \\cos x",
+          "correct": "\\text{Cannot split fraction this way; must manipulate algebraically}",
+          "why": "Division distributes only over addition in numerator, not this form.",
+          "frequency": "occasional"
+        },
+        {
+          "mistake": "1 - \\cos^2 x = 1 - \\cos x \\cdot \\cos x \\text{ (not factoring correctly)}",
+          "correct": "1 - \\cos^2 x = (1 - \\cos x)(1 + \\cos x)",
+          "why": "Difference of squares: a² - b² = (a-b)(a+b).",
+          "frequency": "common"
+        }
+      ],
+      "prerequisites": [],
+      "goldenWords": ["Pythagorean identity", "simplify", "difference of squares", "cancel"],
+      "difficulty": "medio",
+      "estimatedTimeSeconds": 180,
+      "apSection": "mc-no-calc",
+      "calculatorRequired": false,
+      "isQ4Style": true,
+      "practiceCount": 0,
+      "successRate": 0,
+      "dyslexiaMode": {
+        "simplifiedPrompt": "Simplify: (sin²x)/(1 - cos x)",
+        "chunkedSteps": [
+          "Use sin²x = 1 - cos²x",
+          "Get (1 - cos²x)/(1 - cos x)",
+          "Factor top: (1-cos x)(1+cos x)",
+          "Cancel: answer is 1 + cos x"
+        ]
+      },
+      "adhd": {
+        "estimatedFocusMinutes": 3,
+        "sosReminder": true
+      },
+      "tags": ["trigonometry", "identities", "pythagorean", "simplify"],
+      "examFrequency": "high"
+    },
+    {
+      "id": "u3-p008",
+      "type": "symbolic-manipulation",
+      "unit": "unit-3-trigonometric-polar",
+      "topic": "trig-identities",
+      "prompt": "\\text{Prove the identity: } \\tan x + \\cot x = \\sec x \\csc x",
+      "correctAnswer": "\\text{Proven using reciprocal and quotient identities}",
+      "solutions": [
+        {
+          "id": "sol-u3-p008-1",
+          "strategy": "Convert to sine and cosine",
+          "steps": [
+            {
+              "stepNumber": 1,
+              "latex": "\\tan x + \\cot x = \\frac{\\sin x}{\\cos x} + \\frac{\\cos x}{\\sin x}",
+              "explanation": "Use quotient identities.",
+              "goldenWord": "quotient identities",
+              "sosPhase": "organize"
+            },
+            {
+              "stepNumber": 2,
+              "latex": "= \\frac{\\sin^2 x + \\cos^2 x}{\\sin x \\cos x}",
+              "explanation": "Common denominator: sin x cos x.",
+              "sosPhase": "solve"
+            },
+            {
+              "stepNumber": 3,
+              "latex": "= \\frac{1}{\\sin x \\cos x}",
+              "explanation": "Pythagorean identity: sin²x + cos²x = 1.",
+              "goldenWord": "Pythagorean identity",
+              "sosPhase": "solve"
+            },
+            {
+              "stepNumber": 4,
+              "latex": "= \\frac{1}{\\sin x} \\cdot \\frac{1}{\\cos x} = \\csc x \\sec x",
+              "explanation": "Reciprocal identities: csc x = 1/sin x, sec x = 1/cos x.",
+              "goldenWord": "reciprocal identities",
+              "sosPhase": "store"
+            }
+          ],
+          "whenToUse": "Standard approach: convert everything to sin and cos.",
+          "difficultyLevel": "medio"
+        }
+      ],
+      "commonMistakes": [
+        {
+          "mistake": "\\text{Adding fractions incorrectly: } \\frac{a}{b} + \\frac{c}{d} = \\frac{a+c}{b+d}",
+          "correct": "\\frac{a}{b} + \\frac{c}{d} = \\frac{ad + bc}{bd}",
+          "why": "Must use common denominator.",
+          "frequency": "very-common"
+        },
+        {
+          "mistake": "\\text{Forgetting Pythagorean identity}",
+          "correct": "\\sin^2 x + \\cos^2 x = 1 \\text{ (fundamental identity)}",
+          "why": "This is the key step to simplify the numerator.",
+          "frequency": "occasional"
+        }
+      ],
+      "prerequisites": ["u3-p007"],
+      "goldenWords": ["prove identity", "quotient identities", "Pythagorean identity", "reciprocal identities"],
+      "difficulty": "medio",
+      "estimatedTimeSeconds": 240,
+      "apSection": "frq-no-calc",
+      "calculatorRequired": false,
+      "isQ4Style": true,
+      "practiceCount": 0,
+      "successRate": 0,
+      "dyslexiaMode": {
+        "simplifiedPrompt": "Prove: tan x + cot x = sec x csc x",
+        "chunkedSteps": [
+          "LHS: sin x/cos x + cos x/sin x",
+          "Common denominator: (sin²x + cos²x)/(sin x cos x)",
+          "Numerator = 1 (Pythagorean)",
+          "= 1/(sin x cos x) = csc x sec x",
+          "= RHS ✓"
+        ]
+      },
+      "adhd": {
+        "estimatedFocusMinutes": 4,
+        "sosReminder": true
+      },
+      "tags": ["trigonometry", "identities", "prove", "reciprocal"],
+      "examFrequency": "high"
+    },
+    {
+      "id": "u3-p009",
+      "type": "symbolic-manipulation",
+      "unit": "unit-3-trigonometric-polar",
+      "topic": "trig-identities",
+      "prompt": "\\text{Simplify: } \\frac{1 - \\sin^2 x}{\\cos x}",
+      "correctAnswer": "\\cos x",
+      "solutions": [
+        {
+          "id": "sol-u3-p009-1",
+          "strategy": "Pythagorean substitution",
+          "steps": [
+            {
+              "stepNumber": 1,
+              "latex": "1 - \\sin^2 x = \\cos^2 x",
+              "explanation": "Pythagorean identity rearranged.",
+              "goldenWord": "Pythagorean identity",
+              "sosPhase": "organize"
+            },
+            {
+              "stepNumber": 2,
+              "latex": "\\frac{\\cos^2 x}{\\cos x}",
+              "explanation": "Substitute into the expression.",
+              "sosPhase": "solve"
+            },
+            {
+              "stepNumber": 3,
+              "latex": "= \\cos x",
+              "explanation": "Cancel one factor of cos x.",
+              "sosPhase": "store"
+            }
+          ],
+          "whenToUse": "Quick simplification using Pythagorean identity.",
+          "difficultyLevel": "facile"
+        }
+      ],
+      "commonMistakes": [
+        {
+          "mistake": "1 - \\sin^2 x = 1 - \\sin x",
+          "correct": "1 - \\sin^2 x = \\cos^2 x \\text{ (not } 1 - \\sin x)",
+          "why": "Must recognize Pythagorean identity form.",
+          "frequency": "occasional"
+        },
+        {
+          "mistake": "\\frac{\\cos^2 x}{\\cos x} = \\cos^2 x - \\cos x",
+          "correct": "\\frac{\\cos^2 x}{\\cos x} = \\cos x",
+          "why": "Division, not subtraction.",
+          "frequency": "occasional"
+        }
+      ],
+      "prerequisites": ["u3-p007"],
+      "goldenWords": ["Pythagorean identity", "simplify", "cancel"],
+      "difficulty": "facile",
+      "estimatedTimeSeconds": 90,
+      "apSection": "mc-no-calc",
+      "calculatorRequired": false,
+      "isQ4Style": true,
+      "practiceCount": 0,
+      "successRate": 0,
+      "dyslexiaMode": {
+        "simplifiedPrompt": "Simplify: (1 - sin²x)/cos x",
+        "chunkedSteps": [
+          "Use 1 - sin²x = cos²x",
+          "Get cos²x/cos x",
+          "Answer: cos x"
+        ]
+      },
+      "adhd": {
+        "estimatedFocusMinutes": 2,
+        "sosReminder": false
+      },
+      "tags": ["trigonometry", "identities", "pythagorean", "simplify"],
+      "examFrequency": "high"
+    },
+    {
+      "id": "u3-p010",
+      "type": "symbolic-manipulation",
+      "unit": "unit-3-trigonometric-polar",
+      "topic": "trig-identities",
+      "prompt": "\\text{Verify: } (\\sec x - \\tan x)(\\sec x + \\tan x) = 1",
+      "correctAnswer": "\\text{Verified using difference of squares and Pythagorean identity}",
+      "solutions": [
+        {
+          "id": "sol-u3-p010-1",
+          "strategy": "Expand and simplify",
+          "steps": [
+            {
+              "stepNumber": 1,
+              "latex": "(\\sec x - \\tan x)(\\sec x + \\tan x) = \\sec^2 x - \\tan^2 x",
+              "explanation": "Difference of squares: (a-b)(a+b) = a² - b².",
+              "goldenWord": "difference of squares",
+              "sosPhase": "organize"
+            },
+            {
+              "stepNumber": 2,
+              "latex": "\\sec^2 x - \\tan^2 x = 1",
+              "explanation": "Pythagorean identity: 1 + tan²x = sec²x, rearranged.",
+              "goldenWord": "Pythagorean identity",
+              "sosPhase": "solve"
+            }
+          ],
+          "whenToUse": "Recognize algebraic patterns (difference of squares).",
+          "difficultyLevel": "medio"
+        },
+        {
+          "id": "sol-u3-p010-2",
+          "strategy": "Convert to sine and cosine",
+          "steps": [
+            {
+              "stepNumber": 1,
+              "latex": "\\left(\\frac{1}{\\cos x} - \\frac{\\sin x}{\\cos x}\\right)\\left(\\frac{1}{\\cos x} + \\frac{\\sin x}{\\cos x}\\right)",
+              "explanation": "Use quotient and reciprocal identities.",
+              "sosPhase": "organize"
+            },
+            {
+              "stepNumber": 2,
+              "latex": "= \\frac{(1 - \\sin x)(1 + \\sin x)}{\\cos^2 x} = \\frac{1 - \\sin^2 x}{\\cos^2 x}",
+              "explanation": "Multiply and simplify.",
+              "sosPhase": "solve"
+            },
+            {
+              "stepNumber": 3,
+              "latex": "= \\frac{\\cos^2 x}{\\cos^2 x} = 1",
+              "explanation": "Pythagorean identity: 1 - sin²x = cos²x.",
+              "sosPhase": "solve"
+            }
+          ],
+          "whenToUse": "When you want to verify from first principles.",
+          "difficultyLevel": "medio"
+        }
+      ],
+      "commonMistakes": [
+        {
+          "mistake": "\\text{Expanding as } \\sec^2 x + \\tan^2 x",
+          "correct": "(a-b)(a+b) = a^2 - b^2 \\text{, not } a^2 + b^2",
+          "why": "Middle terms cancel in difference of squares.",
+          "frequency": "common"
+        },
+        {
+          "mistake": "\\text{Not knowing Pythagorean identity with sec and tan}",
+          "correct": "1 + \\tan^2 x = \\sec^2 x \\implies \\sec^2 x - \\tan^2 x = 1",
+          "why": "Must memorize all forms of Pythagorean identities.",
+          "frequency": "common"
+        }
+      ],
+      "prerequisites": ["u3-p007", "u3-p008"],
+      "goldenWords": ["verify identity", "difference of squares", "Pythagorean identity", "secant", "tangent"],
+      "difficulty": "medio",
+      "estimatedTimeSeconds": 180,
+      "apSection": "mc-no-calc",
+      "calculatorRequired": false,
+      "isQ4Style": true,
+      "practiceCount": 0,
+      "successRate": 0,
+      "dyslexiaMode": {
+        "simplifiedPrompt": "Verify: (sec x - tan x)(sec x + tan x) = 1",
+        "chunkedSteps": [
+          "Pattern: (a-b)(a+b) = a² - b²",
+          "Get sec²x - tan²x",
+          "Pythagorean: sec²x - tan²x = 1",
+          "Verified ✓"
+        ]
+      },
+      "adhd": {
+        "estimatedFocusMinutes": 3,
+        "sosReminder": true
+      },
+      "tags": ["trigonometry", "identities", "verify", "pythagorean"],
+      "examFrequency": "medium"
+    },
+    {
+      "id": "u3-p011",
+      "type": "symbolic-manipulation",
+      "unit": "unit-3-trigonometric-polar",
+      "topic": "trig-identities",
+      "prompt": "\\text{Simplify: } \\sin x \\tan x + \\cos x",
+      "correctAnswer": "\\sec x",
+      "solutions": [
+        {
+          "id": "sol-u3-p011-1",
+          "strategy": "Convert tan to sin/cos",
+          "steps": [
+            {
+              "stepNumber": 1,
+              "latex": "\\sin x \\cdot \\frac{\\sin x}{\\cos x} + \\cos x",
+              "explanation": "Substitute tan x = sin x / cos x.",
+              "goldenWord": "quotient identity",
+              "sosPhase": "organize"
+            },
+            {
+              "stepNumber": 2,
+              "latex": "= \\frac{\\sin^2 x}{\\cos x} + \\cos x",
+              "explanation": "Simplify first term.",
+              "sosPhase": "solve"
+            },
+            {
+              "stepNumber": 3,
+              "latex": "= \\frac{\\sin^2 x + \\cos^2 x}{\\cos x}",
+              "explanation": "Common denominator.",
+              "sosPhase": "solve"
+            },
+            {
+              "stepNumber": 4,
+              "latex": "= \\frac{1}{\\cos x} = \\sec x",
+              "explanation": "Pythagorean identity and reciprocal.",
+              "goldenWord": "Pythagorean identity",
+              "sosPhase": "store"
+            }
+          ],
+          "whenToUse": "Convert to sin/cos for easier manipulation.",
+          "difficultyLevel": "medio"
+        }
+      ],
+      "commonMistakes": [
+        {
+          "mistake": "\\sin x \\tan x = \\sin^2 x \\text{ (forgetting tan is sin/cos)}",
+          "correct": "\\sin x \\tan x = \\sin x \\cdot \\frac{\\sin x}{\\cos x} = \\frac{\\sin^2 x}{\\cos x}",
+          "why": "Must use quotient identity for tangent.",
+          "frequency": "common"
+        },
+        {
+          "mistake": "\\frac{\\sin^2 x}{\\cos x} + \\cos x = \\frac{\\sin^2 x + \\cos x}{\\cos x}",
+          "correct": "\\text{Need common denominator: } \\frac{\\sin^2 x + \\cos^2 x}{\\cos x}",
+          "why": "cos x = (cos²x)/cos x when finding common denominator.",
+          "frequency": "common"
+        }
+      ],
+      "prerequisites": ["u3-p007", "u3-p009"],
+      "goldenWords": ["simplify", "quotient identity", "Pythagorean identity", "secant"],
+      "difficulty": "medio",
+      "estimatedTimeSeconds": 180,
+      "apSection": "mc-no-calc",
+      "calculatorRequired": false,
+      "isQ4Style": true,
+      "practiceCount": 0,
+      "successRate": 0,
+      "dyslexiaMode": {
+        "simplifiedPrompt": "Simplify: sin x tan x + cos x",
+        "chunkedSteps": [
+          "tan x = sin x/cos x",
+          "So: (sin²x)/cos x + cos x",
+          "Common denominator: (sin²x + cos²x)/cos x",
+          "= 1/cos x = sec x"
+        ]
+      },
+      "adhd": {
+        "estimatedFocusMinutes": 3,
+        "sosReminder": true
+      },
+      "tags": ["trigonometry", "identities", "simplify", "quotient"],
+      "examFrequency": "medium"
+    },
+    {
+      "id": "u3-p012",
+      "type": "graphing",
+      "unit": "unit-3-trigonometric-polar",
+      "topic": "sinusoidal-modeling",
+      "prompt": "\\text{Write equation for sinusoidal function with amplitude 3, period } \\pi, \\text{ phase shift } \\frac{\\pi}{4} \\text{ right, vertical shift 2 up.}",
+      "correctAnswer": "f(x) = 3\\sin\\left(2\\left(x - \\frac{\\pi}{4}\\right)\\right) + 2 \\text{ or } 3\\cos\\left(2\\left(x - \\frac{\\pi}{4}\\right)\\right) + 2",
+      "solutions": [
+        {
+          "id": "sol-u3-p012-1",
+          "strategy": "Build from general form",
+          "steps": [
+            {
+              "stepNumber": 1,
+              "latex": "f(x) = A\\sin(B(x - C)) + D",
+              "explanation": "General sinusoidal form. A = amplitude, D = vertical shift.",
+              "goldenWord": "sinusoidal form",
+              "sosPhase": "scan"
+            },
+            {
+              "stepNumber": 2,
+              "latex": "A = 3, D = 2",
+              "explanation": "Amplitude 3, vertical shift 2.",
+              "sosPhase": "organize"
+            },
+            {
+              "stepNumber": 3,
+              "latex": "\\text{Period } = \\frac{2\\pi}{B} = \\pi \\implies B = 2",
+              "explanation": "Solve for B from period formula.",
+              "goldenWord": "period",
+              "sosPhase": "solve"
+            },
+            {
+              "stepNumber": 4,
+              "latex": "C = \\frac{\\pi}{4} \\text{ (phase shift right)}",
+              "explanation": "Positive C for rightward shift.",
+              "goldenWord": "phase shift",
+              "sosPhase": "solve"
+            },
+            {
+              "stepNumber": 5,
+              "latex": "f(x) = 3\\sin\\left(2\\left(x - \\frac{\\pi}{4}\\right)\\right) + 2",
+              "explanation": "Combine all parameters.",
+              "sosPhase": "store"
+            }
+          ],
+          "whenToUse": "Standard method for writing sinusoidal equations.",
+          "difficultyLevel": "medio"
+        }
+      ],
+      "commonMistakes": [
+        {
+          "mistake": "B = \\pi \\text{ (using period directly)}",
+          "correct": "\\text{Period } = 2\\pi/B \\implies B = 2\\pi/\\text{period} = 2\\pi/\\pi = 2",
+          "why": "B is related inversely to period.",
+          "frequency": "very-common"
+        },
+        {
+          "mistake": "f(x) = 3\\sin\\left(2x - \\frac{\\pi}{4}\\right) + 2",
+          "correct": "f(x) = 3\\sin\\left(2\\left(x - \\frac{\\pi}{4}\\right)\\right) + 2",
+          "why": "Phase shift C is inside with x: factor out B first.",
+          "frequency": "very-common"
+        },
+        {
+          "mistake": "C = -\\frac{\\pi}{4} \\text{ for rightward shift}",
+          "correct": "C = +\\frac{\\pi}{4} \\text{ (positive for right shift)}",
+          "why": "In form A sin(B(x - C)), positive C shifts right.",
+          "frequency": "common"
+        }
+      ],
+      "prerequisites": [],
+      "goldenWords": ["sinusoidal", "amplitude", "period", "phase shift", "vertical shift"],
+      "difficulty": "medio",
+      "estimatedTimeSeconds": 240,
+      "apSection": "mc-no-calc",
+      "calculatorRequired": false,
+      "isQ4Style": false,
+      "practiceCount": 0,
+      "successRate": 0,
+      "dyslexiaMode": {
+        "simplifiedPrompt": "Write equation: amp=3, period=π, phase=π/4 right, vert shift=2 up",
+        "chunkedSteps": [
+          "Form: A sin(B(x-C)) + D",
+          "A = 3, D = 2",
+          "Period = 2π/B → π = 2π/B → B = 2",
+          "C = π/4 (right shift)",
+          "Answer: 3 sin(2(x - π/4)) + 2"
+        ]
+      },
+      "adhd": {
+        "estimatedFocusMinutes": 4,
+        "sosReminder": true
+      },
+      "tags": ["trigonometry", "sinusoidal", "modeling", "transformations"],
+      "examFrequency": "high"
+    },
+    {
+      "id": "u3-p013",
+      "type": "graphing",
+      "unit": "unit-3-trigonometric-polar",
+      "topic": "sinusoidal-modeling",
+      "prompt": "\\text{A Ferris wheel has diameter 50m, center 30m above ground, rotates once per 2 min. Write height } h(t) \\text{ at time } t \\text{ (starting at bottom).}",
+      "correctAnswer": "h(t) = -25\\cos(\\pi t) + 30",
+      "solutions": [
+        {
+          "id": "sol-u3-p013-1",
+          "strategy": "Real-world sinusoidal modeling",
+          "steps": [
+            {
+              "stepNumber": 1,
+              "latex": "\\text{Amplitude } = \\frac{\\text{diameter}}{2} = 25\\text{m}",
+              "explanation": "Half the diameter is the amplitude.",
+              "goldenWord": "amplitude",
+              "sosPhase": "scan"
+            },
+            {
+              "stepNumber": 2,
+              "latex": "\\text{Vertical shift (midline) } = 30\\text{m}",
+              "explanation": "Center height is the midline.",
+              "goldenWord": "midline",
+              "sosPhase": "organize"
+            },
+            {
+              "stepNumber": 3,
+              "latex": "\\text{Period } = 2\\text{ min} \\implies B = \\frac{2\\pi}{2} = \\pi",
+              "explanation": "Full rotation takes 2 minutes.",
+              "goldenWord": "period",
+              "sosPhase": "organize"
+            },
+            {
+              "stepNumber": 4,
+              "latex": "\\text{Start at bottom: use negative cosine}",
+              "explanation": "cos(0) = 1 (top), so -cos(0) = -1 (bottom).",
+              "sosPhase": "organize"
+            },
+            {
+              "stepNumber": 5,
+              "latex": "h(t) = -25\\cos(\\pi t) + 30",
+              "explanation": "Negative amplitude with cosine starts at minimum.",
+              "sosPhase": "store"
+            }
+          ],
+          "whenToUse": "For real-world periodic motion problems.",
+          "difficultyLevel": "medio"
+        }
+      ],
+      "commonMistakes": [
+        {
+          "mistake": "\\text{Using amplitude = 50 (diameter)}",
+          "correct": "\\text{Amplitude = radius = 25}",
+          "why": "Amplitude is half the total variation (radius, not diameter).",
+          "frequency": "very-common"
+        },
+        {
+          "mistake": "h(t) = 25\\cos(\\pi t) + 30 \\text{ (starting at top)}",
+          "correct": "h(t) = -25\\cos(\\pi t) + 30 \\text{ (negative for starting at bottom)}",
+          "why": "Regular cosine starts at maximum; need negative to start at minimum.",
+          "frequency": "very-common"
+        },
+        {
+          "mistake": "\\text{Midline = 25 (using radius)}",
+          "correct": "\\text{Midline = 30 (center height above ground)}",
+          "why": "Midline is the average of max and min heights.",
+          "frequency": "common"
+        }
+      ],
+      "prerequisites": ["u3-p012"],
+      "goldenWords": ["sinusoidal modeling", "amplitude", "period", "midline", "real-world"],
+      "difficulty": "medio",
+      "estimatedTimeSeconds": 300,
+      "apSection": "frq-calc",
+      "calculatorRequired": false,
+      "isQ4Style": false,
+      "practiceCount": 0,
+      "successRate": 0,
+      "dyslexiaMode": {
+        "simplifiedPrompt": "Ferris wheel: 50m diameter, center 30m high, period 2 min, starts at bottom",
+        "chunkedSteps": [
+          "Amplitude = 50/2 = 25",
+          "Midline = 30",
+          "Period = 2 → B = 2π/2 = π",
+          "Start at bottom: use -cos",
+          "h(t) = -25 cos(πt) + 30"
+        ]
+      },
+      "adhd": {
+        "estimatedFocusMinutes": 5,
+        "sosReminder": true
+      },
+      "tags": ["trigonometry", "sinusoidal", "modeling", "applications", "real-world"],
+      "examFrequency": "high"
+    },
+    {
+      "id": "u3-p014",
+      "type": "graphing",
+      "unit": "unit-3-trigonometric-polar",
+      "topic": "sinusoidal-modeling",
+      "prompt": "\\text{Find amplitude, period, and midline of } f(x) = 4\\sin(3x - \\pi) - 2.",
+      "correctAnswer": "\\text{Amplitude: } 4, \\text{ Period: } \\frac{2\\pi}{3}, \\text{ Midline: } y = -2",
+      "solutions": [
+        {
+          "id": "sol-u3-p014-1",
+          "strategy": "Identify parameters from equation",
+          "steps": [
+            {
+              "stepNumber": 1,
+              "latex": "f(x) = A\\sin(Bx - C) + D",
+              "explanation": "Compare to general form.",
+              "sosPhase": "scan"
+            },
+            {
+              "stepNumber": 2,
+              "latex": "A = 4 \\implies \\text{Amplitude} = |A| = 4",
+              "explanation": "Amplitude is absolute value of A.",
+              "goldenWord": "amplitude",
+              "sosPhase": "organize"
+            },
+            {
+              "stepNumber": 3,
+              "latex": "B = 3 \\implies \\text{Period} = \\frac{2\\pi}{B} = \\frac{2\\pi}{3}",
+              "explanation": "Period formula: 2π/B.",
+              "goldenWord": "period",
+              "sosPhase": "solve"
+            },
+            {
+              "stepNumber": 4,
+              "latex": "D = -2 \\implies \\text{Midline: } y = -2",
+              "explanation": "Vertical shift gives midline.",
+              "goldenWord": "midline",
+              "sosPhase": "store"
+            }
+          ],
+          "whenToUse": "Direct reading from sinusoidal equation.",
+          "difficultyLevel": "facile"
+        }
+      ],
+      "commonMistakes": [
+        {
+          "mistake": "\\text{Period} = 3",
+          "correct": "\\text{Period} = 2\\pi/B = 2\\pi/3",
+          "why": "Must use formula, not just B value.",
+          "frequency": "very-common"
+        },
+        {
+          "mistake": "\\text{Amplitude} = -4 \\text{ (including sign)}",
+          "correct": "\\text{Amplitude} = |A| = 4 \\text{ (always positive)}",
+          "why": "Amplitude is a distance, always positive.",
+          "frequency": "occasional"
+        }
+      ],
+      "prerequisites": ["u3-p012"],
+      "goldenWords": ["amplitude", "period", "midline", "sinusoidal"],
+      "difficulty": "facile",
+      "estimatedTimeSeconds": 120,
+      "apSection": "mc-no-calc",
+      "calculatorRequired": false,
+      "isQ4Style": false,
+      "practiceCount": 0,
+      "successRate": 0,
+      "dyslexiaMode": {
+        "simplifiedPrompt": "Find amplitude, period, midline: f(x) = 4 sin(3x - π) - 2",
+        "chunkedSteps": [
+          "A = 4 → amplitude = 4",
+          "B = 3 → period = 2π/3",
+          "D = -2 → midline y = -2"
+        ]
+      },
+      "adhd": {
+        "estimatedFocusMinutes": 2,
+        "sosReminder": false
+      },
+      "tags": ["trigonometry", "sinusoidal", "parameters", "identification"],
+      "examFrequency": "high"
+    },
+    {
+      "id": "u3-p015",
+      "type": "graphing",
+      "unit": "unit-3-trigonometric-polar",
+      "topic": "sinusoidal-modeling",
+      "prompt": "\\text{Temperature varies from 10°C at 4am to 26°C at 4pm. Model } T(t) \\text{ where } t \\text{ is hours after midnight.}",
+      "correctAnswer": "T(t) = -8\\cos\\left(\\frac{\\pi}{12}(t - 4)\\right) + 18 \\text{ or } 8\\sin\\left(\\frac{\\pi}{12}(t - 10)\\right) + 18",
+      "solutions": [
+        {
+          "id": "sol-u3-p015-1",
+          "strategy": "Find amplitude, midline, period, phase shift",
+          "steps": [
+            {
+              "stepNumber": 1,
+              "latex": "\\text{Max} = 26, \\text{Min} = 10 \\implies \\text{Amplitude} = \\frac{26-10}{2} = 8",
+              "explanation": "Half the range.",
+              "goldenWord": "amplitude",
+              "sosPhase": "organize"
+            },
+            {
+              "stepNumber": 2,
+              "latex": "\\text{Midline} = \\frac{26+10}{2} = 18",
+              "explanation": "Average of max and min.",
+              "goldenWord": "midline",
+              "sosPhase": "organize"
+            },
+            {
+              "stepNumber": 3,
+              "latex": "\\text{Period} = 24 \\text{ hours} \\implies B = \\frac{2\\pi}{24} = \\frac{\\pi}{12}",
+              "explanation": "Daily cycle.",
+              "goldenWord": "period",
+              "sosPhase": "organize"
+            },
+            {
+              "stepNumber": 4,
+              "latex": "\\text{Minimum at } t = 4 \\implies \\text{use } -\\cos(B(t-4))",
+              "explanation": "Negative cosine starts at minimum.",
+              "sosPhase": "solve"
+            },
+            {
+              "stepNumber": 5,
+              "latex": "T(t) = -8\\cos\\left(\\frac{\\pi}{12}(t - 4)\\right) + 18",
+              "explanation": "Complete model.",
+              "sosPhase": "store"
+            }
+          ],
+          "whenToUse": "Temperature and other daily periodic phenomena.",
+          "difficultyLevel": "medio"
+        }
+      ],
+      "commonMistakes": [
+        {
+          "mistake": "\\text{Amplitude} = 16 \\text{ (using range)}",
+          "correct": "\\text{Amplitude} = 8 \\text{ (half the range)}",
+          "why": "Amplitude is half the total variation.",
+          "frequency": "common"
+        },
+        {
+          "mistake": "B = 24 \\text{ (using period directly)}",
+          "correct": "B = 2\\pi/24 = \\pi/12",
+          "why": "B = 2π/period, not period itself.",
+          "frequency": "very-common"
+        },
+        {
+          "mistake": "\\text{Not accounting for minimum at } t = 4",
+          "correct": "\\text{Phase shift or use negative cosine to match minimum at } t = 4",
+          "why": "Must match the specific timing given.",
+          "frequency": "common"
+        }
+      ],
+      "prerequisites": ["u3-p012", "u3-p013"],
+      "goldenWords": ["sinusoidal modeling", "amplitude", "midline", "period", "phase shift"],
+      "difficulty": "medio",
+      "estimatedTimeSeconds": 300,
+      "apSection": "frq-calc",
+      "calculatorRequired": false,
+      "isQ4Style": false,
+      "practiceCount": 0,
+      "successRate": 0,
+      "dyslexiaMode": {
+        "simplifiedPrompt": "Model temp: 10°C at 4am, 26°C at 4pm, t = hours after midnight",
+        "chunkedSteps": [
+          "Range: 26 - 10 = 16, amp = 8",
+          "Midline: (26+10)/2 = 18",
+          "Period: 24, so B = π/12",
+          "Min at t=4: use -cos(B(t-4))",
+          "T(t) = -8 cos(π/12·(t-4)) + 18"
+        ]
+      },
+      "adhd": {
+        "estimatedFocusMinutes": 5,
+        "sosReminder": true
+      },
+      "tags": ["trigonometry", "sinusoidal", "modeling", "temperature", "real-world"],
+      "examFrequency": "high"
+    },
+    {
+      "id": "u3-p016",
+      "type": "free-response",
+      "unit": "unit-3-trigonometric-polar",
+      "topic": "inverse-trig",
+      "prompt": "\\text{Find the exact value: } \\arcsin\\left(\\frac{\\sqrt{3}}{2}\\right)",
+      "correctAnswer": "\\frac{\\pi}{3}",
+      "solutions": [
+        {
+          "id": "sol-u3-p016-1",
+          "strategy": "Use inverse trig range",
+          "steps": [
+            {
+              "stepNumber": 1,
+              "latex": "\\text{Range of } \\arcsin: \\left[-\\frac{\\pi}{2}, \\frac{\\pi}{2}\\right]",
+              "explanation": "Inverse sine outputs angles in this range.",
+              "goldenWord": "range of arcsin",
+              "sosPhase": "scan"
+            },
+            {
+              "stepNumber": 2,
+              "latex": "\\sin\\theta = \\frac{\\sqrt{3}}{2} \\text{ when } \\theta = \\frac{\\pi}{3} \\text{ or } \\frac{2\\pi}{3}",
+              "explanation": "Two angles in [0, 2π) have this sine value.",
+              "sosPhase": "organize"
+            },
+            {
+              "stepNumber": 3,
+              "latex": "\\frac{\\pi}{3} \\in \\left[-\\frac{\\pi}{2}, \\frac{\\pi}{2}\\right] \\checkmark",
+              "explanation": "Only π/3 is in the range of arcsin.",
+              "sosPhase": "solve"
+            },
+            {
+              "stepNumber": 4,
+              "latex": "\\arcsin\\left(\\frac{\\sqrt{3}}{2}\\right) = \\frac{\\pi}{3}",
+              "explanation": "The angle in the restricted range.",
+              "sosPhase": "store"
+            }
+          ],
+          "whenToUse": "Always check range when evaluating inverse trig functions.",
+          "difficultyLevel": "facile"
+        }
+      ],
+      "commonMistakes": [
+        {
+          "mistake": "\\arcsin(\\sqrt{3}/2) = \\frac{2\\pi}{3}",
+          "correct": "\\arcsin \\text{ returns angle in } [-\\pi/2, \\pi/2], \\text{ so } \\pi/3",
+          "why": "Must respect the range of the inverse function.",
+          "frequency": "common"
+        },
+        {
+          "mistake": "\\arcsin(\\sqrt{3}/2) = 60° \\text{ (degrees instead of radians)}",
+          "correct": "\\frac{\\pi}{3} \\text{ radians (unless specified otherwise)}",
+          "why": "Default is radians in calculus and precalculus.",
+          "frequency": "occasional"
+        }
+      ],
+      "prerequisites": ["u3-p001"],
+      "goldenWords": ["inverse sine", "arcsin", "range", "unit circle"],
+      "difficulty": "facile",
+      "estimatedTimeSeconds": 120,
+      "apSection": "mc-no-calc",
+      "calculatorRequired": false,
+      "isQ4Style": false,
+      "colorCoding": {
+        "familyColor": "green",
+        "highlightParts": {
+          "\\frac{\\pi}{3}": "#228B22"
+        }
+      },
+      "practiceCount": 0,
+      "successRate": 0,
+      "dyslexiaMode": {
+        "simplifiedPrompt": "Find exact value: arcsin(√3/2)",
+        "chunkedSteps": [
+          "Range of arcsin: [-π/2, π/2]",
+          "sin(π/3) = √3/2",
+          "π/3 is in range",
+          "Answer: π/3"
+        ]
+      },
+      "adhd": {
+        "estimatedFocusMinutes": 2,
+        "sosReminder": false
+      },
+      "tags": ["trigonometry", "inverse-trig", "arcsin", "unit-circle"],
+      "examFrequency": "high"
+    },
+    {
+      "id": "u3-p017",
+      "type": "free-response",
+      "unit": "unit-3-trigonometric-polar",
+      "topic": "inverse-trig",
+      "prompt": "\\text{Evaluate: } \\cos\\left(\\arctan\\left(\\frac{3}{4}\\right)\\right)",
+      "correctAnswer": "\\frac{4}{5}",
+      "solutions": [
+        {
+          "id": "sol-u3-p017-1",
+          "strategy": "Right triangle method",
+          "steps": [
+            {
+              "stepNumber": 1,
+              "latex": "\\text{Let } \\theta = \\arctan(3/4) \\implies \\tan\\theta = \\frac{3}{4}",
+              "explanation": "Set up the inverse relationship.",
+              "goldenWord": "inverse tangent",
+              "sosPhase": "organize"
+            },
+            {
+              "stepNumber": 2,
+              "latex": "\\text{Right triangle: opposite } = 3, \\text{ adjacent } = 4",
+              "explanation": "tan = opposite/adjacent.",
+              "sosPhase": "organize"
+            },
+            {
+              "stepNumber": 3,
+              "latex": "\\text{Hypotenuse} = \\sqrt{3^2 + 4^2} = \\sqrt{9 + 16} = 5",
+              "explanation": "Pythagorean theorem.",
+              "goldenWord": "Pythagorean theorem",
+              "sosPhase": "solve"
+            },
+            {
+              "stepNumber": 4,
+              "latex": "\\cos\\theta = \\frac{\\text{adjacent}}{\\text{hypotenuse}} = \\frac{4}{5}",
+              "explanation": "Cosine definition.",
+              "sosPhase": "store"
+            }
+          ],
+          "whenToUse": "Composition of trig and inverse trig functions.",
+          "difficultyLevel": "medio"
+        }
+      ],
+      "commonMistakes": [
+        {
+          "mistake": "\\cos(\\arctan(3/4)) = \\frac{3}{4}",
+          "correct": "\\text{Must construct triangle to find cosine}",
+          "why": "arctan gives angle, then find cosine of that angle.",
+          "frequency": "common"
+        },
+        {
+          "mistake": "\\text{Hypotenuse} = 3 + 4 = 7",
+          "correct": "\\text{Hypotenuse} = \\sqrt{3^2 + 4^2} = 5",
+          "why": "Use Pythagorean theorem, not addition.",
+          "frequency": "occasional"
+        },
+        {
+          "mistake": "\\cos\\theta = 3/5 \\text{ (using opposite instead of adjacent)}",
+          "correct": "\\cos\\theta = \\text{adjacent/hypotenuse} = 4/5",
+          "why": "Must use correct sides for cosine.",
+          "frequency": "common"
+        }
+      ],
+      "prerequisites": ["u3-p016"],
+      "goldenWords": ["inverse tangent", "right triangle", "Pythagorean theorem", "composition"],
+      "difficulty": "medio",
+      "estimatedTimeSeconds": 180,
+      "apSection": "mc-no-calc",
+      "calculatorRequired": false,
+      "isQ4Style": false,
+      "practiceCount": 0,
+      "successRate": 0,
+      "dyslexiaMode": {
+        "simplifiedPrompt": "Evaluate: cos(arctan(3/4))",
+        "chunkedSteps": [
+          "Let θ = arctan(3/4)",
+          "So tan θ = 3/4",
+          "Triangle: opp=3, adj=4",
+          "Hyp = √(9+16) = 5",
+          "cos θ = adj/hyp = 4/5"
+        ]
+      },
+      "adhd": {
+        "estimatedFocusMinutes": 3,
+        "sosReminder": true
+      },
+      "tags": ["trigonometry", "inverse-trig", "composition", "right-triangle"],
+      "examFrequency": "high"
+    },
+    {
+      "id": "u3-p018",
+      "type": "free-response",
+      "unit": "unit-3-trigonometric-polar",
+      "topic": "inverse-trig",
+      "prompt": "\\text{Find exact value: } \\arccos\\left(-\\frac{1}{2}\\right)",
+      "correctAnswer": "\\frac{2\\pi}{3}",
+      "solutions": [
+        {
+          "id": "sol-u3-p018-1",
+          "strategy": "Use range of arccos",
+          "steps": [
+            {
+              "stepNumber": 1,
+              "latex": "\\text{Range of } \\arccos: [0, \\pi]",
+              "explanation": "Inverse cosine outputs angles in this range.",
+              "goldenWord": "range of arccos",
+              "sosPhase": "scan"
+            },
+            {
+              "stepNumber": 2,
+              "latex": "\\cos\\theta = -\\frac{1}{2} \\text{ in } [0, \\pi]",
+              "explanation": "Need angle in [0, π] where cosine = -1/2.",
+              "sosPhase": "organize"
+            },
+            {
+              "stepNumber": 3,
+              "latex": "\\text{Reference angle: } \\cos^{-1}(1/2) = \\frac{\\pi}{3}",
+              "explanation": "Cosine positive at π/3.",
+              "colorHighlight": "#228B22",
+              "sosPhase": "organize"
+            },
+            {
+              "stepNumber": 4,
+              "latex": "\\text{Cosine negative in Q-II: } \\theta = \\pi - \\frac{\\pi}{3} = \\frac{2\\pi}{3}",
+              "explanation": "π - reference angle for Q-II.",
+              "sosPhase": "solve"
+            }
+          ],
+          "whenToUse": "Finding inverse cosine values.",
+          "difficultyLevel": "facile"
+        }
+      ],
+      "commonMistakes": [
+        {
+          "mistake": "\\arccos(-1/2) = -\\frac{\\pi}{3}",
+          "correct": "\\text{Range of arccos is } [0, \\pi], \\text{ so answer is } 2\\pi/3",
+          "why": "Cannot return negative angles for arccos.",
+          "frequency": "very-common"
+        },
+        {
+          "mistake": "\\arccos(-1/2) = \\frac{4\\pi}{3}",
+          "correct": "\\frac{4\\pi}{3} \\notin [0, \\pi]; \\text{ use } 2\\pi/3",
+          "why": "Must be in the restricted range of arccos.",
+          "frequency": "common"
+        }
+      ],
+      "prerequisites": ["u3-p016"],
+      "goldenWords": ["inverse cosine", "arccos", "range", "reference angle"],
+      "difficulty": "facile",
+      "estimatedTimeSeconds": 120,
+      "apSection": "mc-no-calc",
+      "calculatorRequired": false,
+      "isQ4Style": false,
+      "colorCoding": {
+        "familyColor": "green",
+        "highlightParts": {
+          "\\frac{\\pi}{3}": "#228B22",
+          "\\frac{2\\pi}{3}": "#228B22"
+        }
+      },
+      "practiceCount": 0,
+      "successRate": 0,
+      "dyslexiaMode": {
+        "simplifiedPrompt": "Find exact value: arccos(-1/2)",
+        "chunkedSteps": [
+          "Range of arccos: [0, π]",
+          "cos(π/3) = 1/2",
+          "Need negative: Q-II",
+          "θ = π - π/3 = 2π/3"
+        ]
+      },
+      "adhd": {
+        "estimatedFocusMinutes": 2,
+        "sosReminder": false
+      },
+      "tags": ["trigonometry", "inverse-trig", "arccos", "unit-circle"],
+      "examFrequency": "high"
+    },
+    {
+      "id": "u3-p019",
+      "type": "graphing",
+      "unit": "unit-3-trigonometric-polar",
+      "topic": "polar-coordinates",
+      "prompt": "\\text{Convert polar coordinates } \\left(4, \\frac{2\\pi}{3}\\right) \\text{ to rectangular coordinates.}",
+      "correctAnswer": "\\left(-2, 2\\sqrt{3}\\right)",
+      "solutions": [
+        {
+          "id": "sol-u3-p019-1",
+          "strategy": "Use conversion formulas",
+          "steps": [
+            {
+              "stepNumber": 1,
+              "latex": "x = r\\cos\\theta, \\quad y = r\\sin\\theta",
+              "explanation": "Polar to rectangular conversion formulas.",
+              "goldenWord": "conversion formulas",
+              "sosPhase": "scan"
+            },
+            {
+              "stepNumber": 2,
+              "latex": "x = 4\\cos\\left(\\frac{2\\pi}{3}\\right) = 4 \\cdot \\left(-\\frac{1}{2}\\right) = -2",
+              "explanation": "cos(2π/3) in Q-II is -1/2.",
+              "colorHighlight": "#228B22",
+              "sosPhase": "solve"
+            },
+            {
+              "stepNumber": 3,
+              "latex": "y = 4\\sin\\left(\\frac{2\\pi}{3}\\right) = 4 \\cdot \\frac{\\sqrt{3}}{2} = 2\\sqrt{3}",
+              "explanation": "sin(2π/3) in Q-II is √3/2.",
+              "sosPhase": "solve"
+            },
+            {
+              "stepNumber": 4,
+              "latex": "(x, y) = \\left(-2, 2\\sqrt{3}\\right)",
+              "explanation": "Rectangular coordinates.",
+              "sosPhase": "store"
+            }
+          ],
+          "whenToUse": "Standard method for polar to rectangular conversion.",
+          "difficultyLevel": "facile"
+        }
+      ],
+      "commonMistakes": [
+        {
+          "mistake": "\\cos(2\\pi/3) = \\frac{1}{2} \\text{ (forgetting Q-II is negative)}",
+          "correct": "\\cos(2\\pi/3) = -\\frac{1}{2}",
+          "why": "Must check quadrant for sign.",
+          "frequency": "very-common"
+        },
+        {
+          "mistake": "x = \\cos(4), y = \\sin(2\\pi/3) \\text{ (mixing up } r \\text{ and } \\theta)",
+          "correct": "x = r\\cos\\theta = 4\\cos(2\\pi/3)",
+          "why": "r is the coefficient, θ is the angle argument.",
+          "frequency": "occasional"
+        }
+      ],
+      "prerequisites": ["u3-p001", "u3-p003"],
+      "goldenWords": ["polar coordinates", "rectangular coordinates", "conversion", "unit circle"],
+      "difficulty": "facile",
+      "estimatedTimeSeconds": 150,
+      "apSection": "mc-no-calc",
+      "calculatorRequired": false,
+      "isQ4Style": false,
+      "colorCoding": {
+        "familyColor": "green",
+        "highlightParts": {
+          "\\frac{2\\pi}{3}": "#228B22"
+        }
+      },
+      "practiceCount": 0,
+      "successRate": 0,
+      "dyslexiaMode": {
+        "simplifiedPrompt": "Convert polar (4, 2π/3) to rectangular",
+        "chunkedSteps": [
+          "x = r cos θ = 4 cos(2π/3)",
+          "cos(2π/3) = -1/2, so x = -2",
+          "y = r sin θ = 4 sin(2π/3)",
+          "sin(2π/3) = √3/2, so y = 2√3",
+          "Answer: (-2, 2√3)"
+        ]
+      },
+      "adhd": {
+        "estimatedFocusMinutes": 3,
+        "sosReminder": true
+      },
+      "tags": ["polar-coordinates", "conversion", "rectangular", "unit-circle"],
+      "examFrequency": "medium"
+    },
+    {
+      "id": "u3-p020",
+      "type": "graphing",
+      "unit": "unit-3-trigonometric-polar",
+      "topic": "polar-coordinates",
+      "prompt": "\\text{Convert rectangular coordinates } (-3, 3) \\text{ to polar form } (r, \\theta) \\text{ where } r > 0, 0 \\leq \\theta < 2\\pi.",
+      "correctAnswer": "\\left(3\\sqrt{2}, \\frac{3\\pi}{4}\\right)",
+      "solutions": [
+        {
+          "id": "sol-u3-p020-1",
+          "strategy": "Use conversion formulas",
+          "steps": [
+            {
+              "stepNumber": 1,
+              "latex": "r = \\sqrt{x^2 + y^2} = \\sqrt{(-3)^2 + 3^2} = \\sqrt{18} = 3\\sqrt{2}",
+              "explanation": "Distance from origin.",
+              "goldenWord": "distance formula",
+              "sosPhase": "solve"
+            },
+            {
+              "stepNumber": 2,
+              "latex": "\\tan\\theta = \\frac{y}{x} = \\frac{3}{-3} = -1",
+              "explanation": "Angle's tangent value.",
+              "sosPhase": "organize"
+            },
+            {
+              "stepNumber": 3,
+              "latex": "\\text{Point } (-3, 3) \\text{ is in Q-II}",
+              "explanation": "x < 0, y > 0 means Quadrant II.",
+              "goldenWord": "quadrant",
+              "sosPhase": "organize"
+            },
+            {
+              "stepNumber": 4,
+              "latex": "\\text{Reference angle: } \\arctan(1) = \\frac{\\pi}{4}",
+              "explanation": "tan⁻¹(1) = π/4.",
+              "colorHighlight": "#DC143C",
+              "sosPhase": "solve"
+            },
+            {
+              "stepNumber": 5,
+              "latex": "\\theta = \\pi - \\frac{\\pi}{4} = \\frac{3\\pi}{4} \\text{ (Q-II)}",
+              "explanation": "Angle in Q-II.",
+              "sosPhase": "store"
+            }
+          ],
+          "whenToUse": "Rectangular to polar conversion.",
+          "difficultyLevel": "medio"
+        }
+      ],
+      "commonMistakes": [
+        {
+          "mistake": "\\theta = \\frac{\\pi}{4} \\text{ or } \\frac{5\\pi}{4}",
+          "correct": "\\text{Check quadrant: } (-3, 3) \\text{ is Q-II, so } \\theta = \\frac{3\\pi}{4}",
+          "why": "tan θ = -1 at multiple angles; must check (x, y) signs.",
+          "frequency": "very-common"
+        },
+        {
+          "mistake": "r = \\sqrt{9 + 9} = \\sqrt{18} = 3\\sqrt{2} \\approx 4.24 \\text{ (leaving unsimplified)}",
+          "correct": "r = 3\\sqrt{2} \\text{ (exact form preferred)}",
+          "why": "Exact answers usually required unless specified.",
+          "frequency": "occasional"
+        }
+      ],
+      "prerequisites": ["u3-p019"],
+      "goldenWords": ["rectangular to polar", "distance formula", "quadrant", "reference angle"],
+      "difficulty": "medio",
+      "estimatedTimeSeconds": 180,
+      "apSection": "mc-no-calc",
+      "calculatorRequired": false,
+      "isQ4Style": false,
+      "colorCoding": {
+        "familyColor": "red",
+        "highlightParts": {
+          "\\frac{\\pi}{4}": "#DC143C",
+          "\\frac{3\\pi}{4}": "#DC143C"
+        }
+      },
+      "practiceCount": 0,
+      "successRate": 0,
+      "dyslexiaMode": {
+        "simplifiedPrompt": "Convert rectangular (-3, 3) to polar (r, θ)",
+        "chunkedSteps": [
+          "r = √(9+9) = √18 = 3√2",
+          "tan θ = 3/(-3) = -1",
+          "Point in Q-II (x<0, y>0)",
+          "Reference: π/4",
+          "θ = π - π/4 = 3π/4",
+          "Answer: (3√2, 3π/4)"
+        ]
+      },
+      "adhd": {
+        "estimatedFocusMinutes": 3,
+        "sosReminder": true
+      },
+      "tags": ["polar-coordinates", "conversion", "rectangular", "quadrant"],
+      "examFrequency": "medium"
+    }
+  ]
+}

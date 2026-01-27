@@ -1,0 +1,155 @@
+name: Performance Monitoring
+
+on:
+  pull_request:
+    branches: [main, develop]
+  schedule:
+    # Run daily at 00:00 UTC
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  # Lighthouse CI
+  lighthouse:
+    name: Lighthouse CI
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build application
+        run: npm run build
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY || 'sk-ant-api03-dummy-key' }}
+          NEXT_PUBLIC_APP_URL: 'http://localhost:3000'
+
+      - name: Run Lighthouse CI
+        uses: treosh/lighthouse-ci-action@v11
+        with:
+          urls: |
+            http://localhost:3000
+            http://localhost:3000/dashboard
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+          runs: 3
+
+      - name: Check Lighthouse scores
+        run: |
+          echo "## Lighthouse Performance Report" >> $GITHUB_STEP_SUMMARY
+          echo "Performance thresholds:" >> $GITHUB_STEP_SUMMARY
+          echo "- Performance: ≥ 90" >> $GITHUB_STEP_SUMMARY
+          echo "- Accessibility: ≥ 95" >> $GITHUB_STEP_SUMMARY
+          echo "- Best Practices: ≥ 95" >> $GITHUB_STEP_SUMMARY
+          echo "- SEO: ≥ 95" >> $GITHUB_STEP_SUMMARY
+
+  # Bundle size tracking
+  bundle-size:
+    name: Bundle Size Analysis
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build with bundle analysis
+        run: npm run build
+        env:
+          ANALYZE: 'true'
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY || 'sk-ant-api03-dummy-key' }}
+
+      - name: Analyze bundle size
+        run: |
+          echo "## Bundle Size Report" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Total Size" >> $GITHUB_STEP_SUMMARY
+          du -sh .next/ >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Static Assets" >> $GITHUB_STEP_SUMMARY
+          du -sh .next/static/* >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Largest Files" >> $GITHUB_STEP_SUMMARY
+          find .next/static -type f -exec du -h {} + | sort -rh | head -20 >> $GITHUB_STEP_SUMMARY
+
+      - name: Check bundle size limits
+        run: |
+          # Check if first load JS exceeds 200KB
+          TOTAL_SIZE=$(find .next/static -name "*.js" -type f -exec du -b {} + | awk '{sum+=$1} END {print sum}')
+          LIMIT=204800  # 200KB in bytes
+
+          echo "Total JS size: $(($TOTAL_SIZE / 1024))KB"
+          echo "Limit: $(($LIMIT / 1024))KB"
+
+          if [ $TOTAL_SIZE -gt $LIMIT ]; then
+            echo "⚠️ Bundle size exceeds 200KB limit!"
+            exit 1
+          else
+            echo "✅ Bundle size within limits"
+          fi
+
+  # Runtime performance monitoring
+  runtime-performance:
+    name: Runtime Performance
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build application
+        run: npm run build
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY || 'sk-ant-api03-dummy-key' }}
+
+      - name: Start application
+        run: npm start &
+        env:
+          PORT: 3000
+
+      - name: Wait for server
+        run: |
+          timeout 30 bash -c 'until curl -s http://localhost:3000; do sleep 1; done'
+
+      - name: Measure page load times
+        run: |
+          echo "## Page Load Performance" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          for page in "/" "/dashboard" "/lessons" "/practice"; do
+            echo "Testing: $page" >> $GITHUB_STEP_SUMMARY
+            TIME=$(curl -o /dev/null -s -w '%{time_total}\n' "http://localhost:3000$page")
+            echo "- $page: ${TIME}s" >> $GITHUB_STEP_SUMMARY
+          done
+
+      - name: Stop application
+        run: pkill -f "next start" || true

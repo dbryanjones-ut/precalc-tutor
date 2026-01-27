@@ -1,0 +1,45 @@
+Contact: mailto:security@precalc-tutor.com
+Expires: 2026-12-31T23:59:59.000Z
+Preferred-Languages: en
+Canonical: https://precalc-tutor.vercel.app/.well-known/security.txt
+
+# Security Policy
+
+We take the security of PreCalc Tutor seriously. If you discover a security
+vulnerability, please report it to us responsibly.
+
+## Reporting a Vulnerability
+
+Please email security@precalc-tutor.com with:
+- A description of the vulnerability
+- Steps to reproduce the issue
+- Potential impact
+- Suggested fix (if available)
+
+We will acknowledge your email within 48 hours and provide a detailed response
+within 7 days.
+
+## Scope
+
+The following are in scope:
+- XSS vulnerabilities
+- Authentication/Authorization issues
+- SQL injection (if applicable)
+- Remote code execution
+- Data exposure
+
+Out of scope:
+- Social engineering attacks
+- Physical attacks
+- Denial of service attacks
+- Issues in third-party dependencies (please report to the maintainers)
+
+## Safe Harbor
+
+We will not pursue legal action against security researchers who:
+- Make a good faith effort to avoid privacy violations
+- Do not access or modify user data beyond what is necessary to demonstrate the vulnerability
+- Do not exploit the vulnerability beyond verification
+- Report the vulnerability promptly
+
+Thank you for helping keep PreCalc Tutor secure!

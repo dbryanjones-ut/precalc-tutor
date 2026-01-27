@@ -1,0 +1,532 @@
+{
+  "version": "2.0.0",
+  "lastUpdated": "2026-01-27",
+  "description": "Comprehensive notation translation table for AP Precalculus - 35+ critical notations with common confusions",
+  "notations": [
+    {
+      "id": "func-notation",
+      "notation": "f(x)",
+      "meaning": "The output of function f when input is x",
+      "confusedWith": "f \\cdot x",
+      "trap": "The parentheses indicate function application, not multiplication",
+      "mnemonic": "f(x) is 'f of x' - what f does to x",
+      "examples": [
+        "If f(x) = x^2 + 1, then f(3) = 10",
+        "f(a+b) \\neq f(a) + f(b) in general",
+        "f(2x) means input is 2x, not multiply output by 2"
+      ],
+      "category": "functions",
+      "apUnit": 1
+    },
+    {
+      "id": "composite-func",
+      "notation": "(f \\circ g)(x)",
+      "meaning": "Function composition - apply g first, then apply f to the result",
+      "confusedWith": "f(x) \\cdot g(x)",
+      "trap": "Order matters: f∘g ≠ g∘f in general. Read right to left in f(g(x))",
+      "mnemonic": "Think 'f after g' or work from inside out in f(g(x))",
+      "examples": [
+        "If f(x) = x^2 and g(x) = x+1, then (f \\circ g)(x) = (x+1)^2",
+        "(g \\circ f)(x) = g(f(x)) = x^2 + 1 \\neq (f \\circ g)(x)",
+        "Domain of f∘g: values where g(x) is in domain of f"
+      ],
+      "category": "functions",
+      "apUnit": 1
+    },
+    {
+      "id": "inverse-func",
+      "notation": "f^{-1}(x)",
+      "meaning": "The inverse function of f that undoes what f does",
+      "confusedWith": "\\frac{1}{f(x)}",
+      "trap": "The -1 exponent does NOT mean reciprocal for function notation",
+      "mnemonic": "Think 'undo' not 'flip'. f^{-1} reverses f's operation",
+      "examples": [
+        "If f(x) = 2x + 1, then f^{-1}(x) = \\frac{x-1}{2}",
+        "f(f^{-1}(x)) = x and f^{-1}(f(x)) = x",
+        "To find f^{-1}: swap x and y, then solve for y"
+      ],
+      "category": "functions",
+      "apUnit": 1
+    },
+    {
+      "id": "inverse-sine",
+      "notation": "\\sin^{-1}(x) \\text{ or } \\arcsin(x)",
+      "meaning": "Inverse sine function - returns the angle whose sine is x",
+      "confusedWith": "\\csc(x) = \\frac{1}{\\sin(x)}",
+      "trap": "sin^{-1}(x) is NOT 1/sin(x). It's the inverse function (arcsin)",
+      "mnemonic": "arcsin asks 'what angle has this sine value?'",
+      "examples": [
+        "\\sin^{-1}(0.5) = \\frac{\\pi}{6} \\text{ (30°)}",
+        "Domain: [-1, 1], Range: [-\\frac{\\pi}{2}, \\frac{\\pi}{2}]",
+        "\\sin(\\sin^{-1}(x)) = x \\text{ for } x \\in [-1,1]"
+      ],
+      "category": "trigonometry",
+      "apUnit": 2
+    },
+    {
+      "id": "inverse-cosine",
+      "notation": "\\cos^{-1}(x) \\text{ or } \\arccos(x)",
+      "meaning": "Inverse cosine function - returns the angle whose cosine is x",
+      "confusedWith": "\\sec(x) = \\frac{1}{\\cos(x)}",
+      "trap": "cos^{-1}(x) is NOT 1/cos(x). It's the inverse function (arccos)",
+      "mnemonic": "arccos asks 'what angle has this cosine value?'",
+      "examples": [
+        "\\cos^{-1}(0) = \\frac{\\pi}{2} \\text{ (90°)}",
+        "Domain: [-1, 1], Range: [0, \\pi]",
+        "\\cos(\\cos^{-1}(x)) = x \\text{ for } x \\in [-1,1]"
+      ],
+      "category": "trigonometry",
+      "apUnit": 2
+    },
+    {
+      "id": "inverse-tangent",
+      "notation": "\\tan^{-1}(x) \\text{ or } \\arctan(x)",
+      "meaning": "Inverse tangent function - returns the angle whose tangent is x",
+      "confusedWith": "\\cot(x) = \\frac{1}{\\tan(x)}",
+      "trap": "tan^{-1}(x) is NOT 1/tan(x). It's the inverse function (arctan)",
+      "mnemonic": "arctan asks 'what angle has this tangent value?'",
+      "examples": [
+        "\\tan^{-1}(1) = \\frac{\\pi}{4} \\text{ (45°)}",
+        "Domain: (-\\infty, \\infty), Range: (-\\frac{\\pi}{2}, \\frac{\\pi}{2})",
+        "\\tan(\\tan^{-1}(x)) = x \\text{ for all real } x"
+      ],
+      "category": "trigonometry",
+      "apUnit": 2
+    },
+    {
+      "id": "natural-log",
+      "notation": "\\ln(x)",
+      "meaning": "Natural logarithm with base e ≈ 2.718",
+      "confusedWith": "\\log(x) \\text{ (base 10)}",
+      "trap": "ln is base e, not base 10. ln(x) asks 'e to what power gives x?'",
+      "mnemonic": "ln = logarithm natural (base e)",
+      "examples": [
+        "\\ln(e) = 1 \\text{ because } e^1 = e",
+        "\\ln(e^x) = x \\text{ and } e^{\\ln(x)} = x",
+        "\\ln(ab) = \\ln(a) + \\ln(b)"
+      ],
+      "category": "logarithmic",
+      "apUnit": 3
+    },
+    {
+      "id": "common-log",
+      "notation": "\\log(x) \\text{ or } \\log_{10}(x)",
+      "meaning": "Common logarithm with base 10",
+      "confusedWith": "\\ln(x) \\text{ (base e)}",
+      "trap": "In AP Precalc, log without base usually means base 10",
+      "mnemonic": "log without subscript typically means base 10",
+      "examples": [
+        "\\log(100) = 2 \\text{ because } 10^2 = 100",
+        "\\log(10^x) = x",
+        "\\log_b(x) \\text{ means logarithm base } b"
+      ],
+      "category": "logarithmic",
+      "apUnit": 3
+    },
+    {
+      "id": "log-properties-product",
+      "notation": "\\log(ab) = \\log(a) + \\log(b)",
+      "meaning": "Product rule for logarithms",
+      "confusedWith": "\\log(a+b) = \\log(a) + \\log(b)",
+      "trap": "ONLY works for multiplication, NOT addition",
+      "mnemonic": "Multiplication inside becomes addition outside",
+      "examples": [
+        "\\ln(2 \\cdot 3) = \\ln(2) + \\ln(3)",
+        "\\log(x^2y) = 2\\log(x) + \\log(y)",
+        "\\log(5+3) \\neq \\log(5) + \\log(3)"
+      ],
+      "category": "logarithmic",
+      "apUnit": 3
+    },
+    {
+      "id": "log-properties-quotient",
+      "notation": "\\log(\\frac{a}{b}) = \\log(a) - \\log(b)",
+      "meaning": "Quotient rule for logarithms",
+      "confusedWith": "\\log(a-b) = \\log(a) - \\log(b)",
+      "trap": "ONLY works for division, NOT subtraction",
+      "mnemonic": "Division inside becomes subtraction outside",
+      "examples": [
+        "\\ln(\\frac{10}{2}) = \\ln(10) - \\ln(2)",
+        "\\log(\\frac{x^2}{y}) = 2\\log(x) - \\log(y)",
+        "\\log(10-2) \\neq \\log(10) - \\log(2)"
+      ],
+      "category": "logarithmic",
+      "apUnit": 3
+    },
+    {
+      "id": "log-properties-power",
+      "notation": "\\log(a^n) = n\\log(a)",
+      "meaning": "Power rule for logarithms",
+      "confusedWith": "\\text{Incorrectly distributing exponent}",
+      "trap": "Exponent comes out front as a coefficient",
+      "mnemonic": "Power inside becomes multiplication outside",
+      "examples": [
+        "\\ln(x^3) = 3\\ln(x)",
+        "\\log(\\sqrt{x}) = \\log(x^{1/2}) = \\frac{1}{2}\\log(x)",
+        "\\ln(e^{2x}) = 2x"
+      ],
+      "category": "logarithmic",
+      "apUnit": 3
+    },
+    {
+      "id": "derivative-notation-leibniz",
+      "notation": "\\frac{dy}{dx}",
+      "meaning": "Derivative of y with respect to x (Leibniz notation)",
+      "confusedWith": "\\text{A fraction that can be simplified}",
+      "trap": "This is ONE symbol representing instantaneous rate of change, not a fraction",
+      "mnemonic": "Read as 'dee y dee x' - it's one cohesive notation",
+      "examples": [
+        "\\text{If } y = x^2, \\text{ then } \\frac{dy}{dx} = 2x",
+        "\\frac{dy}{dx} \\text{ represents slope of tangent line}",
+        "\\text{Also written as } y' \\text{ or } f'(x)"
+      ],
+      "category": "calculus",
+      "apUnit": 4
+    },
+    {
+      "id": "derivative-notation-prime",
+      "notation": "f'(x)",
+      "meaning": "Derivative of f (Lagrange notation)",
+      "confusedWith": "\\text{Prime minutes or feet notation}",
+      "trap": "Prime means derivative, not a unit of measurement",
+      "mnemonic": "Prime = rate of change at x",
+      "examples": [
+        "\\text{If } f(x) = x^3, \\text{ then } f'(x) = 3x^2",
+        "f''(x) \\text{ is second derivative}",
+        "f'(2) \\text{ means derivative evaluated at } x=2"
+      ],
+      "category": "calculus",
+      "apUnit": 4
+    },
+    {
+      "id": "limit-notation",
+      "notation": "\\lim_{x \\to a} f(x)",
+      "meaning": "The limit of f(x) as x approaches a",
+      "confusedWith": "f(a)",
+      "trap": "Limit as x→a may exist even if f(a) doesn't exist",
+      "mnemonic": "Asking 'where is f headed?' not 'where is f?'",
+      "examples": [
+        "\\lim_{x \\to 2} x^2 = 4",
+        "\\lim_{x \\to 0} \\frac{\\sin(x)}{x} = 1 \\text{ (even though undefined at 0)}",
+        "\\lim_{x \\to \\infty} \\frac{1}{x} = 0"
+      ],
+      "category": "calculus",
+      "apUnit": 4
+    },
+    {
+      "id": "limit-one-sided-right",
+      "notation": "\\lim_{x \\to a^+} f(x)",
+      "meaning": "Right-hand limit - approaching a from the right (larger values)",
+      "confusedWith": "\\text{Regular limit}",
+      "trap": "+ means from the right (x > a), approaching from positive direction",
+      "mnemonic": "+ means approach from larger values",
+      "examples": [
+        "\\lim_{x \\to 0^+} \\frac{1}{x} = +\\infty",
+        "\\text{For } f(x) = |x|/x, \\lim_{x \\to 0^+} f(x) = 1",
+        "\\text{One-sided limits check continuity}"
+      ],
+      "category": "calculus",
+      "apUnit": 4
+    },
+    {
+      "id": "limit-one-sided-left",
+      "notation": "\\lim_{x \\to a^-} f(x)",
+      "meaning": "Left-hand limit - approaching a from the left (smaller values)",
+      "confusedWith": "\\text{Regular limit or negative value}",
+      "trap": "- means from the left (x < a), NOT a negative result",
+      "mnemonic": "- means approach from smaller values",
+      "examples": [
+        "\\lim_{x \\to 0^-} \\frac{1}{x} = -\\infty",
+        "\\text{For } f(x) = |x|/x, \\lim_{x \\to 0^-} f(x) = -1",
+        "\\text{Limit exists only if left = right}"
+      ],
+      "category": "calculus",
+      "apUnit": 4
+    },
+    {
+      "id": "absolute-value",
+      "notation": "|x|",
+      "meaning": "Absolute value - distance from zero, always non-negative",
+      "confusedWith": "\\text{Parentheses or magnitude in other contexts}",
+      "trap": "Always produces non-negative output, creates V-shape graph",
+      "mnemonic": "Distance is always positive",
+      "examples": [
+        "|{-5}| = 5 \\text{ and } |5| = 5",
+        "|x| = x \\text{ if } x \\geq 0, \\text{ and } |x| = -x \\text{ if } x < 0",
+        "\\text{Graph of } y = |x| \\text{ is V-shaped}"
+      ],
+      "category": "algebra",
+      "apUnit": 1
+    },
+    {
+      "id": "floor-function",
+      "notation": "\\lfloor x \\rfloor",
+      "meaning": "Floor function - greatest integer less than or equal to x",
+      "confusedWith": "|x| \\text{ (absolute value)}",
+      "trap": "Rounds DOWN to nearest integer, even for negative numbers",
+      "mnemonic": "Floor is down - like walking on the floor",
+      "examples": [
+        "\\lfloor 3.7 \\rfloor = 3",
+        "\\lfloor -2.3 \\rfloor = -3 \\text{ (down, not toward zero)}",
+        "\\text{Creates step function graph}"
+      ],
+      "category": "algebra",
+      "apUnit": 1
+    },
+    {
+      "id": "ceiling-function",
+      "notation": "\\lceil x \\rceil",
+      "meaning": "Ceiling function - smallest integer greater than or equal to x",
+      "confusedWith": "\\text{Rounding to nearest}",
+      "trap": "Rounds UP to nearest integer, even for negative numbers",
+      "mnemonic": "Ceiling is up - like looking at the ceiling",
+      "examples": [
+        "\\lceil 3.2 \\rceil = 4",
+        "\\lceil -2.7 \\rceil = -2 \\text{ (up, not toward zero)}",
+        "\\text{Opposite direction of floor}"
+      ],
+      "category": "algebra",
+      "apUnit": 1
+    },
+    {
+      "id": "summation",
+      "notation": "\\sum_{i=1}^{n} a_i",
+      "meaning": "Summation - add terms from i=1 to i=n",
+      "confusedWith": "\\text{Greek letter sigma}",
+      "trap": "Index variable changes with each term; check start and end values",
+      "mnemonic": "Sigma means SUM",
+      "examples": [
+        "\\sum_{i=1}^{4} i = 1 + 2 + 3 + 4 = 10",
+        "\\sum_{k=0}^{n} r^k \\text{ is geometric series}",
+        "\\text{Index variable is placeholder (i, k, j, etc.)}"
+      ],
+      "category": "sequences",
+      "apUnit": 1
+    },
+    {
+      "id": "factorial",
+      "notation": "n!",
+      "meaning": "Factorial - product of all positive integers from 1 to n",
+      "confusedWith": "\\text{Emphasis or excitement}",
+      "trap": "0! = 1 by definition (not 0), and n! grows extremely fast",
+      "mnemonic": "Counts down: 5! = 5 × 4 × 3 × 2 × 1",
+      "examples": [
+        "5! = 120",
+        "0! = 1 \\text{ and } 1! = 1",
+        "\\text{Used in combinations: } C(n,r) = \\frac{n!}{r!(n-r)!}"
+      ],
+      "category": "combinatorics",
+      "apUnit": 1
+    },
+    {
+      "id": "interval-closed",
+      "notation": "[a, b]",
+      "meaning": "Closed interval - all numbers from a to b, including both endpoints",
+      "confusedWith": "\\text{Array notation or matrix}",
+      "trap": "Square brackets mean endpoints ARE included",
+      "mnemonic": "Brackets = closed = endpoints included",
+      "examples": [
+        "[0, 1] \\text{ means } 0 \\leq x \\leq 1",
+        "\\text{Range of } \\sin(x): [-1, 1]",
+        "[a, b] \\text{ contains both } a \\text{ and } b"
+      ],
+      "category": "algebra",
+      "apUnit": 1
+    },
+    {
+      "id": "interval-open",
+      "notation": "(a, b)",
+      "meaning": "Open interval - all numbers between a and b, excluding both endpoints",
+      "confusedWith": "\\text{Point notation or ordered pair}",
+      "trap": "Context determines meaning - interval vs. point vs. function notation",
+      "mnemonic": "Parentheses = open = endpoints excluded",
+      "examples": [
+        "(2, 5) \\text{ means } 2 < x < 5",
+        "\\text{Domain of } \\ln(x): (0, \\infty)",
+        "\\text{Can mix: } [0, 1) \\text{ includes 0 but not 1}"
+      ],
+      "category": "algebra",
+      "apUnit": 1
+    },
+    {
+      "id": "parametric",
+      "notation": "x = f(t), \\, y = g(t)",
+      "meaning": "Parametric equations - both x and y depend on parameter t",
+      "confusedWith": "\\text{Two separate unrelated equations}",
+      "trap": "These define ONE curve in the plane, not two separate functions",
+      "mnemonic": "t is time - trace the path as t increases",
+      "examples": [
+        "x = \\cos(t), y = \\sin(t) \\text{ traces unit circle}",
+        "\\text{To eliminate parameter: solve one for t, substitute}",
+        "\\text{Allows curves that fail vertical line test}"
+      ],
+      "category": "parametric",
+      "apUnit": 4
+    },
+    {
+      "id": "polar",
+      "notation": "r = f(\\theta)",
+      "meaning": "Polar equation - radius as function of angle",
+      "confusedWith": "\\text{Regular Cartesian function}",
+      "trap": "Angle θ is independent variable, radius r is dependent",
+      "mnemonic": "Radius changes as you rotate around origin",
+      "examples": [
+        "r = 2 \\text{ is circle of radius 2}",
+        "r = 1 + \\cos(\\theta) \\text{ is cardioid}",
+        "\\text{Convert: } x = r\\cos(\\theta), y = r\\sin(\\theta)"
+      ],
+      "category": "polar",
+      "apUnit": 4
+    },
+    {
+      "id": "vector",
+      "notation": "\\vec{v} = \\langle a, b \\rangle",
+      "meaning": "Vector in component form - has magnitude and direction",
+      "confusedWith": "(a, b) \\text{ (point notation)}",
+      "trap": "Vectors don't have fixed position, only direction and length",
+      "mnemonic": "Angle brackets for vectors, parentheses for points",
+      "examples": [
+        "\\vec{v} = \\langle 3, 4 \\rangle \\text{ has magnitude 5}",
+        "\\text{Add vectors component-wise: } \\langle a,b \\rangle + \\langle c,d \\rangle = \\langle a+c, b+d \\rangle",
+        "\\text{Position doesn't matter for vectors}"
+      ],
+      "category": "vectors",
+      "apUnit": 4
+    },
+    {
+      "id": "implies",
+      "notation": "A \\Rightarrow B",
+      "meaning": "A implies B - if A is true, then B must be true",
+      "confusedWith": "\\text{Equality or equivalence}",
+      "trap": "One-way implication: A⇒B doesn't mean B⇒A",
+      "mnemonic": "Arrow shows logical flow: A leads to B",
+      "examples": [
+        "x = 2 \\Rightarrow x^2 = 4 \\text{ (true)}",
+        "x^2 = 4 \\Rightarrow x = 2 \\text{ (false! could be -2)}",
+        "\\text{Be careful when squaring both sides}"
+      ],
+      "category": "logic",
+      "apUnit": 1
+    },
+    {
+      "id": "equivalent",
+      "notation": "A \\Leftrightarrow B",
+      "meaning": "A is equivalent to B - both directions of implication hold",
+      "confusedWith": "= \\text{ (equals sign)}",
+      "trap": "Two-way: means both A⇒B AND B⇒A",
+      "mnemonic": "Double arrow = both directions work",
+      "examples": [
+        "x^2 = 4 \\Leftrightarrow (x=2 \\text{ or } x=-2)",
+        "\\text{Reversible algebraic steps create equivalences}",
+        "\\text{Squaring: implication (⇒) not equivalence (⇔)}"
+      ],
+      "category": "logic",
+      "apUnit": 1
+    },
+    {
+      "id": "approximately",
+      "notation": "\\approx",
+      "meaning": "Approximately equal to - close but not exact",
+      "confusedWith": "=",
+      "trap": "Use for rounded values, decimal approximations, or estimates",
+      "mnemonic": "Wavy equals means 'close enough'",
+      "examples": [
+        "\\pi \\approx 3.14159",
+        "\\sqrt{2} \\approx 1.414",
+        "\\frac{1}{3} \\approx 0.333"
+      ],
+      "category": "algebra",
+      "apUnit": 1
+    },
+    {
+      "id": "infinity",
+      "notation": "\\infty",
+      "meaning": "Infinity - unbounded growth, not a specific number",
+      "confusedWith": "\\text{A very large number}",
+      "trap": "Cannot do arithmetic with ∞; it represents unboundedness",
+      "mnemonic": "Beyond all bounds - not a number",
+      "examples": [
+        "\\lim_{x \\to \\infty} \\frac{1}{x} = 0",
+        "\\text{Domain: } (-\\infty, \\infty) \\text{ means all reals}",
+        "\\text{Cannot write } \\infty - \\infty \\text{ or } \\frac{\\infty}{\\infty}"
+      ],
+      "category": "calculus",
+      "apUnit": 4
+    },
+    {
+      "id": "element-of",
+      "notation": "x \\in S",
+      "meaning": "x is an element of set S",
+      "confusedWith": "\\epsilon \\text{ (epsilon)}",
+      "trap": "Different from ⊆ (subset relation)",
+      "mnemonic": "∈ means 'in' the set",
+      "examples": [
+        "2 \\in \\mathbb{Z} \\text{ (2 is an integer)}",
+        "\\pi \\in \\mathbb{R} \\text{ (π is real)}",
+        "x \\in [0,1] \\text{ means } 0 \\leq x \\leq 1"
+      ],
+      "category": "set-theory",
+      "apUnit": 1
+    },
+    {
+      "id": "union",
+      "notation": "A \\cup B",
+      "meaning": "Union - all elements in either A or B (or both)",
+      "confusedWith": "U \\text{ (letter U)}",
+      "trap": "Includes elements in both sets (unlike XOR)",
+      "mnemonic": "Cup holds everything from both sets",
+      "examples": [
+        "(-\\infty, 0) \\cup (0, \\infty) = \\mathbb{R} \\setminus \\{0\\}",
+        "[{-1},0] \\cup [1,2] \\text{ - two separate intervals}",
+        "x \\in A \\cup B \\text{ means } x \\in A \\text{ OR } x \\in B"
+      ],
+      "category": "set-theory",
+      "apUnit": 1
+    },
+    {
+      "id": "intersection",
+      "notation": "A \\cap B",
+      "meaning": "Intersection - elements in both A and B",
+      "confusedWith": "\\text{Upside-down U}",
+      "trap": "Only elements in BOTH sets qualify",
+      "mnemonic": "Cap captures what's common to both",
+      "examples": [
+        "[0, 2] \\cap [1, 3] = [1, 2]",
+        "(-\\infty, 0) \\cap (0, \\infty) = \\emptyset",
+        "x \\in A \\cap B \\text{ means } x \\in A \\text{ AND } x \\in B"
+      ],
+      "category": "set-theory",
+      "apUnit": 1
+    },
+    {
+      "id": "piecewise",
+      "notation": "f(x) = \\begin{cases} g(x) & x < a \\\\ h(x) & x \\geq a \\end{cases}",
+      "meaning": "Piecewise function - different rules for different domains",
+      "confusedWith": "\\text{System of equations}",
+      "trap": "Only ONE piece applies for any given x value",
+      "mnemonic": "Different neighborhoods, different rules",
+      "examples": [
+        "|x| = \\begin{cases} x & x \\geq 0 \\\\ -x & x < 0 \\end{cases}",
+        "\\text{Check domain conditions carefully}",
+        "\\text{Graph each piece over its specified domain}"
+      ],
+      "category": "functions",
+      "apUnit": 1
+    },
+    {
+      "id": "delta-change",
+      "notation": "\\Delta x",
+      "meaning": "Change in x - final value minus initial value",
+      "confusedWith": "\\text{Variable named delta-x}",
+      "trap": "Δx is ONE symbol representing change, not Δ times x",
+      "mnemonic": "Delta = Difference",
+      "examples": [
+        "\\Delta x = x_2 - x_1",
+        "\\text{Slope} = \\frac{\\Delta y}{\\Delta x}",
+        "\\text{Don't separate: } \\Delta x \\neq \\Delta \\cdot x"
+      ],
+      "category": "calculus",
+      "apUnit": 4
+    }
+  ]
+}
