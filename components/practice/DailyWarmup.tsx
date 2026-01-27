@@ -55,12 +55,6 @@ export function DailyWarmup({ problems, onComplete }: DailyWarmupProps) {
 
   const { progress, addWarmup, updateStreak } = useProgressStore();
 
-  // Ensure we have exactly 4 problems
-  if (problems.length !== 4) {
-    console.error("DailyWarmup requires exactly 4 problems");
-    return null;
-  }
-
   const currentProblem = problems[currentIndex];
   const progressPercent = ((currentIndex + 1) / 4) * 100;
 
@@ -296,6 +290,18 @@ export function DailyWarmup({ problems, onComplete }: DailyWarmupProps) {
               </div>
             </div>
           )}
+        </CardContent>
+      </Card>
+    );
+  }
+
+  // Ensure we have exactly 4 problems
+  if (problems.length !== 4) {
+    console.error("DailyWarmup requires exactly 4 problems");
+    return (
+      <Card>
+        <CardContent className="py-8 text-center">
+          <p className="text-red-600">Error: Daily Warmup requires exactly 4 problems</p>
         </CardContent>
       </Card>
     );

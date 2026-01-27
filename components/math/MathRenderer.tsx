@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { renderMath, generateAccessibleLabel } from "@/lib/math/katex-helpers";
 import { LatexValidator } from "@/lib/math/latex-validator";
 import { AlertCircle } from "lucide-react";
@@ -32,11 +32,15 @@ export function MathRenderer({
   // Validate LaTeX before processing
   const validation = useMemo(() => {
     const result = LatexValidator.validate(latex);
-    if (result.warnings.length > 0) {
-      setValidationWarnings(result.warnings);
-    }
     return result;
   }, [latex]);
+
+  // Update warnings in useEffect to avoid setState in useMemo
+  useEffect(() => {
+    if (validation.warnings.length > 0) {
+      setValidationWarnings(validation.warnings);
+    }
+  }, [validation.warnings]);
 
   // Apply color highlights if provided
   const processedLatex = useMemo(() => {

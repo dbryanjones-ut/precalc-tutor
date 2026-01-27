@@ -362,7 +362,7 @@ function applyInterleaving(
       if (!foundDifferent) {
         const currentBest = remaining[bestIndex];
         let candidateScore = candidate.priority;
-        let bestScore = currentBest.priority;
+        const bestScore = currentBest.priority;
 
         // Apply variety bonus
         if (isDifferentTopic) candidateScore += 5;

@@ -287,7 +287,7 @@ describe("SM-2 Scheduler", () => {
     });
 
     it("should calculate correct mastery level", () => {
-      let card = initializeCard("u1-p001");
+      const card = initializeCard("u1-p001");
 
       // Learning
       expect(getCardStats(card).masteryLevel).toBe("learning");
@@ -307,7 +307,7 @@ describe("SM-2 Scheduler", () => {
     });
 
     it("should determine performance trend", () => {
-      let card = initializeCard("u1-p001");
+      const card = initializeCard("u1-p001");
 
       // Stable
       card.consecutiveCorrect = 1;
@@ -375,7 +375,7 @@ describe("SM-2 Scheduler", () => {
 
   describe("Edge Cases", () => {
     it("should handle very long intervals gracefully", () => {
-      let card = initializeCard("u1-p001");
+      const card = initializeCard("u1-p001");
       card.interval = 365; // 1 year
       card.easeFactor = 2.5;
       card.repetitions = 10;
