@@ -9,8 +9,8 @@ import { z } from 'zod';
 
 // Define environment variable schema
 const envSchema = z.object({
-  // API Keys
-  ANTHROPIC_API_KEY: z.string().min(1, 'ANTHROPIC_API_KEY is required'),
+  // API Keys (optional at build time, required at runtime in API routes)
+  ANTHROPIC_API_KEY: z.string().optional(),
   MATHPIX_APP_ID: z.string().optional(),
   MATHPIX_API_KEY: z.string().optional(),
 

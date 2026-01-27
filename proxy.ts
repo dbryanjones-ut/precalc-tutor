@@ -52,7 +52,7 @@ function checkRateLimit(key: string, max: number): { allowed: boolean; remaining
   };
 }
 
-export function middleware(request: NextRequest) {
+export default function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Skip rate limiting for static assets
