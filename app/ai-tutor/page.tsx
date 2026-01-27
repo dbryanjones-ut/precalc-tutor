@@ -248,9 +248,19 @@ export default function AITutorPage() {
         )}
 
         {/* Welcome Modal (First Visit) */}
-        {!currentSession && activeTab === "tutor" && (
-          <div className="fixed inset-0 z-40 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm pointer-events-none">
-            <div className="max-w-md p-6 rounded-lg bg-card border border-border shadow-lg text-center pointer-events-auto">
+        {!currentSession && activeTab === "tutor" && !localStorage.getItem("ai-tutor-welcome-dismissed") && (
+          <div className="fixed inset-0 z-40 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm" onClick={() => localStorage.setItem("ai-tutor-welcome-dismissed", "true")}>
+            <div className="max-w-md p-6 rounded-lg bg-card border border-border shadow-lg text-center" onClick={(e) => e.stopPropagation()}>
+              <div className="flex justify-end mb-2">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => localStorage.setItem("ai-tutor-welcome-dismissed", "true")}
+                  aria-label="Dismiss welcome message"
+                >
+                  ✕
+                </Button>
+              </div>
               <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
                 <Bot className="w-8 h-8 text-primary" />
               </div>
@@ -259,7 +269,7 @@ export default function AITutorPage() {
                 I'm here to help you master precalculus through personalized guidance. Upload a
                 problem to get started!
               </p>
-              <div className="grid grid-cols-2 gap-4 text-left">
+              <div className="grid grid-cols-2 gap-4 text-left mb-6">
                 <div className="p-3 rounded-lg bg-blue-500/10 border border-blue-500/20">
                   <div className="text-sm font-semibold text-blue-500 mb-1">Socratic Mode</div>
                   <div className="text-xs text-muted-foreground">
@@ -273,6 +283,12 @@ export default function AITutorPage() {
                   <div className="text-xs text-muted-foreground">Get direct solutions</div>
                 </div>
               </div>
+              <Button
+                onClick={() => localStorage.setItem("ai-tutor-welcome-dismissed", "true")}
+                className="w-full"
+              >
+                Get Started
+              </Button>
             </div>
           </div>
         )}
