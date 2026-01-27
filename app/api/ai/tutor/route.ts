@@ -217,7 +217,7 @@ export async function POST(request: NextRequest) {
       // TODO: Implement streaming support
       // For now, fall back to non-streaming
       const response = await client.messages.create({
-        model: "claude-sonnet-4-20250514",
+        model: "claude-sonnet-4-5-20250929",
         max_tokens: 2048,
         temperature: 0.7,
         system: systemPrompt,
@@ -233,7 +233,7 @@ export async function POST(request: NextRequest) {
         response.content[0].type === "text" ? response.content[0].text : "";
     } else {
       const response = await client.messages.create({
-        model: "claude-sonnet-4-20250514",
+        model: "claude-sonnet-4-5-20250929",
         max_tokens: 2048,
         temperature: 0.7,
         system: systemPrompt,
