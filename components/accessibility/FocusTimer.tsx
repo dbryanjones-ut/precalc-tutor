@@ -2,7 +2,7 @@
 
 import { useSettingsStore } from "@/stores/useSettingsStore";
 import { useEffect, useState, useCallback } from "react";
-import { Play, Pause, RotateCcw, Coffee, Brain } from "lucide-react";
+import { Play, Pause, RotateCcw, Coffee, Brain, ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
@@ -22,6 +22,7 @@ export function FocusTimer() {
   const [isBreak, setIsBreak] = useState(false);
   const [secondsLeft, setSecondsLeft] = useState(settings.adhd.breakIntervalMinutes * 60);
   const [sessionsCompleted, setSessionsCompleted] = useState(0);
+  const [isMinimized, setIsMinimized] = useState(false);
 
   const workDuration = settings.adhd.breakIntervalMinutes * 60;
   const breakDuration = settings.adhd.breakDurationMinutes * 60;
@@ -130,13 +131,43 @@ export function FocusTimer() {
 
   if (!settings.adhd.focusTimerEnabled) return null;
 
+  // Minimized view
+  if (isMinimized) {
+    return (
+      <div
+        className="fixed bottom-4 right-4 bg-card border border-border rounded-lg shadow-lg p-3 z-40 cursor-pointer hover:bg-accent transition-colors"
+        onClick={() => setIsMinimized(false)}
+        role="button"
+        tabIndex={0}
+        aria-label={`Expand focus timer. ${formatTime(secondsLeft)} remaining in ${isBreak ? "break" : "focus"} session`}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            setIsMinimized(false);
+          }
+        }}
+      >
+        <div className="flex items-center gap-2">
+          {isBreak ? (
+            <Coffee className="w-4 h-4 text-green-500" aria-hidden="true" />
+          ) : (
+            <Brain className="w-4 h-4 text-blue-500" aria-hidden="true" />
+          )}
+          <span className="text-sm font-medium tabular-nums">{formatTime(secondsLeft)}</span>
+          <ChevronUp className="w-4 h-4 text-muted-foreground" aria-hidden="true" />
+        </div>
+      </div>
+    );
+  }
+
+  // Expanded view
   return (
     <div
-      className="fixed bottom-4 left-4 bg-card border border-border rounded-lg shadow-lg p-4 z-40 min-w-[280px]"
+      className="fixed bottom-4 right-4 bg-card border border-border rounded-lg shadow-lg p-4 z-40 min-w-[280px]"
       role="timer"
       aria-label={`Focus timer: ${formatTime(secondsLeft)} remaining in ${isBreak ? "break" : "focus"} session`}
     >
-      {/* Header */}
+      {/* Header with minimize button */}
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           {isBreak ? (
@@ -151,9 +182,20 @@ export function FocusTimer() {
             </>
           )}
         </div>
-        <span className="text-xs text-muted-foreground" aria-label={`${sessionsCompleted} sessions completed today`}>
-          Sessions: {sessionsCompleted}
-        </span>
+        <div className="flex items-center gap-2">
+          <span className="text-xs text-muted-foreground" aria-label={`${sessionsCompleted} sessions completed today`}>
+            {sessionsCompleted}
+          </span>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setIsMinimized(true)}
+            aria-label="Minimize timer"
+            className="h-6 w-6 p-0"
+          >
+            <ChevronDown className="w-3 h-3" aria-hidden="true" />
+          </Button>
+        </div>
       </div>
 
       {/* Circular progress with time */}
