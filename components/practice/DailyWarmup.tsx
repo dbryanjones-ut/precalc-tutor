@@ -20,6 +20,11 @@ import {
   Trophy,
   Calendar,
   Target,
+  ChevronDown,
+  ChevronUp,
+  Lightbulb,
+  AlertCircle,
+  BookOpen,
 } from "lucide-react";
 
 interface DailyWarmupProps {
@@ -52,6 +57,7 @@ export function DailyWarmup({ problems, onComplete }: DailyWarmupProps) {
     isCorrect: boolean;
     message: string;
   } | null>(null);
+  const [expandedExplanations, setExpandedExplanations] = useState<Set<number>>(new Set());
 
   const { progress, addWarmup, updateStreak } = useProgressStore();
 
@@ -132,6 +138,16 @@ export function DailyWarmup({ problems, onComplete }: DailyWarmupProps) {
         handleFinish();
       }
     }
+  };
+
+  const toggleExplanation = (index: number) => {
+    const newExpanded = new Set(expandedExplanations);
+    if (newExpanded.has(index)) {
+      newExpanded.delete(index);
+    } else {
+      newExpanded.add(index);
+    }
+    setExpandedExplanations(newExpanded);
   };
 
   // Calculate streak from progress
@@ -224,22 +240,143 @@ export function DailyWarmup({ problems, onComplete }: DailyWarmupProps) {
                       />
                     </div>
                     {!result.correct && (
-                      <div className="mt-2 text-sm">
-                        <div>
-                          Your answer:{" "}
-                          <span className="font-mono">{answers[index] || "(empty)"}</span>
+                      <div className="mt-3 space-y-2">
+                        <div className="text-sm space-y-1">
+                          <div className="flex items-start gap-2">
+                            <span className="text-muted-foreground min-w-[90px]">Your answer:</span>
+                            <span className="font-mono text-red-700 dark:text-red-300">
+                              {answers[index] || "(empty)"}
+                            </span>
+                          </div>
+                          <div className="flex items-start gap-2">
+                            <span className="text-muted-foreground min-w-[90px]">Correct:</span>
+                            <MathRenderer
+                              latex={
+                                Array.isArray(problems[index].correctAnswer)
+                                  ? problems[index].correctAnswer[0]
+                                  : problems[index].correctAnswer
+                              }
+                              displayMode={false}
+                            />
+                          </div>
                         </div>
-                        <div>
-                          Correct answer:{" "}
-                          <MathRenderer
-                            latex={
-                              Array.isArray(problems[index].correctAnswer)
-                                ? problems[index].correctAnswer[0]
-                                : problems[index].correctAnswer
-                            }
-                            displayMode={false}
-                          />
-                        </div>
+
+                        {/* Toggle Explanation Button */}
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => toggleExplanation(index)}
+                          className="w-full mt-2 text-blue-600 dark:text-blue-400 border-blue-300 dark:border-blue-700 hover:bg-blue-50 dark:hover:bg-blue-950"
+                        >
+                          {expandedExplanations.has(index) ? (
+                            <>
+                              <ChevronUp className="h-4 w-4 mr-2" />
+                              Hide Explanation
+                            </>
+                          ) : (
+                            <>
+                              <ChevronDown className="h-4 w-4 mr-2" />
+                              Show me what I did wrong
+                            </>
+                          )}
+                        </Button>
+
+                        {/* Expanded Explanation */}
+                        {expandedExplanations.has(index) && (
+                          <div className="mt-3 p-4 bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg space-y-4">
+                            {/* Common Mistakes */}
+                            {problems[index].commonMistakes && problems[index].commonMistakes.length > 0 && (
+                              <div>
+                                <div className="flex items-center gap-2 mb-2">
+                                  <AlertCircle className="h-4 w-4 text-orange-600" />
+                                  <h4 className="font-semibold text-sm text-orange-900 dark:text-orange-100">
+                                    Common Mistakes to Avoid
+                                  </h4>
+                                </div>
+                                <ul className="space-y-1 text-sm text-orange-800 dark:text-orange-200">
+                                  {problems[index].commonMistakes.map((mistake, i) => (
+                                    <li key={i} className="flex items-start gap-2">
+                                      <span className="text-orange-600 mt-0.5">•</span>
+                                      <span>{mistake.description}</span>
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            )}
+
+                            {/* Step-by-Step Solution */}
+                            {problems[index].solutions && problems[index].solutions.length > 0 && (
+                              <div>
+                                <div className="flex items-center gap-2 mb-2">
+                                  <BookOpen className="h-4 w-4 text-blue-600" />
+                                  <h4 className="font-semibold text-sm text-blue-900 dark:text-blue-100">
+                                    Step-by-Step Solution
+                                  </h4>
+                                </div>
+                                <ol className="space-y-2 text-sm">
+                                  {problems[index].solutions[0]?.steps?.map((step, i) => (
+                                    <li key={i} className="flex items-start gap-2">
+                                      <span className="font-semibold text-blue-700 dark:text-blue-300 min-w-[24px]">
+                                        {i + 1}.
+                                      </span>
+                                      <div className="flex-1">
+                                        <div className="text-blue-800 dark:text-blue-200">
+                                          {step.explanation}
+                                        </div>
+                                        {step.latex && (
+                                          <div className="mt-1">
+                                            <MathRenderer
+                                              latex={step.latex}
+                                              displayMode={false}
+                                            />
+                                          </div>
+                                        )}
+                                      </div>
+                                    </li>
+                                  ))}
+                                </ol>
+                              </div>
+                            )}
+
+                            {/* Hints */}
+                            {problems[index].hints && problems[index].hints.length > 0 && (
+                              <div>
+                                <div className="flex items-center gap-2 mb-2">
+                                  <Lightbulb className="h-4 w-4 text-yellow-600" />
+                                  <h4 className="font-semibold text-sm text-yellow-900 dark:text-yellow-100">
+                                    Key Concepts
+                                  </h4>
+                                </div>
+                                <ul className="space-y-1 text-sm text-yellow-800 dark:text-yellow-200">
+                                  {problems[index].hints.map((hint, i) => (
+                                    <li key={i} className="flex items-start gap-2">
+                                      <span className="text-yellow-600 mt-0.5">💡</span>
+                                      <span>{hint}</span>
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            )}
+
+                            {/* If no detailed content available, show generic guidance */}
+                            {(!problems[index].commonMistakes || problems[index].commonMistakes.length === 0) &&
+                             (!problems[index].solutions || problems[index].solutions.length === 0) &&
+                             (!problems[index].hints || problems[index].hints.length === 0) && (
+                              <div className="text-sm text-blue-800 dark:text-blue-200">
+                                <p className="mb-2">
+                                  Review the problem carefully and compare your approach to the correct answer.
+                                  Consider these general strategies:
+                                </p>
+                                <ul className="space-y-1 ml-4">
+                                  <li>• Check if you identified the correct operation or formula</li>
+                                  <li>• Verify your calculations step by step</li>
+                                  <li>• Look for sign errors or arithmetic mistakes</li>
+                                  <li>• Make sure you answered what the question asked</li>
+                                </ul>
+                              </div>
+                            )}
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>
