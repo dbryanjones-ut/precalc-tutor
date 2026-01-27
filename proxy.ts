@@ -21,7 +21,7 @@ setInterval(() => {
 
 function getRateLimitKey(request: NextRequest, prefix = 'general'): string {
   // Use IP address for rate limiting
-  const ip = request.ip ?? request.headers.get('x-forwarded-for') ?? 'unknown';
+  const ip = request.headers.get('x-forwarded-for') ?? request.headers.get('x-real-ip') ?? 'unknown';
   return `${prefix}:${ip}`;
 }
 

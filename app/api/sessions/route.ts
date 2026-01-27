@@ -298,12 +298,12 @@ export async function POST(request: NextRequest) {
     const sessionId = `session-${Date.now()}-${Math.random().toString(36).substring(7)}`;
     const now = new Date().toISOString();
 
-    const session: AITutoringSession = {
+    const session = {
       id: sessionId,
       timestamp: now,
       lastUpdated: now,
       ...validatedData,
-    };
+    } as AITutoringSession;
 
     // 4. Store session
     sessionStore.set(sessionId, session);

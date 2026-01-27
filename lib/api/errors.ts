@@ -100,7 +100,7 @@ export function createErrorResponse(
     error: {
       message,
       code: errorCode,
-      ...(details && { details }),
+      details: details || undefined,
     },
     timestamp: new Date().toISOString(),
     requestId,
