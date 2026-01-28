@@ -246,7 +246,7 @@ export function ChatInterface({ className = "" }: ChatInterfaceProps) {
             )}
           >
             <div className="prose prose-sm dark:prose-invert max-w-none">
-              {(message.content || "").split(/(\$\$[\s\S]*?\$\$|\$.*?\$)/g).map((part, i) => {
+              {(message.content || "").split(/(\$\$[\s\S]*?\$\$|\$[\s\S]*?\$)/g).map((part, i) => {
                 // Handle display math $$...$$
                 if (part.startsWith("$$") && part.endsWith("$$")) {
                   const latex = part.slice(2, -2);

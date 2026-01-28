@@ -1,0 +1,72 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - link "Skip to main content" [ref=e2] [cursor=pointer]:
+    - /url: "#main-content"
+  - 'timer "Focus timer: 25:00 remaining in focus session" [ref=e3]':
+    - generic [ref=e4]:
+      - generic [ref=e5]:
+        - img [ref=e6]
+        - generic [ref=e14]: Focus Time
+      - generic [ref=e15]:
+        - generic "0 sessions completed today" [ref=e16]: "0"
+        - button "Minimize timer" [ref=e17]:
+          - img
+    - generic [ref=e19]:
+      - img [ref=e20]
+      - generic [ref=e24]: 25:00
+    - timer [ref=e25]
+    - generic [ref=e26]:
+      - button "Start timer" [ref=e27]:
+        - img
+        - text: Start
+      - button "Reset timer" [ref=e28]:
+        - img
+    - paragraph [ref=e29]: Stay focused on one task at a time.
+  - status [ref=e30]
+  - navigation [ref=e31]:
+    - generic [ref=e33]:
+      - link "PreCalc Tutor" [ref=e34] [cursor=pointer]:
+        - /url: /
+        - img [ref=e35]
+        - generic [ref=e43]: PreCalc Tutor
+      - generic [ref=e44]:
+        - link "Dashboard" [ref=e45] [cursor=pointer]:
+          - /url: /dashboard
+          - img [ref=e46]
+          - generic [ref=e49]: Dashboard
+        - link "AI Tutor" [ref=e50] [cursor=pointer]:
+          - /url: /ai-tutor
+          - img [ref=e51]
+          - generic [ref=e54]: AI Tutor
+        - link "Practice" [ref=e55] [cursor=pointer]:
+          - /url: /practice
+          - img [ref=e56]
+          - generic [ref=e60]: Practice
+        - link "Lessons" [ref=e61] [cursor=pointer]:
+          - /url: /lessons
+          - img [ref=e62]
+          - generic [ref=e64]: Lessons
+        - link "Tools" [ref=e65] [cursor=pointer]:
+          - /url: /tools
+          - img [ref=e66]
+          - generic [ref=e68]: Tools
+        - link "Reference" [ref=e69] [cursor=pointer]:
+          - /url: /reference
+          - img [ref=e70]
+          - generic [ref=e72]: Reference
+      - link "Settings" [ref=e73] [cursor=pointer]:
+        - /url: /settings
+        - img [ref=e74]
+        - generic [ref=e77]: Settings
+  - main [ref=e78]:
+    - generic [ref=e80]:
+      - heading "404" [level=1] [ref=e81]
+      - heading "This page could not be found." [level=2] [ref=e83]
+  - region "Notifications alt+T"
+  - button "Open Next.js Dev Tools" [ref=e89] [cursor=pointer]:
+    - img [ref=e90]
+  - status [ref=e93]
+  - alert [ref=e94]
+```
