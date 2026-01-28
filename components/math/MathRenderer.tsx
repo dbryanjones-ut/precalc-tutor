@@ -12,6 +12,7 @@ interface MathRendererProps {
   className?: string;
   colorHighlights?: Record<string, string>; // Part -> color
   showValidationErrors?: boolean; // Show validation warnings to user
+  onClick?: () => void; // Make math clickable
 }
 
 /**
@@ -26,6 +27,7 @@ export function MathRenderer({
   className = "",
   colorHighlights,
   showValidationErrors = false,
+  onClick,
 }: MathRendererProps) {
   const [validationWarnings, setValidationWarnings] = useState<string[]>([]);
 
@@ -94,10 +96,20 @@ export function MathRenderer({
   return (
     <>
       <span
-        className={`math-renderer ${displayMode ? "math-display" : "math-inline"} ${className}`}
+        className={`math-renderer ${displayMode ? "math-display" : "math-inline"} ${
+          onClick ? "cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-950 hover:ring-2 hover:ring-blue-300 dark:hover:ring-blue-700 rounded px-1 transition-all" : ""
+        } ${className}`}
         dangerouslySetInnerHTML={{ __html: html }}
         role="img"
         aria-label={ariaLabel}
+        onClick={onClick}
+        onKeyDown={(e) => {
+          if (onClick && (e.key === "Enter" || e.key === " ")) {
+            e.preventDefault();
+            onClick();
+          }
+        }}
+        tabIndex={onClick ? 0 : undefined}
       />
       {showValidationErrors && validationWarnings.length > 0 && (
         <div className="text-xs text-amber-600 mt-1">
@@ -117,10 +129,12 @@ export function InlineMath({
   latex,
   className,
   showValidationErrors = false,
+  onClick,
 }: {
   latex: string;
   className?: string;
   showValidationErrors?: boolean;
+  onClick?: () => void;
 }) {
   return (
     <MathRenderer
@@ -128,6 +142,7 @@ export function InlineMath({
       displayMode={false}
       className={className}
       showValidationErrors={showValidationErrors}
+      onClick={onClick}
     />
   );
 }
@@ -139,10 +154,12 @@ export function DisplayMath({
   latex,
   className,
   showValidationErrors = false,
+  onClick,
 }: {
   latex: string;
   className?: string;
   showValidationErrors?: boolean;
+  onClick?: () => void;
 }) {
   return (
     <MathRenderer
@@ -150,6 +167,7 @@ export function DisplayMath({
       displayMode={true}
       className={className}
       showValidationErrors={showValidationErrors}
+      onClick={onClick}
     />
   );
 }

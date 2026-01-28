@@ -252,14 +252,24 @@ export function ChatInterface({ className = "" }: ChatInterfaceProps) {
                   const latex = part.slice(2, -2);
                   return (
                     <div key={i} className="my-4 flex justify-center">
-                      <MathRenderer latex={latex} displayMode={true} />
+                      <MathRenderer
+                        latex={latex}
+                        displayMode={true}
+                        onClick={!isUser ? () => sendMessage(latex) : undefined}
+                      />
                     </div>
                   );
                 }
                 // Handle inline math $...$
                 if (part.startsWith("$") && part.endsWith("$")) {
                   const latex = part.slice(1, -1);
-                  return <MathRenderer key={i} latex={latex} />;
+                  return (
+                    <MathRenderer
+                      key={i}
+                      latex={latex}
+                      onClick={!isUser ? () => sendMessage(latex) : undefined}
+                    />
+                  );
                 }
                 // Handle regular text
                 return part.split("\n").map((line, j) =>
