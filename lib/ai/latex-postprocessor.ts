@@ -3,6 +3,8 @@
  *
  * Cleans up and validates LaTeX output from AI responses to ensure
  * proper rendering in KaTeX. Fixes common AI mistakes automatically.
+ *
+ * CRITICAL: This runs BEFORE extraction to ensure clean LaTeX reaches the frontend
  */
 
 export interface LaTeXIssue {
@@ -26,127 +28,358 @@ export class LaTeXPostProcessor {
 
   /**
    * Process the entire AI response and fix LaTeX issues
+   * This is the main entry point - applies all fixes in order
    */
   static processResponse(content: string): PostProcessResult {
     let cleaned = content;
     const issues: LaTeXIssue[] = [];
-    let changed = false;
+    const initialContent = content;
 
-    // 1. Replace plain text Unicode symbols with LaTeX commands
-    // Process each replacement multiple times to ensure we get all occurrences
-    const unicodeReplacements: Array<[RegExp, string, string]> = [
-      // Middle dot (multiplication)
-      [/(\$[^$]*?)·([^$]*?\$)/g, '\\cdot', 'Replaced plain text · with \\cdot'],
-      // Plus-minus
-      [/(\$[^$]*?)±([^$]*?\$)/g, '\\pm', 'Replaced plain text ± with \\pm'],
-      // Pi (both inside and outside dollar signs for Pi at boundary)
-      [/(\$[^$]*?)π([^$]*?\$)/g, '\\pi', 'Replaced plain text π with \\pi'],
-      // Theta
-      [/(\$[^$]*?)θ([^$]*?\$)/g, '\\theta', 'Replaced plain text θ with \\theta'],
-      // Alpha
-      [/(\$[^$]*?)α([^$]*?\$)/g, '\\alpha', 'Replaced plain text α with \\alpha'],
-      // Beta
-      [/(\$[^$]*?)β([^$]*?\$)/g, '\\beta', 'Replaced plain text β with \\beta'],
-      // Infinity
-      [/(\$[^$]*?)∞([^$]*?\$)/g, '\\infty', 'Replaced plain text ∞ with \\infty'],
-      // Less than or equal
-      [/(\$[^$]*?)≤([^$]*?\$)/g, '\\leq', 'Replaced plain text ≤ with \\leq'],
-      // Greater than or equal
-      [/(\$[^$]*?)≥([^$]*?\$)/g, '\\geq', 'Replaced plain text ≥ with \\geq'],
-      // Times symbol
-      [/(\$[^$]*?)×([^$]*?\$)/g, '\\times', 'Replaced plain text × with \\times'],
-      // Division symbol
-      [/(\$[^$]*?)÷([^$]*?\$)/g, '\\div', 'Replaced plain text ÷ with \\div'],
+    // Step 1: Remove question marks from math expressions (CRITICAL FIX)
+    const questionMarkResult = this.removeQuestionMarksFromMath(cleaned);
+    cleaned = questionMarkResult.cleaned;
+    issues.push(...questionMarkResult.issues);
+
+    // Step 2: Replace Unicode symbols with LaTeX commands (both inside and outside delimiters)
+    const unicodeResult = this.replaceUnicodeSymbols(cleaned);
+    cleaned = unicodeResult.cleaned;
+    issues.push(...unicodeResult.issues);
+
+    // Step 3: Fix delimiter types (replace \( \) and \[ \] with $ and $$)
+    const delimiterResult = this.fixDelimiters(cleaned);
+    cleaned = delimiterResult.cleaned;
+    issues.push(...delimiterResult.issues);
+
+    // Step 4: Ensure display math is on its own line
+    const displayResult = this.fixDisplayMathLayout(cleaned);
+    cleaned = displayResult.cleaned;
+    issues.push(...displayResult.issues);
+
+    // Step 5: Final validation check
+    const validationIssues = this.detectRemainingIssues(cleaned);
+    issues.push(...validationIssues);
+
+    return {
+      cleaned,
+      issues,
+      changed: cleaned !== initialContent,
+    };
+  }
+
+  /**
+   * CRITICAL: Remove question marks from math expressions
+   * These are placeholders the AI shouldn't use
+   */
+  private static removeQuestionMarksFromMath(content: string): PostProcessResult {
+    let cleaned = content;
+    const issues: LaTeXIssue[] = [];
+    let changesMade = false;
+
+    // Pattern 1: Question marks in inline math $..?...$
+    const inlineQuestionPattern = /\$([^$]*?)\?([^$]*?)\$/g;
+    const inlineMatches = [...cleaned.matchAll(inlineQuestionPattern)];
+
+    if (inlineMatches.length > 0) {
+      inlineMatches.forEach(match => {
+        const original = match[0];
+        // Remove the question mark - if it's a placeholder pattern like (?)
+        // just remove the whole (?) part
+        let fixed = original.replace(/\(\?\)/g, '\\square'); // Use LaTeX square placeholder
+        fixed = fixed.replace(/\?/g, ''); // Remove any remaining ?
+
+        cleaned = cleaned.replace(original, fixed);
+        issues.push({
+          type: 'warning',
+          message: `Removed question mark placeholder from: ${original}`,
+          original,
+          fixed,
+        });
+      });
+      changesMade = true;
+    }
+
+    // Pattern 2: Question marks in display math $$..?...$$
+    const displayQuestionPattern = /\$\$([^$]*?)\?([^$]*?)\$\$/g;
+    const displayMatches = [...cleaned.matchAll(displayQuestionPattern)];
+
+    if (displayMatches.length > 0) {
+      displayMatches.forEach(match => {
+        const original = match[0];
+        let fixed = original.replace(/\(\?\)/g, '\\square');
+        fixed = fixed.replace(/\?/g, '');
+
+        cleaned = cleaned.replace(original, fixed);
+        issues.push({
+          type: 'warning',
+          message: `Removed question mark placeholder from display math: ${original.substring(0, 50)}`,
+          original,
+          fixed,
+        });
+      });
+      changesMade = true;
+    }
+
+    return { cleaned, issues, changed: changesMade };
+  }
+
+  /**
+   * Replace Unicode symbols with LaTeX commands
+   * Handles both inside and outside math delimiters
+   */
+  private static replaceUnicodeSymbols(content: string): PostProcessResult {
+    let cleaned = content;
+    const issues: LaTeXIssue[] = [];
+    let changesMade = false;
+
+    // Define all Unicode symbol replacements
+    const symbolReplacements: Array<{
+      unicode: string;
+      latex: string;
+      name: string;
+      insidePattern: RegExp;
+      outsidePattern: RegExp;
+    }> = [
+      {
+        unicode: '·',
+        latex: '\\cdot',
+        name: 'middle dot',
+        insidePattern: /(\$[^$]*?)·([^$]*?\$)/g,
+        outsidePattern: /·/g,
+      },
+      {
+        unicode: '±',
+        latex: '\\pm',
+        name: 'plus-minus',
+        insidePattern: /(\$[^$]*?)±([^$]*?\$)/g,
+        outsidePattern: /±/g,
+      },
+      {
+        unicode: 'π',
+        latex: '\\pi',
+        name: 'pi',
+        insidePattern: /(\$[^$]*?)π([^$]*?\$)/g,
+        outsidePattern: /(?<!\$)π(?!\$)/g,
+      },
+      {
+        unicode: 'θ',
+        latex: '\\theta',
+        name: 'theta',
+        insidePattern: /(\$[^$]*?)θ([^$]*?\$)/g,
+        outsidePattern: /(?<!\$)θ(?!\$)/g,
+      },
+      {
+        unicode: 'α',
+        latex: '\\alpha',
+        name: 'alpha',
+        insidePattern: /(\$[^$]*?)α([^$]*?\$)/g,
+        outsidePattern: /(?<!\$)α(?!\$)/g,
+      },
+      {
+        unicode: 'β',
+        latex: '\\beta',
+        name: 'beta',
+        insidePattern: /(\$[^$]*?)β([^$]*?\$)/g,
+        outsidePattern: /(?<!\$)β(?!\$)/g,
+      },
+      {
+        unicode: '∞',
+        latex: '\\infty',
+        name: 'infinity',
+        insidePattern: /(\$[^$]*?)∞([^$]*?\$)/g,
+        outsidePattern: /(?<!\$)∞(?!\$)/g,
+      },
+      {
+        unicode: '≤',
+        latex: '\\leq',
+        name: 'less-than-or-equal',
+        insidePattern: /(\$[^$]*?)≤([^$]*?\$)/g,
+        outsidePattern: /(?<!\$)≤(?!\$)/g,
+      },
+      {
+        unicode: '≥',
+        latex: '\\geq',
+        name: 'greater-than-or-equal',
+        insidePattern: /(\$[^$]*?)≥([^$]*?\$)/g,
+        outsidePattern: /(?<!\$)≥(?!\$)/g,
+      },
+      {
+        unicode: '×',
+        latex: '\\times',
+        name: 'times',
+        insidePattern: /(\$[^$]*?)×([^$]*?\$)/g,
+        outsidePattern: /(?<!\$)×(?!\$)/g,
+      },
+      {
+        unicode: '÷',
+        latex: '\\div',
+        name: 'division',
+        insidePattern: /(\$[^$]*?)÷([^$]*?\$)/g,
+        outsidePattern: /(?<!\$)÷(?!\$)/g,
+      },
+      {
+        unicode: '≠',
+        latex: '\\neq',
+        name: 'not-equal',
+        insidePattern: /(\$[^$]*?)≠([^$]*?\$)/g,
+        outsidePattern: /(?<!\$)≠(?!\$)/g,
+      },
     ];
 
-    for (const [pattern, replacement, message] of unicodeReplacements) {
-      let before = cleaned;
-      // Keep replacing until no more matches (handles multiple occurrences in one expression)
+    // Process each symbol type
+    for (const symbol of symbolReplacements) {
+      // First: Replace inside math delimiters
       let iterationCount = 0;
-      const maxIterations = 10; // Prevent infinite loops
+      const maxIterations = 10;
 
       while (iterationCount < maxIterations) {
-        before = cleaned;
-        cleaned = cleaned.replace(pattern, `$1${replacement}$2`);
+        const before = cleaned;
+        cleaned = cleaned.replace(symbol.insidePattern, `$1${symbol.latex}$2`);
         if (cleaned === before) break;
         iterationCount++;
       }
 
-      if (before !== content && !changed) {
-        issues.push({ type: 'warning', message });
-        changed = true;
+      if (iterationCount > 0) {
+        issues.push({
+          type: 'warning',
+          message: `Replaced ${iterationCount} occurrence(s) of plain ${symbol.name} (${symbol.unicode}) with ${symbol.latex} inside math delimiters`,
+        });
+        changesMade = true;
+      }
+
+      // Second: Wrap standalone symbols with delimiters
+      if (symbol.outsidePattern.test(cleaned)) {
+        const beforeWrap = cleaned;
+        cleaned = cleaned.replace(symbol.outsidePattern, `$${symbol.latex}$`);
+
+        if (cleaned !== beforeWrap) {
+          issues.push({
+            type: 'warning',
+            message: `Wrapped standalone ${symbol.name} symbol (${symbol.unicode}) with math delimiters`,
+          });
+          changesMade = true;
+        }
       }
     }
 
-    // Special case: replace plain text π outside of math mode by wrapping in $ $
-    const plainPiPattern = /(?<!\$)π(?!\$)/g;
-    if (plainPiPattern.test(cleaned)) {
-      cleaned = cleaned.replace(plainPiPattern, '$\\pi$');
-      issues.push({ type: 'warning', message: 'Wrapped plain text π with LaTeX delimiters' });
-      changed = true;
-    }
+    return { cleaned, issues, changed: changesMade };
+  }
 
-    // 2. Detect question marks used as placeholders in LaTeX
-    const questionMarkPattern = /\$([^$]*?)\?([^$]*?)\$/g;
-    if (questionMarkPattern.test(cleaned)) {
-      issues.push({
-        type: 'error',
-        message: 'Found question marks (?) used as placeholders in LaTeX expressions',
-        original: cleaned.match(questionMarkPattern)?.[0],
-      });
-      // Note: We don't auto-fix this as we don't know what the placeholder should be
-      // But we flag it as an error
-    }
+  /**
+   * Fix wrong delimiter types
+   */
+  private static fixDelimiters(content: string): PostProcessResult {
+    let cleaned = content;
+    const issues: LaTeXIssue[] = [];
+    let changesMade = false;
 
-    // 3. Replace \( \) delimiters with $ $
-    const parenDelimiterPattern = /\\\(([^)]+?)\\\)/g;
-    if (parenDelimiterPattern.test(cleaned)) {
+    // Replace \( \) with $ $
+    const parenPattern = /\\\(([^)]+?)\\\)/g;
+    if (parenPattern.test(cleaned)) {
       const before = cleaned;
-      cleaned = cleaned.replace(parenDelimiterPattern, '$$$1$$');
+      cleaned = cleaned.replace(parenPattern, '$$$1$$');
+
       if (cleaned !== before) {
         issues.push({
           type: 'warning',
           message: 'Replaced \\( \\) delimiters with $ $',
         });
-        changed = true;
+        changesMade = true;
       }
     }
 
-    // 4. Replace \[ \] delimiters with $$ $$
-    const bracketDelimiterPattern = /\\\[([^\]]+?)\\\]/g;
-    if (bracketDelimiterPattern.test(cleaned)) {
+    // Replace \[ \] with $$ $$
+    const bracketPattern = /\\\[([^\]]+?)\\\]/g;
+    if (bracketPattern.test(cleaned)) {
       const before = cleaned;
-      cleaned = cleaned.replace(bracketDelimiterPattern, '\n\n$$$$$1$$$$\n\n');
+      cleaned = cleaned.replace(bracketPattern, '\n\n$$$$$1$$$$\n\n');
+
       if (cleaned !== before) {
         issues.push({
           type: 'warning',
           message: 'Replaced \\[ \\] delimiters with $$ $$',
         });
-        changed = true;
+        changesMade = true;
       }
     }
 
-    // 5. Fix display math that's not on its own line
+    return { cleaned, issues, changed: changesMade };
+  }
+
+  /**
+   * Ensure display math is on its own line with blank lines before/after
+   */
+  private static fixDisplayMathLayout(content: string): PostProcessResult {
+    let cleaned = content;
+    const issues: LaTeXIssue[] = [];
+    let changesMade = false;
+
     // Pattern: text$$ or $$text (should have blank lines)
     const inlineDisplayPattern = /([^\n])\$\$([^$]+?)\$\$([^\n])/g;
+
     if (inlineDisplayPattern.test(cleaned)) {
+      const before = cleaned;
       cleaned = cleaned.replace(inlineDisplayPattern, '$1\n\n$$$$$2$$$$\n\n$3');
-      issues.push({
-        type: 'warning',
-        message: 'Fixed display math to be on its own line with blank lines',
-      });
-      changed = true;
+
+      if (cleaned !== before) {
+        issues.push({
+          type: 'warning',
+          message: 'Fixed display math to be on its own line with blank lines',
+        });
+        changesMade = true;
+      }
     }
 
-    return {
-      cleaned,
-      issues,
-      changed,
-    };
+    return { cleaned, issues, changed: changesMade };
+  }
+
+  /**
+   * Detect any remaining issues that couldn't be auto-fixed
+   */
+  private static detectRemainingIssues(content: string): LaTeXIssue[] {
+    const issues: LaTeXIssue[] = [];
+
+    // Check for remaining question marks in math
+    const questionMarksInMath = content.match(/\$[^$]*?\?[^$]*?\$/g);
+    if (questionMarksInMath && questionMarksInMath.length > 0) {
+      issues.push({
+        type: 'error',
+        message: `Still found ${questionMarksInMath.length} question mark(s) in math expressions after post-processing`,
+        original: questionMarksInMath[0],
+      });
+    }
+
+    // Check for remaining Unicode symbols
+    const unicodeSymbolsRegex = /\$[^$]*?[·±π≤≥×÷∞θαβ≠][^$]*?\$/g;
+    const remainingUnicode = content.match(unicodeSymbolsRegex);
+    if (remainingUnicode && remainingUnicode.length > 0) {
+      issues.push({
+        type: 'error',
+        message: `Still found ${remainingUnicode.length} Unicode symbol(s) in math expressions after post-processing`,
+        original: remainingUnicode[0],
+      });
+    }
+
+    // Check for wrong delimiters
+    if (content.includes('\\(') || content.includes('\\)')) {
+      issues.push({
+        type: 'error',
+        message: 'Still found \\( \\) delimiters after post-processing',
+      });
+    }
+
+    if (content.includes('\\[') || content.includes('\\]')) {
+      issues.push({
+        type: 'error',
+        message: 'Still found \\[ \\] delimiters after post-processing',
+      });
+    }
+
+    return issues;
   }
 
   /**
    * Validate that a math expression doesn't contain problematic patterns
+   * Used for individual expressions after extraction
    */
   static validateExpression(latex: string): LaTeXIssue[] {
     const issues: LaTeXIssue[] = [];
@@ -162,6 +395,9 @@ export class LaTeXPostProcessor {
       { symbol: '∞', correct: '\\infty', name: 'infinity' },
       { symbol: '×', correct: '\\times', name: 'times' },
       { symbol: '÷', correct: '\\div', name: 'division' },
+      { symbol: '≠', correct: '\\neq', name: 'not equal' },
+      { symbol: 'α', correct: '\\alpha', name: 'alpha' },
+      { symbol: 'β', correct: '\\beta', name: 'beta' },
     ];
 
     for (const { symbol, correct, name } of unicodeSymbols) {
@@ -183,7 +419,7 @@ export class LaTeXPostProcessor {
       });
     }
 
-    // Check for wrong delimiters
+    // Check for wrong delimiters (shouldn't be in extracted latex, but check anyway)
     if (latex.includes('\\(') || latex.includes('\\)')) {
       issues.push({
         type: 'error',
@@ -223,6 +459,9 @@ export class LaTeXPostProcessor {
         if (error.original) {
           report += `   Original: ${error.original.substring(0, 100)}\n`;
         }
+        if (error.fixed) {
+          report += `   Fixed: ${error.fixed.substring(0, 100)}\n`;
+        }
       });
       report += '\n';
     }
@@ -231,6 +470,9 @@ export class LaTeXPostProcessor {
       report += `WARNINGS (${warnings.length}):\n`;
       warnings.forEach((warning, idx) => {
         report += `${idx + 1}. ${warning.message}\n`;
+        if (warning.fixed) {
+          report += `   Fixed to: ${warning.fixed.substring(0, 100)}\n`;
+        }
       });
     }
 
