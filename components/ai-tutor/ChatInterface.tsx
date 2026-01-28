@@ -374,12 +374,20 @@ export function ChatInterface({ className = "" }: ChatInterfaceProps) {
               {renderMessageContent(message.content || "", isUser)}
             </div>
 
-            {/* LaTeX expressions */}
+            {/* LaTeX expressions - NOW WITH ONCLICK HANDLERS */}
             {message.latex && Array.isArray(message.latex) && message.latex.length > 0 && (
               <div className="mt-4 space-y-3">
                 {message.latex.map((latex, i) => (
-                  <div key={i} className="p-4 rounded-xl bg-background/50 border border-border/50 animate-in zoom-in-95 duration-300" style={{ animationDelay: `${i * 100}ms` }}>
-                    <MathRenderer latex={latex} displayMode={true} />
+                  <div
+                    key={i}
+                    className="p-4 rounded-xl bg-background/50 border border-border/50 animate-in zoom-in-95 duration-300"
+                    style={{ animationDelay: `${i * 100}ms` }}
+                  >
+                    <MathRenderer
+                      latex={latex}
+                      displayMode={true}
+                      onClick={!isUser ? () => sendMessage(latex) : undefined}
+                    />
                   </div>
                 ))}
               </div>
