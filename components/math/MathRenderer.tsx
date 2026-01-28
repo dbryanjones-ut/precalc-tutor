@@ -30,6 +30,7 @@ export function MathRenderer({
   onClick,
 }: MathRendererProps) {
   const [validationWarnings, setValidationWarnings] = useState<string[]>([]);
+  const [isClicked, setIsClicked] = useState(false);
 
   // Validate LaTeX before processing
   const validation = useMemo(() => {
@@ -78,6 +79,16 @@ export function MathRenderer({
     [latex]
   );
 
+  // Handle click with visual feedback
+  const handleClick = () => {
+    if (onClick) {
+      setIsClicked(true);
+      onClick();
+      // Reset animation after it completes
+      setTimeout(() => setIsClicked(false), 600);
+    }
+  };
+
   // Show error state for invalid LaTeX
   if (!validation.valid) {
     return (
@@ -96,17 +107,21 @@ export function MathRenderer({
   return (
     <>
       <span
-        className={`math-renderer ${displayMode ? "math-display" : "math-inline"} ${
-          onClick ? "cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-950 hover:ring-2 hover:ring-blue-300 dark:hover:ring-blue-700 rounded px-1 transition-all" : ""
-        } ${className}`}
+        className={`
+          math-renderer
+          ${displayMode ? "math-display" : "math-inline"}
+          ${onClick ? "math-clickable" : ""}
+          ${isClicked ? "math-clicked" : ""}
+          ${className}
+        `.trim()}
         dangerouslySetInnerHTML={{ __html: html }}
         role="img"
         aria-label={ariaLabel}
-        onClick={onClick}
+        onClick={handleClick}
         onKeyDown={(e) => {
           if (onClick && (e.key === "Enter" || e.key === " ")) {
             e.preventDefault();
-            onClick();
+            handleClick();
           }
         }}
         tabIndex={onClick ? 0 : undefined}

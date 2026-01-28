@@ -3,6 +3,7 @@
  *
  * Handles AI tutoring requests using Claude API with streaming support.
  * Validates responses, manages context, and implements rate limiting.
+ * Post-processes LaTeX to ensure >97% rendering accuracy.
  */
 
 import { NextRequest, NextResponse } from "next/server";
@@ -22,6 +23,7 @@ import {
 } from "@/lib/api/rate-limiter";
 import { AIResponseValidator } from "@/lib/ai/response-validator";
 import { LatexValidator } from "@/lib/math/latex-validator";
+import { LaTeXPostProcessor } from "@/lib/ai/latex-postprocessor";
 import { generateTutorPrompt } from "@/lib/ai/tutor-prompts";
 import type { ChatMessage, Citation } from "@/types/ai-session";
 import { z } from "zod";
@@ -258,21 +260,56 @@ export async function POST(request: NextRequest) {
       throw new InternalServerError("No response from AI");
     }
 
-    // 7. Extract LaTeX and citations
+    // 7. Post-process LaTeX in the response
+    const postProcessResult = LaTeXPostProcessor.processResponse(assistantResponse);
+
+    if (postProcessResult.changed) {
+      console.log("LaTeX Post-Processing Applied:", {
+        issuesFound: postProcessResult.issues.length,
+        report: LaTeXPostProcessor.generateReport(postProcessResult),
+      });
+
+      // Use the cleaned version
+      assistantResponse = postProcessResult.cleaned;
+    }
+
+    // 8. Extract LaTeX and citations
     const latex = extractLatex(assistantResponse);
     const citations = extractCitations(assistantResponse);
 
-    // 8. Validate LaTeX expressions
+    // 9. Validate LaTeX expressions
     const latexValidationErrors: string[] = [];
+    const latexValidationWarnings: string[] = [];
+
     for (const latexExpr of latex) {
+      // Validate with KaTeX
       const validation = LatexValidator.validate(latexExpr);
       if (!validation.valid) {
         console.warn(`Invalid LaTeX in AI response: ${latexExpr}`, validation.errors);
         latexValidationErrors.push(`LaTeX "${latexExpr.substring(0, 50)}...": ${validation.errors[0]}`);
       }
+
+      // Check for problematic patterns
+      const expressionIssues = LaTeXPostProcessor.validateExpression(latexExpr);
+      for (const issue of expressionIssues) {
+        if (issue.type === 'error') {
+          latexValidationErrors.push(issue.message);
+        } else {
+          latexValidationWarnings.push(issue.message);
+        }
+      }
     }
 
-    // 9. Validate AI response quality
+    // Add post-processing issues to validation
+    for (const issue of postProcessResult.issues) {
+      if (issue.type === 'error') {
+        latexValidationErrors.push(issue.message);
+      } else {
+        latexValidationWarnings.push(issue.message);
+      }
+    }
+
+    // 10. Validate AI response quality
     const validation = await AIResponseValidator.validate({
       content: assistantResponse,
       latex,
@@ -287,12 +324,27 @@ export async function POST(request: NextRequest) {
         errors: validation.errors,
         warnings: validation.warnings,
         latexErrors: latexValidationErrors,
+        latexWarnings: latexValidationWarnings,
         confidence: validation.confidence,
         riskLevel: validation.riskLevel,
       });
     }
 
-    // 10. Return response
+    // 11. Calculate LaTeX accuracy
+    const totalLatexExpressions = latex.length;
+    const validLatexExpressions = latex.filter(expr => {
+      const val = LatexValidator.validate(expr);
+      const issues = LaTeXPostProcessor.validateExpression(expr);
+      return val.valid && issues.filter(i => i.type === 'error').length === 0;
+    }).length;
+
+    const latexAccuracy = totalLatexExpressions > 0
+      ? (validLatexExpressions / totalLatexExpressions) * 100
+      : 100;
+
+    console.log(`LaTeX Accuracy: ${latexAccuracy.toFixed(1)}% (${validLatexExpressions}/${totalLatexExpressions} valid)`);
+
+    // 12. Return response
     return NextResponse.json(
       {
         data: {
@@ -304,6 +356,9 @@ export async function POST(request: NextRequest) {
             riskLevel: validation.riskLevel,
             warnings: validation.warnings,
             latexErrors: latexValidationErrors,
+            latexWarnings: latexValidationWarnings,
+            latexAccuracy: latexAccuracy,
+            postProcessingApplied: postProcessResult.changed,
           },
         },
         timestamp: new Date().toISOString(),

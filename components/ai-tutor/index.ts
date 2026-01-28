@@ -5,3 +5,4 @@ export { ChatInterface } from "./ChatInterface";
 export { ModeToggle } from "./ModeToggle";
 export { QuickActions } from "./QuickActions";
 export { SessionHistory } from "./SessionHistory";
+export { ProblemDisplay } from "./ProblemDisplay";
