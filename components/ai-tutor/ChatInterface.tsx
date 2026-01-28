@@ -20,6 +20,7 @@ export function ChatInterface({ className = "" }: ChatInterfaceProps) {
   const [input, setInput] = useState("");
   const [copiedMessageId, setCopiedMessageId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
   const { currentSession, isLoading, sendMessage, endSession, mode, setMode } = useAITutorStore();
@@ -27,11 +28,16 @@ export function ChatInterface({ className = "" }: ChatInterfaceProps) {
   const messages = currentSession?.messages || [];
   const prevMessagesLengthRef = useRef(messages.length);
 
-  // Auto-scroll to bottom only when new messages are added
+  // Auto-scroll to bottom only when new messages are added AND user is near bottom
   useEffect(() => {
-    // Only scroll if messages were added (not on initial load or other changes)
-    if (messages.length > prevMessagesLengthRef.current) {
-      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (messages.length > prevMessagesLengthRef.current && messagesContainerRef.current) {
+      const container = messagesContainerRef.current;
+      const isNearBottom = container.scrollHeight - container.scrollTop - container.clientHeight < 150;
+
+      // Only auto-scroll if user is already near the bottom (within 150px)
+      if (isNearBottom) {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+      }
     }
     prevMessagesLengthRef.current = messages.length;
   }, [messages]);
@@ -402,6 +408,7 @@ export function ChatInterface({ className = "" }: ChatInterfaceProps) {
 
       {/* Messages */}
       <div
+        ref={messagesContainerRef}
         className="flex-1 overflow-y-auto p-6 space-y-6 min-h-[300px] max-h-[450px] bg-muted/10"
         role="log"
         aria-live="polite"
