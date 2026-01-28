@@ -108,20 +108,24 @@ export function ProblemCard({
     <Card className={cn("relative", className)}>
       <CardHeader>
         <div className="flex items-start justify-between gap-4">
-          <CardTitle className="flex-1">
-            <MathRenderer latex={problem.prompt} displayMode={false} />
+          <CardTitle className="flex-1" asChild>
+            <h3>
+              <MathRenderer latex={problem.prompt} displayMode={false} />
+            </h3>
           </CardTitle>
           {showTimer && (
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <Clock className="h-4 w-4" />
-              <span className="font-mono">{formatTime(timeElapsed)}</span>
+            <div className="flex items-center gap-2 text-sm text-muted-foreground" role="timer" aria-live="off">
+              <Clock className="h-4 w-4" aria-hidden="true" />
+              <time className="font-mono" aria-label={`Time elapsed: ${formatTime(timeElapsed)}`}>
+                {formatTime(timeElapsed)}
+              </time>
             </div>
           )}
         </div>
         {problem.imageUrl && (
           <img
             src={problem.imageUrl}
-            alt="Problem diagram"
+            alt={`Diagram for problem: ${problem.prompt.substring(0, 50)}...`}
             className="mt-4 rounded-lg max-w-full"
           />
         )}
@@ -130,80 +134,97 @@ export function ProblemCard({
       <CardContent className="space-y-4">
         {/* Answer Input */}
         {problem.type === "multiple-choice" && problem.choices ? (
-          <div className="space-y-2">
-            {problem.choices.map((choice, index) => (
-              <button
-                key={index}
-                onClick={() => !isSubmitted && setSelectedChoice(index)}
-                disabled={isSubmitted}
-                className={cn(
-                  "w-full p-4 rounded-lg border-2 text-left transition-all",
-                  "hover:border-primary hover:bg-accent",
-                  selectedChoice === index &&
-                    "border-primary bg-accent",
-                  isSubmitted &&
-                    selectedChoice === index &&
-                    isCorrect &&
-                    "border-green-500 bg-green-50 dark:bg-green-950",
-                  isSubmitted &&
-                    selectedChoice === index &&
-                    !isCorrect &&
-                    "border-red-500 bg-red-50 dark:bg-red-950",
-                  isSubmitted && "cursor-not-allowed"
-                )}
-              >
-                <div className="flex items-center gap-3">
-                  <span className="font-semibold text-muted-foreground">
-                    {String.fromCharCode(65 + index)}.
-                  </span>
-                  <MathRenderer latex={choice} displayMode={false} />
-                  {isSubmitted && selectedChoice === index && (
-                    <div className="ml-auto">
-                      {isCorrect ? (
-                        <CheckCircle2 className="h-5 w-5 text-green-600" />
-                      ) : (
-                        <XCircle className="h-5 w-5 text-red-600" />
-                      )}
-                    </div>
+          <fieldset className="space-y-2">
+            <legend className="sr-only">Select your answer</legend>
+            {problem.choices.map((choice, index) => {
+              const choiceLabel = String.fromCharCode(65 + index);
+              const isSelected = selectedChoice === index;
+              const showResult = isSubmitted && isSelected;
+
+              return (
+                <button
+                  key={index}
+                  onClick={() => !isSubmitted && setSelectedChoice(index)}
+                  disabled={isSubmitted}
+                  role="radio"
+                  aria-checked={isSelected}
+                  aria-label={`Option ${choiceLabel}`}
+                  className={cn(
+                    "w-full p-4 rounded-lg border-2 text-left transition-all min-h-[60px]",
+                    "hover:border-primary hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+                    isSelected && "border-primary bg-accent",
+                    showResult && isCorrect && "border-green-500 bg-green-50 dark:bg-green-950",
+                    showResult && !isCorrect && "border-red-500 bg-red-50 dark:bg-red-950",
+                    isSubmitted && "cursor-not-allowed"
                   )}
-                </div>
-              </button>
-            ))}
-          </div>
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="font-semibold text-muted-foreground min-w-[24px]" aria-hidden="true">
+                      {choiceLabel}.
+                    </span>
+                    <MathRenderer latex={choice} displayMode={false} />
+                    {showResult && (
+                      <div className="ml-auto" aria-label={isCorrect ? "Correct answer" : "Incorrect answer"}>
+                        {isCorrect ? (
+                          <CheckCircle2 className="h-5 w-5 text-green-600" aria-hidden="true" />
+                        ) : (
+                          <XCircle className="h-5 w-5 text-red-600" aria-hidden="true" />
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </button>
+              );
+            })}
+          </fieldset>
         ) : (
-          <div className="space-y-2">
-            <Input
-              type="text"
-              placeholder="Enter your answer..."
-              value={answer}
-              onChange={(e) => setAnswer(e.target.value)}
-              onKeyPress={handleKeyPress}
-              disabled={isSubmitted}
-              className={cn(
-                "font-mono text-lg",
-                isSubmitted &&
-                  isCorrect &&
-                  "border-green-500 bg-green-50 dark:bg-green-950",
-                isSubmitted &&
-                  !isCorrect &&
-                  "border-red-500 bg-red-50 dark:bg-red-950"
-              )}
-            />
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleSubmit();
+            }}
+            className="space-y-2"
+          >
+            <div className="space-y-2">
+              <label htmlFor="answer-input" className="sr-only">
+                Enter your answer
+              </label>
+              <Input
+                id="answer-input"
+                type="text"
+                placeholder="Enter your answer..."
+                value={answer}
+                onChange={(e) => setAnswer(e.target.value)}
+                onKeyPress={handleKeyPress}
+                disabled={isSubmitted}
+                aria-invalid={isSubmitted && !isCorrect}
+                aria-describedby={feedback ? "answer-feedback" : undefined}
+                className={cn(
+                  "font-mono text-lg min-h-[48px]",
+                  isSubmitted && isCorrect && "border-green-500 bg-green-50 dark:bg-green-950",
+                  isSubmitted && !isCorrect && "border-red-500 bg-red-50 dark:bg-red-950"
+                )}
+              />
+            </div>
             {!isSubmitted && (
               <Button
+                type="submit"
                 onClick={handleSubmit}
                 disabled={answer.trim() === ""}
-                className="w-full"
+                className="w-full min-h-[44px]"
               >
                 Submit Answer
               </Button>
             )}
-          </div>
+          </form>
         )}
 
         {/* Feedback */}
         {feedback && (
           <div
+            id="answer-feedback"
+            role="alert"
+            aria-live="polite"
             className={cn(
               "p-4 rounded-lg border-2",
               isCorrect
@@ -213,9 +234,9 @@ export function ProblemCard({
           >
             <div className="flex items-start gap-3">
               {isCorrect ? (
-                <CheckCircle2 className="h-5 w-5 mt-0.5 flex-shrink-0" />
+                <CheckCircle2 className="h-5 w-5 mt-0.5 flex-shrink-0" aria-hidden="true" />
               ) : (
-                <XCircle className="h-5 w-5 mt-0.5 flex-shrink-0" />
+                <XCircle className="h-5 w-5 mt-0.5 flex-shrink-0" aria-hidden="true" />
               )}
               <div className="flex-1">
                 <p className="font-semibold">
@@ -234,14 +255,16 @@ export function ProblemCard({
               variant="outline"
               size="sm"
               onClick={handleHintClick}
-              className="w-full"
+              className="w-full min-h-[44px]"
+              aria-expanded={showHint}
+              aria-label={showHint ? "Hide hint" : `Show hint, ${hintsUsed} hints used so far`}
             >
-              <Lightbulb className="h-4 w-4" />
+              <Lightbulb className="h-4 w-4" aria-hidden="true" />
               {showHint ? "Hide Hint" : `Show Hint (${hintsUsed} used)`}
             </Button>
 
             {showHint && (
-              <div className="p-4 bg-blue-50 dark:bg-blue-950 rounded-lg border border-blue-200 dark:border-blue-800">
+              <div className="p-4 bg-blue-50 dark:bg-blue-950 rounded-lg border border-blue-200 dark:border-blue-800" role="region" aria-label="Hint">
                 <p className="text-sm text-blue-900 dark:text-blue-100">
                   <strong>Hint:</strong> {problem.solutions[0].whenToUse}
                 </p>
@@ -257,29 +280,31 @@ export function ProblemCard({
               variant="outline"
               size="sm"
               onClick={() => setShowSolution(!showSolution)}
-              className="w-full"
+              className="w-full min-h-[44px]"
+              aria-expanded={showSolution}
+              aria-label={showSolution ? "Hide solution" : "View solution"}
             >
               {showSolution ? (
                 <>
-                  <EyeOff className="h-4 w-4" />
+                  <EyeOff className="h-4 w-4" aria-hidden="true" />
                   Hide Solution
                 </>
               ) : (
                 <>
-                  <Eye className="h-4 w-4" />
+                  <Eye className="h-4 w-4" aria-hidden="true" />
                   View Solution
                 </>
               )}
             </Button>
 
             {showSolution && (
-              <div className="space-y-3 p-4 bg-muted rounded-lg">
-                <h4 className="font-semibold">
+              <div className="space-y-3 p-4 bg-muted rounded-lg" role="region" aria-label="Solution steps">
+                <h4 className="font-semibold text-base">
                   Solution: {problem.solutions[0].strategy}
                 </h4>
-                <div className="space-y-4">
+                <ol className="space-y-4 list-none">
                   {problem.solutions[0].steps.map((step) => (
-                    <div key={step.stepNumber} className="space-y-1">
+                    <li key={step.stepNumber} className="space-y-1">
                       <p className="text-sm font-medium text-muted-foreground">
                         Step {step.stepNumber}
                       </p>
@@ -294,9 +319,9 @@ export function ProblemCard({
                           Key term: <strong>{step.goldenWord}</strong>
                         </p>
                       )}
-                    </div>
+                    </li>
                   ))}
-                </div>
+                </ol>
               </div>
             )}
           </div>

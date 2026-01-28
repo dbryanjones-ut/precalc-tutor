@@ -159,7 +159,12 @@ export default function PracticePage() {
     return (
       <div className="container mx-auto py-8 px-4">
         <div className="mb-6">
-          <Button variant="ghost" onClick={() => setActiveMode(null)}>
+          <Button
+            variant="ghost"
+            onClick={() => setActiveMode(null)}
+            className="min-h-[44px]"
+            aria-label="Return to practice modes"
+          >
             ← Back to Practice Modes
           </Button>
         </div>
@@ -231,76 +236,85 @@ export default function PracticePage() {
       </div>
 
       {/* Stats Overview */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground">Current Streak</p>
-                <p className="text-3xl font-bold">{progress.currentStreak}</p>
+      <section aria-label="Practice statistics" className="mb-8">
+        <h2 className="sr-only">Your Practice Statistics</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <Card>
+            <CardContent className="pt-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-muted-foreground">Current Streak</p>
+                  <p className="text-3xl font-bold" aria-label={`${progress.currentStreak} day streak`}>{progress.currentStreak}</p>
+                </div>
+                <Flame className="h-8 w-8 text-orange-500" aria-hidden="true" />
               </div>
-              <Flame className="h-8 w-8 text-orange-500" />
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
 
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground">Problems Solved</p>
-                <p className="text-3xl font-bold">{totalCorrect}</p>
+          <Card>
+            <CardContent className="pt-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-muted-foreground">Problems Solved</p>
+                  <p className="text-3xl font-bold" aria-label={`${totalCorrect} problems solved`}>{totalCorrect}</p>
+                </div>
+                <Target className="h-8 w-8 text-primary" aria-hidden="true" />
               </div>
-              <Target className="h-8 w-8 text-primary" />
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
 
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground">Accuracy</p>
-                <p className="text-3xl font-bold">{accuracy}%</p>
+          <Card>
+            <CardContent className="pt-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-muted-foreground">Accuracy</p>
+                  <p className="text-3xl font-bold" aria-label={`${accuracy} percent accuracy`}>{accuracy}%</p>
+                </div>
+                <Trophy className="h-8 w-8 text-yellow-500" aria-hidden="true" />
               </div>
-              <Trophy className="h-8 w-8 text-yellow-500" />
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
 
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground">Total Attempts</p>
-                <p className="text-3xl font-bold">{totalAttempted}</p>
+          <Card>
+            <CardContent className="pt-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-muted-foreground">Total Attempts</p>
+                  <p className="text-3xl font-bold" aria-label={`${totalAttempted} total attempts`}>{totalAttempted}</p>
+                </div>
+                <BookOpen className="h-8 w-8 text-blue-500" aria-hidden="true" />
               </div>
-              <BookOpen className="h-8 w-8 text-blue-500" />
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
 
       {/* Practice Modes */}
-      <div className="space-y-6">
-        <div>
-          <h2 className="text-2xl font-semibold mb-4">Daily Routines</h2>
+      <div className="space-y-8">
+        <section aria-labelledby="daily-routines-heading">
+          <h2 id="daily-routines-heading" className="text-2xl font-semibold mb-4">Daily Routines</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Daily Warmup */}
-            <Card className={cn(
-              "hover:border-primary transition-colors cursor-pointer",
-              warmupCompletedToday && "bg-green-50 dark:bg-green-950 border-green-500"
-            )}
+            <Card
+              className={cn(
+                "hover:border-primary transition-colors cursor-pointer focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2",
+                warmupCompletedToday && "bg-green-50 dark:bg-green-950 border-green-500"
+              )}
               onClick={() => !warmupCompletedToday && setActiveMode("warmup")}
+              role="button"
+              tabIndex={warmupCompletedToday ? -1 : 0}
+              aria-label={warmupCompletedToday ? "Daily warm-up completed" : "Start daily warm-up practice"}
             >
               <CardHeader>
                 <div className="flex items-center justify-between">
-                  <Coffee className="h-8 w-8 text-orange-500" />
+                  <Coffee className="h-8 w-8 text-orange-500" aria-hidden="true" />
                   {warmupCompletedToday && (
-                    <CheckCircle2 className="h-6 w-6 text-green-600" />
+                    <CheckCircle2 className="h-6 w-6 text-green-600" aria-label="Completed" />
                   )}
                 </div>
-                <CardTitle>Daily Warm-up</CardTitle>
+                <CardTitle asChild>
+                  <h3>Daily Warm-up</h3>
+                </CardTitle>
                 <CardDescription>
                   4 questions • 8 minutes • Spaced repetition
                 </CardDescription>
@@ -312,12 +326,12 @@ export default function PracticePage() {
                 </p>
                 {warmupCompletedToday ? (
                   <div className="flex items-center gap-2 text-green-600">
-                    <CheckCircle2 className="h-4 w-4" />
+                    <CheckCircle2 className="h-4 w-4" aria-hidden="true" />
                     <span className="text-sm font-medium">Completed today!</span>
                   </div>
                 ) : (
-                  <Button className="w-full">
-                    <Coffee className="h-4 w-4" />
+                  <Button className="w-full min-h-[44px]" aria-label="Start daily warm-up">
+                    <Coffee className="h-4 w-4" aria-hidden="true" />
                     Start Warm-up
                   </Button>
                 )}
@@ -325,15 +339,21 @@ export default function PracticePage() {
             </Card>
 
             {/* Q4 Sprint */}
-            <Card className="hover:border-primary transition-colors cursor-pointer"
+            <Card
+              className="hover:border-primary transition-colors cursor-pointer focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2"
               onClick={() => setActiveMode("q4-sprint")}
+              role="button"
+              tabIndex={0}
+              aria-label="Start Q4 symbolic sprint practice"
             >
               <CardHeader>
                 <div className="flex items-center justify-between">
-                  <Zap className="h-8 w-8 text-yellow-500" />
-                  <span className="text-sm text-muted-foreground">Week {thisWeek}</span>
+                  <Zap className="h-8 w-8 text-yellow-500" aria-hidden="true" />
+                  <span className="text-sm text-muted-foreground" aria-label={`Week ${thisWeek}`}>Week {thisWeek}</span>
                 </div>
-                <CardTitle>Q4 Symbolic Sprint</CardTitle>
+                <CardTitle asChild>
+                  <h3>Q4 Symbolic Sprint</h3>
+                </CardTitle>
                 <CardDescription>
                   10 problems • 15 minutes • No calculator
                 </CardDescription>
@@ -359,25 +379,31 @@ export default function PracticePage() {
                     </div>
                   </div>
                 ) : null}
-                <Button className="w-full" variant="default">
-                  <Zap className="h-4 w-4" />
+                <Button className="w-full min-h-[44px]" variant="default" aria-label="Start Q4 sprint">
+                  <Zap className="h-4 w-4" aria-hidden="true" />
                   Start Sprint
                 </Button>
               </CardContent>
             </Card>
           </div>
-        </div>
+        </section>
 
-        <div>
-          <h2 className="text-2xl font-semibold mb-4">Focused Practice</h2>
+        <section aria-labelledby="focused-practice-heading">
+          <h2 id="focused-practice-heading" className="text-2xl font-semibold mb-4">Focused Practice</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Unit Circle */}
-            <Card className="hover:border-primary transition-colors cursor-pointer"
+            <Card
+              className="hover:border-primary transition-colors cursor-pointer focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2"
               onClick={() => setActiveMode("unit-circle")}
+              role="button"
+              tabIndex={0}
+              aria-label="Practice unit circle mastery"
             >
               <CardHeader>
-                <Circle className="h-8 w-8 text-blue-500" />
-                <CardTitle>Unit Circle Mastery</CardTitle>
+                <Circle className="h-8 w-8 text-blue-500" aria-hidden="true" />
+                <CardTitle asChild>
+                  <h3>Unit Circle Mastery</h3>
+                </CardTitle>
                 <CardDescription>
                   Interactive explorer • Click-to-reveal • Quiz mode
                 </CardDescription>
@@ -387,20 +413,26 @@ export default function PracticePage() {
                   Master all 16 special angles with color-coded families (π/6, π/4,
                   π/3). Essential for trig unit.
                 </p>
-                <Button className="w-full" variant="outline">
-                  <Circle className="h-4 w-4" />
+                <Button className="w-full min-h-[44px]" variant="outline" aria-label="Practice unit circle">
+                  <Circle className="h-4 w-4" aria-hidden="true" />
                   Practice Unit Circle
                 </Button>
               </CardContent>
             </Card>
 
             {/* Transformations */}
-            <Card className="hover:border-primary transition-colors cursor-pointer"
+            <Card
+              className="hover:border-primary transition-colors cursor-pointer focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2"
               onClick={() => setActiveMode("transformations")}
+              role="button"
+              tabIndex={0}
+              aria-label="Explore function transformations"
             >
               <CardHeader>
-                <TrendingUp className="h-8 w-8 text-green-500" />
-                <CardTitle>Function Transformations</CardTitle>
+                <TrendingUp className="h-8 w-8 text-green-500" aria-hidden="true" />
+                <CardTitle asChild>
+                  <h3>Function Transformations</h3>
+                </CardTitle>
                 <CardDescription>
                   Interactive sliders • Input vs Output • All families
                 </CardDescription>
@@ -410,44 +442,50 @@ export default function PracticePage() {
                   Visualize how a, h, and k transform parent functions. Understand
                   input vs output geography.
                 </p>
-                <Button className="w-full" variant="outline">
-                  <TrendingUp className="h-4 w-4" />
+                <Button className="w-full min-h-[44px]" variant="outline" aria-label="Explore transformations">
+                  <TrendingUp className="h-4 w-4" aria-hidden="true" />
                   Explore Transformations
                 </Button>
               </CardContent>
             </Card>
           </div>
-        </div>
+        </section>
 
         {/* Coming Soon Section */}
-        <div>
-          <h2 className="text-2xl font-semibold mb-4">Coming Soon</h2>
+        <section aria-labelledby="coming-soon-heading">
+          <h2 id="coming-soon-heading" className="text-2xl font-semibold mb-4">Coming Soon</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Card className="opacity-60">
+            <Card className="opacity-60" aria-disabled="true">
               <CardHeader>
-                <Target className="h-8 w-8 text-muted-foreground" />
-                <CardTitle>Topic Drills</CardTitle>
-                <CardDescription>Targeted practice by topic</CardDescription>
+                <Target className="h-8 w-8 text-muted-foreground" aria-hidden="true" />
+                <CardTitle asChild>
+                  <h3>Topic Drills</h3>
+                </CardTitle>
+                <CardDescription>Targeted practice by topic (Coming soon)</CardDescription>
               </CardHeader>
             </Card>
 
-            <Card className="opacity-60">
+            <Card className="opacity-60" aria-disabled="true">
               <CardHeader>
-                <Calendar className="h-8 w-8 text-muted-foreground" />
-                <CardTitle>Mock Exams</CardTitle>
-                <CardDescription>Full AP-style practice tests</CardDescription>
+                <Calendar className="h-8 w-8 text-muted-foreground" aria-hidden="true" />
+                <CardTitle asChild>
+                  <h3>Mock Exams</h3>
+                </CardTitle>
+                <CardDescription>Full AP-style practice tests (Coming soon)</CardDescription>
               </CardHeader>
             </Card>
 
-            <Card className="opacity-60">
+            <Card className="opacity-60" aria-disabled="true">
               <CardHeader>
-                <Trophy className="h-8 w-8 text-muted-foreground" />
-                <CardTitle>Challenge Mode</CardTitle>
-                <CardDescription>Compete with yourself</CardDescription>
+                <Trophy className="h-8 w-8 text-muted-foreground" aria-hidden="true" />
+                <CardTitle asChild>
+                  <h3>Challenge Mode</h3>
+                </CardTitle>
+                <CardDescription>Compete with yourself (Coming soon)</CardDescription>
               </CardHeader>
             </Card>
           </div>
-        </div>
+        </section>
 
         {/* Tips Section */}
         <Card className="bg-blue-50 dark:bg-blue-950 border-blue-200 dark:border-blue-800">

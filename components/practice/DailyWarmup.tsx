@@ -8,6 +8,8 @@ import { Progress } from "@/components/ui/progress";
 import { MathRenderer } from "@/components/math/MathRenderer";
 import { AnswerValidator } from "@/lib/math/answer-validator";
 import { useProgressStore } from "@/stores/useProgressStore";
+import { Confetti } from "@/components/ui/confetti";
+import { CelebrationMessage } from "@/components/ui/celebration";
 import type { Problem } from "@/types/problem";
 import { cn } from "@/lib/utils";
 import { formatTime, getTimeColor } from "@/lib/utils/timer";
@@ -25,10 +27,11 @@ import {
   Lightbulb,
   AlertCircle,
   BookOpen,
+  Zap,
 } from "lucide-react";
 
 interface DailyWarmupProps {
-  problems: Problem[]; // Should be exactly 4 problems
+  problems: Problem[];
   onComplete: (results: WarmupResult[]) => void;
 }
 
@@ -58,6 +61,7 @@ export function DailyWarmup({ problems, onComplete }: DailyWarmupProps) {
     message: string;
   } | null>(null);
   const [expandedExplanations, setExpandedExplanations] = useState<Set<number>>(new Set());
+  const [showConfetti, setShowConfetti] = useState(false);
 
   const { progress, addWarmup, updateStreak } = useProgressStore();
 
@@ -121,6 +125,12 @@ export function DailyWarmup({ problems, onComplete }: DailyWarmupProps) {
     setResults(gradedResults);
     setIsComplete(true);
 
+    // Trigger confetti for excellent performance
+    const correctCount = gradedResults.filter((r) => r.correct).length;
+    if (correctCount >= 3) {
+      setShowConfetti(true);
+    }
+
     // Save to progress store
     const problemIds = problems.map((p) => p.id);
     const scores = gradedResults.map((r) => r.correct);
@@ -161,274 +171,301 @@ export function DailyWarmup({ problems, onComplete }: DailyWarmupProps) {
     const accuracy = (correctCount / 4) * 100;
 
     return (
-      <Card className="max-w-2xl mx-auto">
-        <CardHeader className="text-center">
-          <div className="flex justify-center mb-4">
-            <Coffee className="h-16 w-16 text-orange-500" />
-          </div>
-          <CardTitle className="text-3xl">Warm-up Complete!</CardTitle>
-          <CardDescription>
-            Great way to start your practice session
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          {/* Summary Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="text-center p-4 bg-muted rounded-lg">
-              <Target className="h-6 w-6 mx-auto mb-2 text-primary" />
-              <div className="text-2xl font-bold">{correctCount}/4</div>
-              <div className="text-sm text-muted-foreground">Correct</div>
-            </div>
-            <div className="text-center p-4 bg-muted rounded-lg">
-              <Trophy className="h-6 w-6 mx-auto mb-2 text-yellow-500" />
-              <div className="text-2xl font-bold">{accuracy}%</div>
-              <div className="text-sm text-muted-foreground">Accuracy</div>
-            </div>
-            <div className="text-center p-4 bg-muted rounded-lg">
-              <Clock className="h-6 w-6 mx-auto mb-2 text-blue-500" />
-              <div className="text-2xl font-bold">{formatTime(timeElapsed)}</div>
-              <div className="text-sm text-muted-foreground">Time</div>
-            </div>
-            <div className="text-center p-4 bg-muted rounded-lg">
-              <Flame className="h-6 w-6 mx-auto mb-2 text-orange-500" />
-              <div className="text-2xl font-bold">{progress.currentStreak}</div>
-              <div className="text-sm text-muted-foreground">Day Streak</div>
-            </div>
-          </div>
+      <>
+        {showConfetti && <Confetti active={true} duration={4000} particleCount={60} />}
 
-          {/* Problem Breakdown */}
-          <div className="space-y-3">
-            <h3 className="font-semibold flex items-center gap-2">
-              <Calendar className="h-5 w-5" />
-              Problem Breakdown
-            </h3>
-            {results.map((result, index) => (
-              <div
-                key={index}
-                className={cn(
-                  "p-4 rounded-lg border-2",
-                  result.correct
-                    ? "border-green-500 bg-green-50 dark:bg-green-950"
-                    : "border-red-500 bg-red-50 dark:bg-red-950"
-                )}
-              >
-                <div className="flex items-start gap-3">
-                  {result.correct ? (
-                    <CheckCircle2 className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
-                  ) : (
-                    <XCircle className="h-5 w-5 text-red-600 mt-0.5 flex-shrink-0" />
+        <Card className="max-w-2xl mx-auto animate-in zoom-in-95 duration-500">
+          <CardHeader className="text-center">
+            <div className="flex justify-center mb-4">
+              <div className="animate-bounce-scale">
+                <Coffee className="h-16 w-16 text-orange-500" />
+              </div>
+            </div>
+            <CardTitle className="text-3xl animate-in slide-in-from-bottom-4 duration-500 delay-100">
+              Warm-up Complete!
+            </CardTitle>
+            <CardDescription className="animate-in slide-in-from-bottom-4 duration-500 delay-200">
+              Great way to start your practice session
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            {/* Celebration message */}
+            {correctCount === 4 && (
+              <CelebrationMessage type="perfect" className="animate-in slide-in-from-bottom-4 duration-500 delay-300" />
+            )}
+            {correctCount === 3 && (
+              <CelebrationMessage type="excellent" className="animate-in slide-in-from-bottom-4 duration-500 delay-300" />
+            )}
+            {correctCount >= 1 && correctCount <= 2 && (
+              <CelebrationMessage type="good" className="animate-in slide-in-from-bottom-4 duration-500 delay-300" />
+            )}
+
+            {/* Summary Stats */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 animate-in slide-in-from-bottom-4 duration-500 delay-400">
+              <div className="text-center p-4 bg-muted rounded-lg hover-lift">
+                <Target className="h-6 w-6 mx-auto mb-2 text-primary animate-pop-in" />
+                <div className="text-2xl font-bold">{correctCount}/4</div>
+                <div className="text-sm text-muted-foreground">Correct</div>
+              </div>
+              <div className="text-center p-4 bg-muted rounded-lg hover-lift">
+                <Trophy className={cn(
+                  "h-6 w-6 mx-auto mb-2 animate-pop-in",
+                  accuracy === 100 ? "text-yellow-500 animate-wiggle" : "text-yellow-500"
+                )} />
+                <div className="text-2xl font-bold">{accuracy}%</div>
+                <div className="text-sm text-muted-foreground">Accuracy</div>
+              </div>
+              <div className="text-center p-4 bg-muted rounded-lg hover-lift">
+                <Clock className="h-6 w-6 mx-auto mb-2 text-blue-500 animate-pop-in" />
+                <div className="text-2xl font-bold">{formatTime(timeElapsed)}</div>
+                <div className="text-sm text-muted-foreground">Time</div>
+              </div>
+              <div className="text-center p-4 bg-muted rounded-lg hover-lift">
+                <Flame className={cn(
+                  "h-6 w-6 mx-auto mb-2 text-orange-500 animate-pop-in",
+                  progress.currentStreak >= 7 && "animate-glow"
+                )} />
+                <div className="text-2xl font-bold">{progress.currentStreak}</div>
+                <div className="text-sm text-muted-foreground">Day Streak</div>
+              </div>
+            </div>
+
+            {/* Problem Breakdown */}
+            <div className="space-y-3 animate-in slide-in-from-bottom-4 duration-500 delay-500">
+              <h3 className="font-semibold flex items-center gap-2">
+                <Calendar className="h-5 w-5" />
+                Problem Breakdown
+              </h3>
+              {results.map((result, index) => (
+                <div
+                  key={index}
+                  className={cn(
+                    "p-4 rounded-lg border-2 animate-in slide-in-from-bottom-4",
+                    result.correct
+                      ? "border-green-500 bg-green-50 dark:bg-green-950 animate-success-pulse"
+                      : "border-red-500 bg-red-50 dark:bg-red-950 animate-shake-gentle"
                   )}
-                  <div className="flex-1">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="font-semibold">
-                        Q{index + 1}: {PROBLEM_CATEGORIES[index]}
-                      </span>
-                      {result.correct ? (
-                        <span className="text-sm text-green-700 dark:text-green-300">
-                          Correct
+                  style={{ animationDelay: `${600 + index * 100}ms` }}
+                >
+                  <div className="flex items-start gap-3">
+                    {result.correct ? (
+                      <CheckCircle2 className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0 animate-pop-in" />
+                    ) : (
+                      <XCircle className="h-5 w-5 text-red-600 mt-0.5 flex-shrink-0 animate-pop-in" />
+                    )}
+                    <div className="flex-1">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="font-semibold">
+                          Q{index + 1}: {PROBLEM_CATEGORIES[index]}
                         </span>
-                      ) : (
-                        <span className="text-sm text-red-700 dark:text-red-300">
-                          Incorrect
-                        </span>
-                      )}
-                    </div>
-                    <div className="text-sm">
-                      <MathRenderer
-                        latex={problems[index].prompt}
-                        displayMode={false}
-                      />
-                    </div>
-                    {!result.correct && (
-                      <div className="mt-3 space-y-2">
-                        <div className="text-sm space-y-1">
-                          <div className="flex items-start gap-2">
-                            <span className="text-muted-foreground min-w-[90px]">Your answer:</span>
-                            <span className="font-mono text-red-700 dark:text-red-300">
-                              {answers[index] || "(empty)"}
-                            </span>
-                          </div>
-                          <div className="flex items-start gap-2">
-                            <span className="text-muted-foreground min-w-[90px]">Correct:</span>
-                            <MathRenderer
-                              latex={
-                                Array.isArray(problems[index].correctAnswer)
-                                  ? problems[index].correctAnswer[0]
-                                  : problems[index].correctAnswer
-                              }
-                              displayMode={false}
-                            />
-                          </div>
-                        </div>
-
-                        {/* Toggle Explanation Button */}
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => toggleExplanation(index)}
-                          className="w-full mt-2 text-blue-600 dark:text-blue-400 border-blue-300 dark:border-blue-700 hover:bg-blue-50 dark:hover:bg-blue-950"
-                        >
-                          {expandedExplanations.has(index) ? (
-                            <>
-                              <ChevronUp className="h-4 w-4 mr-2" />
-                              Hide Explanation
-                            </>
-                          ) : (
-                            <>
-                              <ChevronDown className="h-4 w-4 mr-2" />
-                              Show me what I did wrong
-                            </>
-                          )}
-                        </Button>
-
-                        {/* Expanded Explanation */}
-                        {expandedExplanations.has(index) && (
-                          <div className="mt-3 p-4 bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg space-y-4">
-                            {/* Common Mistakes */}
-                            {problems[index].commonMistakes && problems[index].commonMistakes.length > 0 && (
-                              <div>
-                                <div className="flex items-center gap-2 mb-2">
-                                  <AlertCircle className="h-4 w-4 text-orange-600" />
-                                  <h4 className="font-semibold text-sm text-orange-900 dark:text-orange-100">
-                                    Common Mistakes to Avoid
-                                  </h4>
-                                </div>
-                                <ul className="space-y-1 text-sm text-orange-800 dark:text-orange-200">
-                                  {problems[index].commonMistakes.map((mistake, i) => (
-                                    <li key={i} className="flex items-start gap-2">
-                                      <span className="text-orange-600 mt-0.5">•</span>
-                                      <span>{mistake.description}</span>
-                                    </li>
-                                  ))}
-                                </ul>
-                              </div>
-                            )}
-
-                            {/* Step-by-Step Solution */}
-                            {problems[index].solutions && problems[index].solutions.length > 0 && (
-                              <div>
-                                <div className="flex items-center gap-2 mb-2">
-                                  <BookOpen className="h-4 w-4 text-blue-600" />
-                                  <h4 className="font-semibold text-sm text-blue-900 dark:text-blue-100">
-                                    Step-by-Step Solution
-                                  </h4>
-                                </div>
-                                <ol className="space-y-2 text-sm">
-                                  {problems[index].solutions[0]?.steps?.map((step, i) => (
-                                    <li key={i} className="flex items-start gap-2">
-                                      <span className="font-semibold text-blue-700 dark:text-blue-300 min-w-[24px]">
-                                        {i + 1}.
-                                      </span>
-                                      <div className="flex-1">
-                                        <div className="text-blue-800 dark:text-blue-200">
-                                          {step.explanation}
-                                        </div>
-                                        {step.latex && (
-                                          <div className="mt-1">
-                                            <MathRenderer
-                                              latex={step.latex}
-                                              displayMode={false}
-                                            />
-                                          </div>
-                                        )}
-                                      </div>
-                                    </li>
-                                  ))}
-                                </ol>
-                              </div>
-                            )}
-
-                            {/* Hints */}
-                            {problems[index].hints && problems[index].hints.length > 0 && (
-                              <div>
-                                <div className="flex items-center gap-2 mb-2">
-                                  <Lightbulb className="h-4 w-4 text-yellow-600" />
-                                  <h4 className="font-semibold text-sm text-yellow-900 dark:text-yellow-100">
-                                    Key Concepts
-                                  </h4>
-                                </div>
-                                <ul className="space-y-1 text-sm text-yellow-800 dark:text-yellow-200">
-                                  {problems[index].hints.map((hint, i) => (
-                                    <li key={i} className="flex items-start gap-2">
-                                      <span className="text-yellow-600 mt-0.5">💡</span>
-                                      <span>{hint}</span>
-                                    </li>
-                                  ))}
-                                </ul>
-                              </div>
-                            )}
-
-                            {/* If no detailed content available, show generic guidance */}
-                            {(!problems[index].commonMistakes || problems[index].commonMistakes.length === 0) &&
-                             (!problems[index].solutions || problems[index].solutions.length === 0) &&
-                             (!problems[index].hints || problems[index].hints.length === 0) && (
-                              <div className="text-sm text-blue-800 dark:text-blue-200">
-                                <p className="mb-2">
-                                  Review the problem carefully and compare your approach to the correct answer.
-                                  Consider these general strategies:
-                                </p>
-                                <ul className="space-y-1 ml-4">
-                                  <li>• Check if you identified the correct operation or formula</li>
-                                  <li>• Verify your calculations step by step</li>
-                                  <li>• Look for sign errors or arithmetic mistakes</li>
-                                  <li>• Make sure you answered what the question asked</li>
-                                </ul>
-                              </div>
-                            )}
-                          </div>
+                        {result.correct ? (
+                          <span className="text-sm text-green-700 dark:text-green-300 flex items-center gap-1">
+                            <Zap className="h-3 w-3" />
+                            Correct
+                          </span>
+                        ) : (
+                          <span className="text-sm text-red-700 dark:text-red-300">
+                            Incorrect
+                          </span>
                         )}
                       </div>
-                    )}
+                      <div className="text-sm">
+                        <MathRenderer
+                          latex={problems[index].prompt}
+                          displayMode={false}
+                        />
+                      </div>
+                      {!result.correct && (
+                        <div className="mt-3 space-y-2">
+                          <div className="text-sm space-y-1">
+                            <div className="flex items-start gap-2">
+                              <span className="text-muted-foreground min-w-[90px]">Your answer:</span>
+                              <span className="font-mono text-red-700 dark:text-red-300">
+                                {answers[index] || "(empty)"}
+                              </span>
+                            </div>
+                            <div className="flex items-start gap-2">
+                              <span className="text-muted-foreground min-w-[90px]">Correct:</span>
+                              <MathRenderer
+                                latex={
+                                  Array.isArray(problems[index].correctAnswer)
+                                    ? problems[index].correctAnswer[0]
+                                    : problems[index].correctAnswer
+                                }
+                                displayMode={false}
+                              />
+                            </div>
+                          </div>
+
+                          {/* Toggle Explanation Button */}
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => toggleExplanation(index)}
+                            className="w-full mt-2 text-blue-600 dark:text-blue-400 border-blue-300 dark:border-blue-700 hover:bg-blue-50 dark:hover:bg-blue-950 btn-press"
+                          >
+                            {expandedExplanations.has(index) ? (
+                              <>
+                                <ChevronUp className="h-4 w-4 mr-2" />
+                                Hide Explanation
+                              </>
+                            ) : (
+                              <>
+                                <ChevronDown className="h-4 w-4 mr-2" />
+                                Show me what I did wrong
+                              </>
+                            )}
+                          </Button>
+
+                          {/* Expanded Explanation */}
+                          {expandedExplanations.has(index) && (
+                            <div className="mt-3 p-4 bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg space-y-4 animate-in slide-in-from-top-4 duration-300">
+                              {/* Common Mistakes */}
+                              {problems[index].commonMistakes && problems[index].commonMistakes.length > 0 && (
+                                <div>
+                                  <div className="flex items-center gap-2 mb-2">
+                                    <AlertCircle className="h-4 w-4 text-orange-600" />
+                                    <h4 className="font-semibold text-sm text-orange-900 dark:text-orange-100">
+                                      Common Mistakes to Avoid
+                                    </h4>
+                                  </div>
+                                  <ul className="space-y-1 text-sm text-orange-800 dark:text-orange-200">
+                                    {problems[index].commonMistakes.map((mistake, i) => (
+                                      <li key={i} className="flex items-start gap-2">
+                                        <span className="text-orange-600 mt-0.5">•</span>
+                                        <span>{mistake.description}</span>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </div>
+                              )}
+
+                              {/* Step-by-Step Solution */}
+                              {problems[index].solutions && problems[index].solutions.length > 0 && (
+                                <div>
+                                  <div className="flex items-center gap-2 mb-2">
+                                    <BookOpen className="h-4 w-4 text-blue-600" />
+                                    <h4 className="font-semibold text-sm text-blue-900 dark:text-blue-100">
+                                      Step-by-Step Solution
+                                    </h4>
+                                  </div>
+                                  <ol className="space-y-2 text-sm">
+                                    {problems[index].solutions[0]?.steps?.map((step, i) => (
+                                      <li key={i} className="flex items-start gap-2">
+                                        <span className="font-semibold text-blue-700 dark:text-blue-300 min-w-[24px]">
+                                          {i + 1}.
+                                        </span>
+                                        <div className="flex-1">
+                                          <div className="text-blue-800 dark:text-blue-200">
+                                            {step.explanation}
+                                          </div>
+                                          {step.latex && (
+                                            <div className="mt-1">
+                                              <MathRenderer
+                                                latex={step.latex}
+                                                displayMode={false}
+                                              />
+                                            </div>
+                                          )}
+                                        </div>
+                                      </li>
+                                    ))}
+                                  </ol>
+                                </div>
+                              )}
+
+                              {/* Hints */}
+                              {problems[index].hints && problems[index].hints.length > 0 && (
+                                <div>
+                                  <div className="flex items-center gap-2 mb-2">
+                                    <Lightbulb className="h-4 w-4 text-yellow-600" />
+                                    <h4 className="font-semibold text-sm text-yellow-900 dark:text-yellow-100">
+                                      Key Concepts
+                                    </h4>
+                                  </div>
+                                  <ul className="space-y-1 text-sm text-yellow-800 dark:text-yellow-200">
+                                    {problems[index].hints.map((hint, i) => (
+                                      <li key={i} className="flex items-start gap-2">
+                                        <span className="text-yellow-600 mt-0.5">💡</span>
+                                        <span>{hint}</span>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </div>
+                              )}
+
+                              {/* If no detailed content available, show generic guidance */}
+                              {(!problems[index].commonMistakes || problems[index].commonMistakes.length === 0) &&
+                               (!problems[index].solutions || problems[index].solutions.length === 0) &&
+                               (!problems[index].hints || problems[index].hints.length === 0) && (
+                                <div className="text-sm text-blue-800 dark:text-blue-200">
+                                  <p className="mb-2">
+                                    Review the problem carefully and compare your approach to the correct answer.
+                                    Consider these general strategies:
+                                  </p>
+                                  <ul className="space-y-1 ml-4">
+                                    <li>• Check if you identified the correct operation or formula</li>
+                                    <li>• Verify your calculations step by step</li>
+                                    <li>• Look for sign errors or arithmetic mistakes</li>
+                                    <li>• Make sure you answered what the question asked</li>
+                                  </ul>
+                                </div>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Feedback Message */}
+            <div className="p-4 bg-primary/10 rounded-lg animate-in slide-in-from-bottom-4 duration-500 delay-700">
+              <h4 className="font-semibold mb-2">Daily Feedback</h4>
+              {accuracy === 100 ? (
+                <p className="text-sm">
+                  🎉 Perfect score! You're demonstrating excellent retention across all time
+                  ranges. This spaced repetition strategy is working!
+                </p>
+              ) : accuracy >= 75 ? (
+                <p className="text-sm">
+                  💪 Strong work! You're retaining concepts well. Review the problems you
+                  missed to maintain your edge.
+                </p>
+              ) : accuracy >= 50 ? (
+                <p className="text-sm">
+                  👍 Good effort! Some topics need reinforcement. Consider reviewing the
+                  categories you struggled with today.
+                </p>
+              ) : (
+                <p className="text-sm">
+                  📚 These warm-ups are challenging, but they're helping identify areas to
+                  focus on. Revisit the relevant lessons and keep practicing!
+                </p>
+              )}
+            </div>
+
+            {/* Streak Celebration */}
+            {progress.currentStreak >= 3 && (
+              <div className="p-4 bg-orange-50 dark:bg-orange-950 border border-orange-200 dark:border-orange-800 rounded-lg animate-in slide-in-from-bottom-4 duration-500 delay-800">
+                <div className="flex items-center gap-3">
+                  <Flame className="h-8 w-8 text-orange-500 animate-bounce" />
+                  <div>
+                    <p className="font-semibold text-orange-900 dark:text-orange-100">
+                      {progress.currentStreak} Day Streak!
+                    </p>
+                    <p className="text-sm text-orange-800 dark:text-orange-200">
+                      Keep it going! Consistency is the key to mastery.
+                    </p>
                   </div>
                 </div>
               </div>
-            ))}
-          </div>
-
-          {/* Feedback Message */}
-          <div className="p-4 bg-primary/10 rounded-lg">
-            <h4 className="font-semibold mb-2">Daily Feedback</h4>
-            {accuracy === 100 ? (
-              <p className="text-sm">
-                Perfect score! You're demonstrating excellent retention across all time
-                ranges. This spaced repetition strategy is working!
-              </p>
-            ) : accuracy >= 75 ? (
-              <p className="text-sm">
-                Strong work! You're retaining concepts well. Review the problems you
-                missed to maintain your edge.
-              </p>
-            ) : accuracy >= 50 ? (
-              <p className="text-sm">
-                Good effort! Some topics need reinforcement. Consider reviewing the
-                categories you struggled with today.
-              </p>
-            ) : (
-              <p className="text-sm">
-                These warm-ups are challenging, but they're helping identify areas to
-                focus on. Revisit the relevant lessons and keep practicing!
-              </p>
             )}
-          </div>
-
-          {/* Streak Celebration */}
-          {progress.currentStreak >= 3 && (
-            <div className="p-4 bg-orange-50 dark:bg-orange-950 border border-orange-200 dark:border-orange-800 rounded-lg">
-              <div className="flex items-center gap-3">
-                <Flame className="h-8 w-8 text-orange-500" />
-                <div>
-                  <p className="font-semibold text-orange-900 dark:text-orange-100">
-                    {progress.currentStreak} Day Streak!
-                  </p>
-                  <p className="text-sm text-orange-800 dark:text-orange-200">
-                    Keep it going! Consistency is the key to mastery.
-                  </p>
-                </div>
-              </div>
-            </div>
-          )}
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      </>
     );
   }
 
@@ -445,13 +482,13 @@ export function DailyWarmup({ problems, onComplete }: DailyWarmupProps) {
   }
 
   return (
-    <div className="max-w-3xl mx-auto space-y-4">
+    <div className="max-w-3xl mx-auto space-y-4 animate-in fade-in duration-500">
       {/* Header */}
-      <Card>
+      <Card className="hover-lift">
         <CardContent className="py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <Coffee className="h-6 w-6 text-orange-500" />
+              <Coffee className="h-6 w-6 text-orange-500 animate-bounce" />
               <div>
                 <h2 className="font-semibold">Daily Warm-up</h2>
                 <p className="text-sm text-muted-foreground">
@@ -481,7 +518,7 @@ export function DailyWarmup({ problems, onComplete }: DailyWarmupProps) {
       </Card>
 
       {/* Problem */}
-      <Card>
+      <Card className="hover-lift">
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle>
@@ -492,11 +529,11 @@ export function DailyWarmup({ problems, onComplete }: DailyWarmupProps) {
                 <div
                   key={index}
                   className={cn(
-                    "h-2 w-8 rounded-full transition-colors",
+                    "h-2 w-8 rounded-full transition-all duration-300",
                     index < currentIndex
-                      ? "bg-green-500"
+                      ? "bg-green-500 animate-success-pulse"
                       : index === currentIndex
-                      ? "bg-primary"
+                      ? "bg-primary animate-pulse"
                       : "bg-muted"
                   )}
                 />
@@ -523,7 +560,7 @@ export function DailyWarmup({ problems, onComplete }: DailyWarmupProps) {
               value={answers[currentIndex]}
               onChange={(e) => handleAnswerChange(e.target.value)}
               onKeyPress={handleKeyPress}
-              className="font-mono text-lg"
+              className="font-mono text-lg transition-all duration-200 focus:scale-[1.01]"
               autoFocus
             />
           </div>
@@ -534,6 +571,7 @@ export function DailyWarmup({ problems, onComplete }: DailyWarmupProps) {
               onClick={handlePrevious}
               disabled={currentIndex === 0}
               variant="outline"
+              className="btn-press"
             >
               Previous
             </Button>
@@ -543,17 +581,19 @@ export function DailyWarmup({ problems, onComplete }: DailyWarmupProps) {
             </div>
 
             {currentIndex < 3 ? (
-              <Button onClick={handleNext}>Next</Button>
+              <Button onClick={handleNext} className="btn-press">
+                Next
+              </Button>
             ) : (
-              <Button onClick={handleFinish} variant="default">
-                <Trophy className="h-4 w-4" />
+              <Button onClick={handleFinish} variant="default" className="btn-press">
+                <Trophy className="h-4 w-4 mr-2" />
                 Finish Warm-up
               </Button>
             )}
           </div>
 
           {/* Category Info */}
-          <div className="p-3 bg-blue-50 dark:bg-blue-950 rounded-lg text-sm">
+          <div className="p-3 bg-blue-50 dark:bg-blue-950 rounded-lg text-sm animate-in slide-in-from-bottom-4 duration-300">
             <p className="font-medium text-blue-900 dark:text-blue-100 mb-1">
               About This Category
             </p>
@@ -573,11 +613,11 @@ export function DailyWarmup({ problems, onComplete }: DailyWarmupProps) {
 
       {/* Streak Display */}
       {progress.currentStreak > 0 && (
-        <Card className="bg-orange-50 dark:bg-orange-950 border-orange-200 dark:border-orange-800">
+        <Card className="bg-orange-50 dark:bg-orange-950 border-orange-200 dark:border-orange-800 hover-lift">
           <CardContent className="py-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <Flame className="h-6 w-6 text-orange-500" />
+                <Flame className="h-6 w-6 text-orange-500 animate-bounce" />
                 <div>
                   <p className="font-semibold text-orange-900 dark:text-orange-100">
                     {progress.currentStreak} Day Streak

@@ -164,9 +164,11 @@ export function ProblemUploader({ onProblemExtracted, className = "" }: ProblemU
   return (
     <Card className={className}>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Upload className="w-5 h-5" />
-          Upload Problem
+        <CardTitle className="flex items-center gap-2" asChild>
+          <h2>
+            <Upload className="w-5 h-5" aria-hidden="true" />
+            Upload Problem
+          </h2>
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -178,17 +180,21 @@ export function ProblemUploader({ onProblemExtracted, className = "" }: ProblemU
             className={`
               relative border-2 border-dashed rounded-lg p-8 text-center transition-colors
               ${isDragging ? "border-primary bg-primary/5" : "border-border"}
-              hover:border-primary hover:bg-primary/5 cursor-pointer
+              hover:border-primary hover:bg-primary/5 cursor-pointer focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2
             `}
             onClick={() => fileInputRef.current?.click()}
+            role="button"
+            tabIndex={0}
+            aria-label="Drop image here or click to browse files"
           >
             <input
               ref={fileInputRef}
               type="file"
               accept="image/*"
               onChange={handleFileSelect}
-              className="hidden"
+              className="sr-only"
               aria-label="Upload problem image"
+              id="file-upload"
             />
             <input
               ref={cameraInputRef}
@@ -196,13 +202,14 @@ export function ProblemUploader({ onProblemExtracted, className = "" }: ProblemU
               accept="image/*"
               capture="environment"
               onChange={handleCameraCapture}
-              className="hidden"
+              className="sr-only"
               aria-label="Capture problem with camera"
+              id="camera-capture"
             />
 
             <div className="space-y-4">
               <div className="flex justify-center">
-                <Upload className="w-12 h-12 text-muted-foreground" />
+                <Upload className="w-12 h-12 text-muted-foreground" aria-hidden="true" />
               </div>
               <div>
                 <p className="text-lg font-medium">Drop image here or click to browse</p>
@@ -210,7 +217,7 @@ export function ProblemUploader({ onProblemExtracted, className = "" }: ProblemU
                   Supports PNG, JPG, WebP up to 10MB
                 </p>
               </div>
-              <div className="flex gap-2 justify-center">
+              <div className="flex gap-2 justify-center flex-wrap">
                 <Button
                   type="button"
                   variant="outline"
@@ -219,8 +226,10 @@ export function ProblemUploader({ onProblemExtracted, className = "" }: ProblemU
                     e.stopPropagation();
                     fileInputRef.current?.click();
                   }}
+                  className="min-h-[44px]"
+                  aria-label="Browse files to upload"
                 >
-                  <Upload className="w-4 h-4 mr-2" />
+                  <Upload className="w-4 h-4 mr-2" aria-hidden="true" />
                   Browse Files
                 </Button>
                 <Button
@@ -231,9 +240,10 @@ export function ProblemUploader({ onProblemExtracted, className = "" }: ProblemU
                     e.stopPropagation();
                     cameraInputRef.current?.click();
                   }}
-                  className="md:hidden"
+                  className="md:hidden min-h-[44px]"
+                  aria-label="Take photo with camera"
                 >
-                  <Camera className="w-4 h-4 mr-2" />
+                  <Camera className="w-4 h-4 mr-2" aria-hidden="true" />
                   Take Photo
                 </Button>
               </div>
@@ -251,17 +261,18 @@ export function ProblemUploader({ onProblemExtracted, className = "" }: ProblemU
               <Button
                 size="sm"
                 variant="destructive"
-                className="absolute top-2 right-2"
+                className="absolute top-2 right-2 min-h-[36px] min-w-[36px]"
                 onClick={handleClear}
+                aria-label="Remove image"
               >
-                <X className="w-4 h-4" />
+                <X className="w-4 h-4" aria-hidden="true" />
               </Button>
             </div>
 
             {/* Processing Indicator */}
             {isProcessing && (
-              <div className="flex items-center justify-center gap-2 py-4">
-                <Loader2 className="w-5 h-5 animate-spin text-primary" />
+              <div className="flex items-center justify-center gap-2 py-4" role="status" aria-live="polite">
+                <Loader2 className="w-5 h-5 animate-spin text-primary" aria-hidden="true" />
                 <span className="text-sm text-muted-foreground">
                   Processing image with OCR...
                 </span>
@@ -270,8 +281,8 @@ export function ProblemUploader({ onProblemExtracted, className = "" }: ProblemU
 
             {/* Error Display */}
             {error && (
-              <div className="flex items-start gap-2 p-3 rounded-lg bg-destructive/10 border border-destructive/20">
-                <AlertCircle className="w-5 h-5 text-destructive flex-shrink-0 mt-0.5" />
+              <div className="flex items-start gap-2 p-3 rounded-lg bg-destructive/10 border border-destructive/20" role="alert" aria-live="assertive">
+                <AlertCircle className="w-5 h-5 text-destructive flex-shrink-0 mt-0.5" aria-hidden="true" />
                 <div className="space-y-1 flex-1">
                   <p className="text-sm font-medium text-destructive">OCR Error</p>
                   <p className="text-xs text-destructive/80">{error}</p>
@@ -281,14 +292,14 @@ export function ProblemUploader({ onProblemExtracted, className = "" }: ProblemU
 
             {/* Extracted LaTeX Display */}
             {extractedLatex && !isProcessing && (
-              <div className="space-y-3">
+              <div className="space-y-3" role="region" aria-label="Extracted problem">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <CheckCircle2 className="w-5 h-5 text-green-500" />
+                    <CheckCircle2 className="w-5 h-5 text-green-500" aria-hidden="true" />
                     <span className="text-sm font-medium">Extracted Problem</span>
                   </div>
                   {ocrConfidence !== null && (
-                    <span className="text-xs text-muted-foreground">
+                    <span className="text-xs text-muted-foreground" aria-label={`OCR confidence: ${(ocrConfidence * 100).toFixed(0)} percent`}>
                       Confidence: {(ocrConfidence * 100).toFixed(0)}%
                     </span>
                   )}
@@ -303,7 +314,9 @@ export function ProblemUploader({ onProblemExtracted, className = "" }: ProblemU
                   variant="outline"
                   size="sm"
                   onClick={() => setShowManualInput(!showManualInput)}
-                  className="w-full"
+                  className="w-full min-h-[44px]"
+                  aria-expanded={showManualInput}
+                  aria-label={showManualInput ? "Hide LaTeX editor" : "Edit LaTeX"}
                 >
                   {showManualInput ? "Hide" : "Edit"} LaTeX
                 </Button>
@@ -322,13 +335,19 @@ export function ProblemUploader({ onProblemExtracted, className = "" }: ProblemU
                     value={manualLatex || extractedLatex}
                     onChange={(e) => setManualLatex(e.target.value)}
                     placeholder="Enter problem in LaTeX (e.g., x^2 + 5x + 6 = 0)"
-                    className="w-full min-h-[100px] p-3 rounded-lg bg-background border border-input text-sm font-mono focus:outline-none focus:ring-2 focus:ring-ring"
-                    aria-label="Manual LaTeX input"
+                    className="w-full min-h-[120px] p-3 rounded-lg bg-background border border-input text-sm font-mono focus:outline-none focus:ring-2 focus:ring-ring"
+                    aria-label="Enter LaTeX code for the math problem"
+                    aria-describedby="latex-hint"
+                    autoComplete="off"
+                    spellCheck="false"
                   />
+                  <p id="latex-hint" className="text-xs text-muted-foreground mt-1">
+                    Use LaTeX syntax. Example: x^2 for x squared, \frac{'{a}{b}'} for fractions
+                  </p>
                 </div>
 
                 {manualLatex && (
-                  <div className="p-4 rounded-lg bg-card border border-border">
+                  <div className="p-4 rounded-lg bg-card border border-border" role="region" aria-label="LaTeX preview">
                     <p className="text-xs text-muted-foreground mb-2">Preview:</p>
                     <MathRenderer latex={manualLatex} displayMode={true} />
                   </div>
@@ -337,8 +356,9 @@ export function ProblemUploader({ onProblemExtracted, className = "" }: ProblemU
                 <Button
                   type="button"
                   onClick={handleManualSubmit}
-                  className="w-full"
+                  className="w-full min-h-[44px]"
                   disabled={!manualLatex.trim()}
+                  aria-label="Use this problem to start tutoring session"
                 >
                   Use This Problem
                 </Button>

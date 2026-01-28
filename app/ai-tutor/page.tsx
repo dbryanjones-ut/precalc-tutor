@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Bot, Settings, History as HistoryIcon } from "lucide-react";
 import { ProblemUploader } from "@/components/ai-tutor/ProblemUploader";
 import { ChatInterface } from "@/components/ai-tutor/ChatInterface";
@@ -19,6 +19,8 @@ export default function AITutorPage() {
   const [showSettings, setShowSettings] = useState(false);
   const [welcomeDismissed, setWelcomeDismissed] = useLocalStorage("ai-tutor-welcome-dismissed", false);
   const { currentSession, resumeSession } = useAITutorStore();
+  const settingsRef = useRef<HTMLDivElement>(null);
+  const welcomeModalRef = useRef<HTMLDivElement>(null);
 
   // Save sessions to localStorage when they change
   useEffect(() => {
@@ -46,6 +48,34 @@ export default function AITutorPage() {
     setActiveTab("tutor");
   };
 
+  // Focus management for settings panel
+  useEffect(() => {
+    if (showSettings && settingsRef.current) {
+      settingsRef.current.focus();
+    }
+  }, [showSettings]);
+
+  // Focus management for welcome modal
+  useEffect(() => {
+    if (!welcomeDismissed && !currentSession && activeTab === "tutor" && welcomeModalRef.current) {
+      welcomeModalRef.current.focus();
+    }
+  }, [welcomeDismissed, currentSession, activeTab]);
+
+  // Close settings on escape key
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && showSettings) {
+        setShowSettings(false);
+      }
+    };
+
+    if (showSettings) {
+      document.addEventListener("keydown", handleEscape);
+      return () => document.removeEventListener("keydown", handleEscape);
+    }
+  }, [showSettings]);
+
   return (
     <ErrorBoundary>
       <div className="min-h-screen bg-background">
@@ -70,15 +100,17 @@ export default function AITutorPage() {
                   variant="ghost"
                   size="sm"
                   onClick={() => setActiveTab(activeTab === "tutor" ? "history" : "tutor")}
+                  aria-label={activeTab === "tutor" ? "View session history" : "Return to tutor"}
+                  className="min-h-[44px]"
                 >
                   {activeTab === "tutor" ? (
                     <>
-                      <HistoryIcon className="w-4 h-4 mr-2" />
+                      <HistoryIcon className="w-4 h-4 mr-2" aria-hidden="true" />
                       History
                     </>
                   ) : (
                     <>
-                      <Bot className="w-4 h-4 mr-2" />
+                      <Bot className="w-4 h-4 mr-2" aria-hidden="true" />
                       Tutor
                     </>
                   )}
@@ -87,8 +119,12 @@ export default function AITutorPage() {
                   variant="ghost"
                   size="sm"
                   onClick={() => setShowSettings(!showSettings)}
+                  aria-label={showSettings ? "Close settings panel" : "Open settings panel"}
+                  aria-expanded={showSettings}
+                  className="min-h-[44px] min-w-[44px]"
                 >
-                  <Settings className="w-4 h-4" />
+                  <Settings className="w-4 h-4" aria-hidden="true" />
+                  <span className="sr-only">Settings</span>
                 </Button>
               </div>
             </div>
@@ -147,16 +183,27 @@ export default function AITutorPage() {
 
         {/* Settings Panel (Optional) */}
         {showSettings && (
-          <div className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm animate-in fade-in duration-200">
+          <div
+            className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm animate-in fade-in duration-200"
+            onClick={() => setShowSettings(false)}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="settings-title"
+          >
             <div
-              className="fixed inset-y-0 right-0 w-full sm:w-96 bg-card border-l border-border shadow-lg animate-in slide-in-from-right duration-300"
+              ref={settingsRef}
+              className="fixed inset-y-0 right-0 w-full sm:w-96 bg-card border-l border-border shadow-lg animate-in slide-in-from-right duration-300 overflow-y-auto"
+              onClick={(e) => e.stopPropagation()}
+              tabIndex={-1}
             >
               <div className="flex items-center justify-between p-4 border-b border-border">
-                <h2 className="text-lg font-semibold">Settings</h2>
+                <h2 id="settings-title" className="text-lg font-semibold">Settings</h2>
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={() => setShowSettings(false)}
+                  aria-label="Close settings"
+                  className="min-h-[44px] min-w-[44px]"
                 >
                   Close
                 </Button>
@@ -251,22 +298,34 @@ export default function AITutorPage() {
 
         {/* Welcome Modal (First Visit) */}
         {!currentSession && activeTab === "tutor" && !welcomeDismissed && (
-          <div className="fixed inset-0 z-40 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm" onClick={() => setWelcomeDismissed(true)}>
-            <div className="max-w-md p-6 rounded-lg bg-card border border-border shadow-lg text-center" onClick={(e) => e.stopPropagation()}>
+          <div
+            className="fixed inset-0 z-40 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm"
+            onClick={() => setWelcomeDismissed(true)}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="welcome-title"
+          >
+            <div
+              ref={welcomeModalRef}
+              className="max-w-md p-6 rounded-lg bg-card border border-border shadow-lg text-center"
+              onClick={(e) => e.stopPropagation()}
+              tabIndex={-1}
+            >
               <div className="flex justify-end mb-2">
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={() => setWelcomeDismissed(true)}
                   aria-label="Dismiss welcome message"
+                  className="min-h-[44px] min-w-[44px]"
                 >
                   ✕
                 </Button>
               </div>
               <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
-                <Bot className="w-8 h-8 text-primary" />
+                <Bot className="w-8 h-8 text-primary" aria-hidden="true" />
               </div>
-              <h2 className="text-2xl font-bold mb-2">Welcome to AI Tutor!</h2>
+              <h2 id="welcome-title" className="text-2xl font-bold mb-2">Welcome to AI Tutor!</h2>
               <p className="text-muted-foreground mb-6">
                 I'm here to help you master precalculus through personalized guidance. Upload a
                 problem to get started!
