@@ -322,19 +322,27 @@
     white-space: pre-wrap;
   }
 
+  /* CRITICAL: Math must NEVER wrap, even inside prose */
+  .prose .math-renderer,
+  .prose .math-inline {
+    white-space: nowrap !important;
+  }
+
   /* Math Renderer Styles - Comprehensive fixes for rendering and interactions */
   .math-renderer {
     display: inline-block;
     vertical-align: middle;
     max-width: 100%;
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    white-space: nowrap; /* CRITICAL: Prevent line breaks within math */
   }
 
-  /* Inline math - stays inline with text */
+  /* Inline math - stays inline with text, NEVER breaks across lines */
   .math-inline {
-    display: inline;
+    display: inline-block;
     vertical-align: baseline;
     margin: 0 0.15em;
+    white-space: nowrap;
   }
 
   /* Display math - centered block */
