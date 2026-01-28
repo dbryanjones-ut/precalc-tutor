@@ -25,10 +25,15 @@ export function ChatInterface({ className = "" }: ChatInterfaceProps) {
   const { currentSession, isLoading, sendMessage, endSession, mode, setMode } = useAITutorStore();
 
   const messages = currentSession?.messages || [];
+  const prevMessagesLengthRef = useRef(messages.length);
 
-  // Auto-scroll to bottom when messages change
+  // Auto-scroll to bottom only when new messages are added
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    // Only scroll if messages were added (not on initial load or other changes)
+    if (messages.length > prevMessagesLengthRef.current) {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+    prevMessagesLengthRef.current = messages.length;
   }, [messages]);
 
   // Auto-resize textarea
@@ -397,7 +402,7 @@ export function ChatInterface({ className = "" }: ChatInterfaceProps) {
 
       {/* Messages */}
       <div
-        className="flex-1 overflow-y-auto p-6 space-y-6 min-h-[500px] max-h-[650px] bg-muted/10"
+        className="flex-1 overflow-y-auto p-6 space-y-6 min-h-[300px] max-h-[450px] bg-muted/10"
         role="log"
         aria-live="polite"
         aria-label="Chat messages"
