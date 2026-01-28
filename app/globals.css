@@ -443,7 +443,7 @@
   /* Ensure KaTeX content doesn't break layout */
   .math-renderer .katex {
     text-align: inherit;
-    white-space: normal;
+    white-space: nowrap !important; /* CRITICAL: Inherit nowrap from parent */
   }
 
   .math-renderer .katex-display {
@@ -459,19 +459,26 @@
 
   /* Prevent math from breaking across lines */
   .math-inline .katex-html {
-    display: inline;
-    white-space: nowrap;
+    display: inline-block;
+    white-space: nowrap !important;
   }
 
   /* Ensure proper spacing around math operators */
   .math-renderer .katex .mspace {
     display: inline-block;
+    white-space: nowrap !important;
   }
 
   /* Fix for cdot and other operators rendering */
   .math-renderer .katex .mbin,
   .math-renderer .katex .mrel {
     display: inline-block;
+    white-space: nowrap !important;
+  }
+
+  /* NUCLEAR OPTION: Force nowrap on ALL KaTeX internal elements */
+  .math-renderer .katex * {
+    white-space: nowrap !important;
   }
 
   /* Responsive math sizing */
