@@ -245,24 +245,32 @@ export function ChatInterface({ className = "" }: ChatInterfaceProps) {
                 : "bg-card border-2 border-border shadow-sm"
             )}
           >
-            <div className="prose prose-sm dark:prose-invert max-w-none whitespace-pre-wrap">
-              {(message.content || "").split("\n").map((line, i) => {
-                // Check if line contains math delimiters
-                const mathMatch = line.match(/\$(.*?)\$/g);
-                if (mathMatch) {
+            <div className="prose prose-sm dark:prose-invert max-w-none">
+              {(message.content || "").split(/(\$\$[\s\S]*?\$\$|\$.*?\$)/g).map((part, i) => {
+                // Handle display math $$...$$
+                if (part.startsWith("$$") && part.endsWith("$$")) {
+                  const latex = part.slice(2, -2);
                   return (
-                    <div key={i} className="my-2 whitespace-pre-wrap">
-                      {line.split(/(\$.*?\$)/g).map((part, j) => {
-                        if (part.startsWith("$") && part.endsWith("$")) {
-                          const latex = part.slice(1, -1);
-                          return <MathRenderer key={j} latex={latex} />;
-                        }
-                        return <span key={j} className="whitespace-pre-wrap">{part}</span>;
-                      })}
+                    <div key={i} className="my-4 flex justify-center">
+                      <MathRenderer latex={latex} displayMode={true} />
                     </div>
                   );
                 }
-                return line ? <p key={i} className="leading-relaxed whitespace-pre-wrap">{line}</p> : <br key={i} />;
+                // Handle inline math $...$
+                if (part.startsWith("$") && part.endsWith("$")) {
+                  const latex = part.slice(1, -1);
+                  return <MathRenderer key={i} latex={latex} />;
+                }
+                // Handle regular text
+                return part.split("\n").map((line, j) =>
+                  line ? (
+                    <p key={`${i}-${j}`} className="leading-relaxed whitespace-pre-wrap mb-2">
+                      {line}
+                    </p>
+                  ) : (
+                    <br key={`${i}-${j}`} />
+                  )
+                );
               })}
             </div>
 
