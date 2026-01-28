@@ -22,6 +22,7 @@ import {
 } from "@/lib/api/rate-limiter";
 import { AIResponseValidator } from "@/lib/ai/response-validator";
 import { LatexValidator } from "@/lib/math/latex-validator";
+import { generateTutorPrompt } from "@/lib/ai/tutor-prompts";
 import type { ChatMessage, Citation } from "@/types/ai-session";
 import { z } from "zod";
 
@@ -35,41 +36,6 @@ function getAnthropicClient(): Anthropic {
   }
   return anthropicClient;
 }
-
-// System prompt for the AI tutor
-const SYSTEM_PROMPTS = {
-  socratic: `You are a skilled PreCalculus tutor using the Socratic method. Your goal is to guide students to discover solutions themselves through thoughtful questions.
-
-Core Principles:
-- Never give direct answers - ask leading questions
-- Build on student's current understanding
-- Help students identify misconceptions
-- Encourage critical thinking and pattern recognition
-- Validate correct reasoning, redirect incorrect thinking
-- Reference notation tables and mathematical definitions when relevant
-
-When providing mathematical content:
-- Use proper LaTeX notation wrapped in $ or $$
-- Cite relevant mathematical properties, theorems, or formulas
-- Highlight common mistakes students should avoid
-- Break complex problems into manageable steps`,
-
-  explanation: `You are an expert PreCalculus tutor providing clear, detailed explanations. Your goal is to teach concepts thoroughly while building understanding.
-
-Core Principles:
-- Provide step-by-step explanations with clear reasoning
-- Use proper mathematical notation and terminology
-- Explain the "why" behind each step
-- Connect to broader mathematical concepts
-- Highlight common pitfalls and misconceptions
-- Include examples to reinforce learning
-
-When providing mathematical content:
-- Use proper LaTeX notation wrapped in $ or $$
-- Cite relevant mathematical properties, theorems, or formulas
-- Show all intermediate steps clearly
-- Explain intuition behind mathematical operations`,
-};
 
 /**
  * Build context for Claude API
@@ -102,20 +68,31 @@ function buildContext(
 
 /**
  * Extract LaTeX from AI response
+ * UPDATED: Only extract $ and $$ delimited expressions (not \( \) or \[ \])
  */
 function extractLatex(content: string): string[] {
-  const latexPatterns = [
-    /\$\$([^$]+)\$\$/g, // Display math
-    /\$([^$]+)\$/g, // Inline math
-  ];
-
   const latex: string[] = [];
-  for (const pattern of latexPatterns) {
-    const matches = content.matchAll(pattern);
-    for (const match of matches) {
-      if (match[1]) {
-        latex.push(match[1].trim());
-      }
+
+  // Pattern 1: Display math $$...$$
+  // Use non-greedy matching but ensure we don't match across multiple display blocks
+  const displayPattern = /\$\$((?:(?!\$\$).)+)\$\$/gs;
+  let match;
+
+  while ((match = displayPattern.exec(content)) !== null) {
+    if (match[1]) {
+      latex.push(match[1].trim());
+    }
+  }
+
+  // Pattern 2: Inline math $...$
+  // But NOT if it's part of $$...$$
+  // We need to be careful not to match the $ in $$
+  const inlinePattern = /(?<!\$)\$(?!\$)((?:(?!\$).)+)\$(?!\$)/gs;
+
+  // Reset lastIndex for new pattern
+  while ((match = inlinePattern.exec(content)) !== null) {
+    if (match[1]) {
+      latex.push(match[1].trim());
     }
   }
 
@@ -128,11 +105,33 @@ function extractLatex(content: string): string[] {
 function extractCitations(content: string): Citation[] {
   const citations: Citation[] = [];
 
-  // Look for references to mathematical concepts
-  const theoremPattern = /\b(theorem|formula|identity|property|rule|law):\s*([^.]+)/gi;
-  const matches = content.matchAll(theoremPattern);
+  // Pattern for [Notation: id]
+  const notationPattern = /\[Notation:\s*([^\]]+)\]/g;
+  let match;
 
-  for (const match of matches) {
+  while ((match = notationPattern.exec(content)) !== null) {
+    citations.push({
+      type: "notation",
+      title: match[1].trim(),
+      content: `Notation reference: ${match[1].trim()}`,
+    });
+  }
+
+  // Pattern for [Term: term-name]
+  const termPattern = /\[Term:\s*([^\]]+)\]/g;
+
+  while ((match = termPattern.exec(content)) !== null) {
+    citations.push({
+      type: "golden-word",
+      title: match[1].trim(),
+      content: `Term reference: ${match[1].trim()}`,
+    });
+  }
+
+  // Pattern for generic references
+  const theoremPattern = /\b(theorem|formula|identity|property|rule|law):\s*([^.]+)/gi;
+
+  while ((match = theoremPattern.exec(content)) !== null) {
     citations.push({
       type: "reference",
       title: match[1].charAt(0).toUpperCase() + match[1].slice(1),
@@ -202,13 +201,19 @@ export async function POST(request: NextRequest) {
       validatedData.context?.referenceMaterials
     );
 
-    // 4. Prepare messages for Claude API
-    const systemPrompt = SYSTEM_PROMPTS[validatedData.mode];
+    // 4. Generate system prompt using new prompt engineering system
+    const { systemPrompt } = generateTutorPrompt({
+      mode: validatedData.mode,
+      problemContext: contextString,
+      referenceMaterials: validatedData.context?.referenceMaterials as any,
+    });
+
+    // 5. Prepare messages for Claude API
     const userMessage = contextString
       ? `${contextString}\n\nStudent's Question: ${validatedData.message}`
       : validatedData.message;
 
-    // 5. Call Claude API
+    // 6. Call Claude API
     const client = getAnthropicClient();
 
     let assistantResponse: string;
@@ -253,20 +258,21 @@ export async function POST(request: NextRequest) {
       throw new InternalServerError("No response from AI");
     }
 
-    // 6. Extract LaTeX and citations
+    // 7. Extract LaTeX and citations
     const latex = extractLatex(assistantResponse);
     const citations = extractCitations(assistantResponse);
 
-    // 7. Validate LaTeX expressions
+    // 8. Validate LaTeX expressions
+    const latexValidationErrors: string[] = [];
     for (const latexExpr of latex) {
       const validation = LatexValidator.validate(latexExpr);
       if (!validation.valid) {
         console.warn(`Invalid LaTeX in AI response: ${latexExpr}`, validation.errors);
-        // Continue anyway but log the issue
+        latexValidationErrors.push(`LaTeX "${latexExpr.substring(0, 50)}...": ${validation.errors[0]}`);
       }
     }
 
-    // 8. Validate AI response quality
+    // 9. Validate AI response quality
     const validation = await AIResponseValidator.validate({
       content: assistantResponse,
       latex,
@@ -274,18 +280,19 @@ export async function POST(request: NextRequest) {
     });
 
     // Log validation issues
-    if (!validation.valid || validation.requiresHumanReview) {
+    if (!validation.valid || validation.requiresHumanReview || latexValidationErrors.length > 0) {
       console.warn("AI Response Validation Issues:", {
         valid: validation.valid,
         requiresHumanReview: validation.requiresHumanReview,
         errors: validation.errors,
         warnings: validation.warnings,
+        latexErrors: latexValidationErrors,
         confidence: validation.confidence,
         riskLevel: validation.riskLevel,
       });
     }
 
-    // 9. Return response
+    // 10. Return response
     return NextResponse.json(
       {
         data: {
@@ -296,6 +303,7 @@ export async function POST(request: NextRequest) {
             confidence: validation.confidence,
             riskLevel: validation.riskLevel,
             warnings: validation.warnings,
+            latexErrors: latexValidationErrors,
           },
         },
         timestamp: new Date().toISOString(),

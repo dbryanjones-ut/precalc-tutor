@@ -18,7 +18,7 @@ export default function Home() {
           Master AP Precalculus
         </h1>
         <p className="text-lg md:text-2xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-          AI-powered tutoring platform designed for students with dyslexia and ADHD
+          AI-powered tutoring platform with personalized learning support
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6">
           <Button asChild size="lg" className="text-lg h-14 px-8">
@@ -155,9 +155,9 @@ export default function Home() {
             <div className="w-14 h-14 rounded-xl bg-purple-500/10 flex items-center justify-center">
               <Brain className="h-7 w-7 text-purple-500" />
             </div>
-            <CardTitle className="text-2xl">ADHD Support</CardTitle>
+            <CardTitle className="text-2xl">Learning Support</CardTitle>
             <CardDescription className="text-base">
-              Executive function scaffolds and focus tools
+              Focus tools and study scaffolds for better learning
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -168,7 +168,7 @@ export default function Home() {
               </li>
               <li className="flex items-start gap-3">
                 <span className="text-purple-500 mt-0.5">✓</span>
-                <span>Break reminders & timers</span>
+                <span>Break reminders & focus timers</span>
               </li>
               <li className="flex items-start gap-3">
                 <span className="text-purple-500 mt-0.5">✓</span>

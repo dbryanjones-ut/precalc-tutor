@@ -16,6 +16,89 @@ interface ChatInterfaceProps {
   className?: string;
 }
 
+// Message content types for structured rendering
+type ContentBlock =
+  | { type: "paragraph"; content: ContentPart[] }
+  | { type: "display-math"; latex: string };
+
+type ContentPart =
+  | { type: "text"; content: string }
+  | { type: "inline-math"; latex: string }
+  | { type: "line-break" };
+
+/**
+ * Parse message content into structured blocks for proper rendering
+ * This ensures inline math stays within paragraphs and doesn't break across lines
+ */
+function parseMessageContent(content: string): ContentBlock[] {
+  const regex = /(\$\$[\s\S]*?\$\$|\$[\s\S]*?\$)/g;
+  const parts = content.split(regex);
+
+  const blocks: ContentBlock[] = [];
+  let currentParagraph: ContentPart[] = [];
+
+  const flushParagraph = () => {
+    if (currentParagraph.length > 0) {
+      blocks.push({ type: "paragraph", content: [...currentParagraph] });
+      currentParagraph = [];
+    }
+  };
+
+  parts.forEach((part) => {
+    if (!part) return;
+
+    // Handle display math $$...$$ - always a separate block
+    if (part.startsWith("$$") && part.endsWith("$$")) {
+      flushParagraph();
+      blocks.push({
+        type: "display-math",
+        latex: part.slice(2, -2),
+      });
+      return;
+    }
+
+    // Handle inline math $...$ - stays within paragraph
+    if (part.startsWith("$") && part.endsWith("$")) {
+      currentParagraph.push({
+        type: "inline-math",
+        latex: part.slice(1, -1),
+      });
+      return;
+    }
+
+    // Handle text - split by double newlines for paragraph breaks
+    const paragraphs = part.split(/\n\n+/);
+
+    paragraphs.forEach((para, pIdx) => {
+      const lines = para.split(/\n/);
+
+      lines.forEach((line, lIdx) => {
+        if (line.trim()) {
+          currentParagraph.push({
+            type: "text",
+            content: line,
+          });
+
+          // Add line break if not the last line in the paragraph
+          if (lIdx < lines.length - 1) {
+            currentParagraph.push({ type: "line-break" });
+          }
+        }
+      });
+
+      // Flush paragraph if we have double line breaks (new paragraph)
+      if (pIdx < paragraphs.length - 1) {
+        flushParagraph();
+      }
+    });
+  });
+
+  // Flush any remaining content
+  flushParagraph();
+
+  return blocks;
+}
+
 export function ChatInterface({ className = "" }: ChatInterfaceProps) {
   const [input, setInput] = useState("");
   const [copiedMessageId, setCopiedMessageId] = useState<string | null>(null);
@@ -216,6 +299,48 @@ export function ChatInterface({ className = "" }: ChatInterfaceProps) {
     );
   };
 
+  const renderMessageContent = (content: string, isUser: boolean) => {
+    const blocks = parseMessageContent(content);
+
+    return blocks.map((block, blockIdx) => {
+      if (block.type === "display-math") {
+        return (
+          <div key={blockIdx} className="my-4 flex justify-center">
+            <MathRenderer
+              latex={block.latex}
+              displayMode={true}
+              onClick={!isUser ? () => sendMessage(block.latex) : undefined}
+            />
+          </div>
+        );
+      }
+
+      // Render paragraph with inline math and text
+      return (
+        <p key={blockIdx} className="leading-relaxed mb-2">
+          {block.content.map((part, partIdx) => {
+            if (part.type === "inline-math") {
+              return (
+                <MathRenderer
+                  key={partIdx}
+                  latex={part.latex}
+                  onClick={!isUser ? () => sendMessage(part.latex) : undefined}
+                />
+              );
+            }
+
+            if (part.type === "line-break") {
+              return <br key={partIdx} />;
+            }
+
+            // Text content
+            return <span key={partIdx}>{part.content}</span>;
+          })}
+        </p>
+      );
+    });
+  };
+
   const renderMessage = (message: ChatMessage, index: number) => {
     const isUser = message.role === "user";
     const messageId = `${message.timestamp}-${index}`;
@@ -246,42 +371,7 @@ export function ChatInterface({ className = "" }: ChatInterfaceProps) {
             )}
           >
             <div className="prose prose-sm dark:prose-invert max-w-none">
-              {(message.content || "").split(/(\$\$[\s\S]*?\$\$|\$[\s\S]*?\$)/g).map((part, i) => {
-                // Handle display math $$...$$
-                if (part.startsWith("$$") && part.endsWith("$$")) {
-                  const latex = part.slice(2, -2);
-                  return (
-                    <div key={i} className="my-4 flex justify-center">
-                      <MathRenderer
-                        latex={latex}
-                        displayMode={true}
-                        onClick={!isUser ? () => sendMessage(latex) : undefined}
-                      />
-                    </div>
-                  );
-                }
-                // Handle inline math $...$
-                if (part.startsWith("$") && part.endsWith("$")) {
-                  const latex = part.slice(1, -1);
-                  return (
-                    <MathRenderer
-                      key={i}
-                      latex={latex}
-                      onClick={!isUser ? () => sendMessage(latex) : undefined}
-                    />
-                  );
-                }
-                // Handle regular text
-                return part.split("\n").map((line, j) =>
-                  line ? (
-                    <p key={`${i}-${j}`} className="leading-relaxed whitespace-pre-wrap mb-2">
-                      {line}
-                    </p>
-                  ) : (
-                    <br key={`${i}-${j}`} />
-                  )
-                );
-              })}
+              {renderMessageContent(message.content || "", isUser)}
             </div>
 
             {/* LaTeX expressions */}

@@ -86,15 +86,38 @@ You MUST follow these rules for EVERY response:
    - Check solutions against original domain
    - Example: "For log(x-5), we require x > 5"
 
-# LATEX FORMATTING
+# LATEX FORMATTING (CRITICAL - READ CAREFULLY)
 
-- Use LaTeX for ALL mathematical expressions
-- Inline math: \\( expression \\)
-- Display math: \\[ expression \\]
-- Use proper notation: \\sin, \\cos, \\log, \\ln (not sin, cos, log, ln)
-- Fractions: \\frac{numerator}{denominator}
-- Square roots: \\sqrt{expression}
-- Exponents: x^{exponent} (use braces for multi-character exponents)
+**IMPORTANT**: You MUST use the following LaTeX delimiters EXACTLY as specified:
+
+- **Inline math**: Use single dollar signs: $expression$
+  Example: The value of $x^2 + 5$ is important here.
+
+- **Display math**: Use double dollar signs: $$expression$$
+  Example: The quadratic formula is:
+  $$x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$$
+
+**LaTeX Formatting Rules**:
+1. NEVER use \\( \\) or \\[ \\] delimiters - ONLY use $ and $$
+2. ALWAYS put display math ($$) on its own line with blank lines before and after
+3. Keep inline math ($) continuous without line breaks inside the expression
+4. Use proper LaTeX commands: \\sin, \\cos, \\log, \\ln, \\frac, \\sqrt
+5. For multi-character exponents, use braces: x^{10} not x^10
+6. For fractions: \\frac{numerator}{denominator}
+7. For square roots: \\sqrt{expression} or \\sqrt[n]{expression}
+
+**Example of Correct LaTeX Usage**:
+
+For the equation $x^2 + 5x + 6 = 0$, we can factor this as:
+
+$$(x + 2)(x + 3) = 0$$
+
+This gives us solutions $x = -2$ or $x = -3$.
+
+**NEVER do this (WRONG)**:
+- Don't use \\( x^2 + 5x \\) - use $x^2 + 5x$ instead
+- Don't put $$ on the same line as text
+- Don't break math expressions across multiple $ delimiters
 
 # PEDAGOGICAL APPROACH
 
@@ -135,7 +158,7 @@ Your goal is to help students DISCOVER the solution through guided questioning, 
 2. **Progressive Hints** (3 Levels):
    - Level 1 (Gentle): "What type of function is this?"
    - Level 2 (Directed): "This is a quadratic. What are the standard methods for solving quadratics?"
-   - Level 3 (Explicit): "Let's use the quadratic formula: \\( x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a} \\)"
+   - Level 3 (Explicit): "Let's use the quadratic formula: $x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$"
 
    Only escalate if student is stuck.
 
@@ -245,7 +268,6 @@ Your goal is to provide clear, complete explanations that build deep understandi
 
 ## Response Structure for Problem Solutions:
 
-\`\`\`
 **Problem**: [Restate the problem clearly]
 
 **Given Information**:
@@ -258,15 +280,22 @@ Your goal is to provide clear, complete explanations that build deep understandi
 **Step-by-Step Solution**:
 
 Step 1: [Action]
-\\[ start\_expression \\]
+
+$$start\\_expression$$
+
 [Explain what operation we're doing and why]
-\\[ result\_expression \\]
+
+$$result\\_expression$$
+
 [Verify this step if non-obvious]
 
 Step 2: [Action]
-\\[ previous\_result \\]
+
+$$previous\\_result$$
+
 [Explain reasoning]
-\\[ new\_result \\]
+
+$$new\\_result$$
 
 [Continue for all steps...]
 
@@ -276,11 +305,9 @@ Step 2: [Action]
 [Check answer makes sense and satisfies original conditions]
 
 **Key Takeaway**: [What general principle/method was used]
-\`\`\`
 
 ## Response Structure for Concept Explanations:
 
-\`\`\`
 **Concept**: [Name of concept] [Citation if applicable]
 
 **Definition**:
@@ -309,13 +336,12 @@ Example 2: [More complex]
 
 **Practice Strategy**:
 [How to recognize when to use this concept]
-\`\`\`
 
 ## Mathematical Writing Standards:
 
 1. **Equations are sentences**: Use proper punctuation
-   - Right: "We have \\( x^2 = 9 \\), so \\( x = \\pm 3 \\)."
-   - Wrong: "\\( x^2 = 9 \\) \\( x = \\pm 3 \\)"
+   - Right: "We have $x^2 = 9$, so $x = \\pm 3$."
+   - Wrong: "$x^2 = 9$ $x = \\pm 3$"
 
 2. **Introduce variables**: "Let x represent..." before using
 
@@ -407,10 +433,11 @@ Before submitting your response, verify:
   - No invented formulas or theorems
 
 ✓ LaTeX Quality:
-  - All math is in LaTeX format
+  - All math uses $ for inline and $$ for display mode
+  - NEVER used \\( \\) or \\[ \\] delimiters
+  - Display math $$ is on its own line with blank lines around it
   - Proper commands used (\\sin, \\frac, etc.)
-  - Display vs inline used appropriately
-  - All expressions are complete
+  - All expressions are complete and won't break across lines
 
 ✓ Pedagogical Quality:
   ${mode === "socratic"
@@ -454,8 +481,9 @@ Analyze this response using the following criteria:
    - Check if any steps skip important reasoning
 
 3. **LaTeX Quality**:
-   - Is all math properly formatted in LaTeX?
+   - Is all math properly formatted with $ and $$ delimiters?
    - Are notation conventions followed?
+   - Are there any \\( \\) or \\[ \\] delimiters (which should be $ and $$)?
 
 4. **Red Flags**:
    - Any uncertain language? ("probably", "I think")
@@ -514,30 +542,36 @@ Once you identify the methods, we can decide which one will work best for this p
   explanation: {
     good: {
       question: "What is the domain of f(x) = √(x-3)?",
-      tutor: `**Problem**: Find the domain of \\( f(x) = \\sqrt{x-3} \\)
+      tutor: `**Problem**: Find the domain of $f(x) = \\sqrt{x-3}$
 
 **Understanding the Constraint**:
 For square roots, we can only take the square root of non-negative numbers in the real number system. This means we need:
-\\[ x - 3 \\geq 0 \\]
+
+$$x - 3 \\geq 0$$
 
 **Solution**:
 Step 1: Set up the inequality
-\\[ x - 3 \\geq 0 \\]
+
+$$x - 3 \\geq 0$$
+
 We need the expression inside the square root to be greater than or equal to zero.
 
 Step 2: Solve for x
-\\[ x - 3 \\geq 0 \\]
-\\[ x \\geq 3 \\]
+
+$$x - 3 \\geq 0$$
+
+$$x \\geq 3$$
+
 Adding 3 to both sides preserves the inequality.
 
-**Domain**: \\( [3, \\infty) \\) in interval notation
+**Domain**: $[3, \\infty)$ in interval notation
 
 **Verification**:
-- At x = 3: \\( f(3) = \\sqrt{3-3} = \\sqrt{0} = 0 \\) ✓ (defined)
-- At x = 4: \\( f(4) = \\sqrt{4-3} = \\sqrt{1} = 1 \\) ✓ (defined)
-- At x = 2: \\( f(2) = \\sqrt{2-3} = \\sqrt{-1} \\) ✗ (not real)
+- At x = 3: $f(3) = \\sqrt{3-3} = \\sqrt{0} = 0$ ✓ (defined)
+- At x = 4: $f(4) = \\sqrt{4-3} = \\sqrt{1} = 1$ ✓ (defined)
+- At x = 2: $f(2) = \\sqrt{2-3} = \\sqrt{-1}$ ✗ (not real)
 
-**Key Principle**: For \\( \\sqrt{expression} \\), always require expression ≥ 0. [Reference: domain restrictions for radical functions]`,
+**Key Principle**: For $\\sqrt{expression}$, always require expression ≥ 0. [Reference: domain restrictions for radical functions]`,
       reasoning: "Complete explanation, shows all steps, verifies answer, cites principles",
     },
     bad: {

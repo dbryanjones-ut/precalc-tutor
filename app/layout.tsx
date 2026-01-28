@@ -18,8 +18,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "PreCalc Tutor - Master AP Precalculus",
-  description: "AI-powered AP Precalculus tutoring platform designed for students with dyslexia and ADHD",
-  keywords: ["precalculus", "AP", "tutoring", "math", "accessibility", "dyslexia", "ADHD"],
+  description: "AI-powered AP Precalculus tutoring platform with personalized learning support and accessibility features",
+  keywords: ["precalculus", "AP", "tutoring", "math", "accessibility", "learning support", "AI tutor"],
 };
 
 export default function RootLayout({

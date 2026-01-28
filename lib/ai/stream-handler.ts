@@ -141,54 +141,48 @@ export class StreamHandler {
 
   /**
    * Extract LaTeX expressions from buffer
+   * UPDATED: Only use $ and $$ delimiters (consistent with prompts)
    */
   private extractLatexFromBuffer(): void {
-    // Pattern for inline LaTeX: \( ... \)
-    const inlinePattern = /\\$$[^)]+\\$$/g;
+    // Clear existing latex to re-extract from full buffer
+    const extractedLatex: string[] = [];
+
+    // Pattern 1: Display math $$...$$
+    const displayPattern = /\$\$((?:(?!\$\$).)+)\$\$/gs;
     let match;
 
-    while ((match = inlinePattern.exec(this.buffer)) !== null) {
-      const latexExpr = match[0];
-      if (!this.latex.includes(latexExpr)) {
-        this.latex.push(latexExpr);
-      }
-    }
-
-    // Pattern for display LaTeX: \[ ... \]
-    const displayPattern = /\\\[[^\]]+\\\]/g;
-
     while ((match = displayPattern.exec(this.buffer)) !== null) {
-      const latexExpr = match[0];
-      if (!this.latex.includes(latexExpr)) {
-        this.latex.push(latexExpr);
+      if (match[1]) {
+        const latexExpr = match[1].trim();
+        if (!extractedLatex.includes(latexExpr)) {
+          extractedLatex.push(latexExpr);
+        }
       }
     }
 
-    // Pattern for inline $...$ (if used)
-    const dollarPattern = /\$[^$]+\$/g;
+    // Pattern 2: Inline math $...$
+    // But NOT if it's part of $$...$$
+    const inlinePattern = /(?<!\$)\$(?!\$)((?:(?!\$).)+)\$(?!\$)/gs;
 
-    while ((match = dollarPattern.exec(this.buffer)) !== null) {
-      const latexExpr = match[0];
-      if (!this.latex.includes(latexExpr)) {
-        this.latex.push(latexExpr);
+    while ((match = inlinePattern.exec(this.buffer)) !== null) {
+      if (match[1]) {
+        const latexExpr = match[1].trim();
+        if (!extractedLatex.includes(latexExpr)) {
+          extractedLatex.push(latexExpr);
+        }
       }
     }
 
-    // Pattern for display $$...$$ (if used)
-    const doubleDollarPattern = /\$\$[^$]+\$\$/g;
-
-    while ((match = doubleDollarPattern.exec(this.buffer)) !== null) {
-      const latexExpr = match[0];
-      if (!this.latex.includes(latexExpr)) {
-        this.latex.push(latexExpr);
-      }
-    }
+    this.latex = extractedLatex;
   }
 
   /**
    * Extract citations from buffer
    */
   private extractCitationsFromBuffer(): void {
+    // Clear existing to re-extract
+    const extractedCitations: Citation[] = [];
+
     // Pattern: [Notation: id]
     const notationPattern = /\[Notation:\s*([^\]]+)\]/g;
     let match;
@@ -197,8 +191,8 @@ export class StreamHandler {
       const id = match[1].trim();
 
       // Check if not already added
-      if (!this.citations.find((c) => c.type === "notation" && c.title === id)) {
-        this.citations.push({
+      if (!extractedCitations.find((c) => c.type === "notation" && c.title === id)) {
+        extractedCitations.push({
           type: "notation",
           title: id,
           content: `Notation reference: ${id}`,
@@ -212,8 +206,8 @@ export class StreamHandler {
     while ((match = termPattern.exec(this.buffer)) !== null) {
       const term = match[1].trim();
 
-      if (!this.citations.find((c) => c.type === "golden-word" && c.title === term)) {
-        this.citations.push({
+      if (!extractedCitations.find((c) => c.type === "golden-word" && c.title === term)) {
+        extractedCitations.push({
           type: "golden-word",
           title: term,
           content: `Term reference: ${term}`,
@@ -227,8 +221,8 @@ export class StreamHandler {
     while ((match = mistakePattern.exec(this.buffer)) !== null) {
       const id = match[1].trim();
 
-      if (!this.citations.find((c) => c.type === "common-mistake" && c.title === id)) {
-        this.citations.push({
+      if (!extractedCitations.find((c) => c.type === "common-mistake" && c.title === id)) {
+        extractedCitations.push({
           type: "common-mistake",
           title: id,
           content: `Common mistake reference: ${id}`,
@@ -242,14 +236,16 @@ export class StreamHandler {
     while ((match = refPattern.exec(this.buffer)) !== null) {
       const ref = match[1].trim();
 
-      if (!this.citations.find((c) => c.type === "reference" && c.title === ref)) {
-        this.citations.push({
+      if (!extractedCitations.find((c) => c.type === "reference" && c.title === ref)) {
+        extractedCitations.push({
           type: "reference",
           title: ref,
           content: ref,
         });
       }
     }
+
+    this.citations = extractedCitations;
   }
 
   /**
@@ -382,29 +378,8 @@ export class StreamHandler {
    * Clean LaTeX for rendering
    */
   static cleanLatex(latex: string): string {
-    // Remove wrapper delimiters for processing
-    let cleaned = latex;
-
-    // Remove \( ... \) wrappers
-    if (cleaned.startsWith("\\(") && cleaned.endsWith("\\)")) {
-      cleaned = cleaned.slice(2, -2);
-    }
-
-    // Remove \[ ... \] wrappers
-    if (cleaned.startsWith("\\[") && cleaned.endsWith("\\]")) {
-      cleaned = cleaned.slice(2, -2);
-    }
-
-    // Remove $ ... $ wrappers
-    if (cleaned.startsWith("$") && cleaned.endsWith("$") && cleaned.length > 2) {
-      if (cleaned.startsWith("$$")) {
-        cleaned = cleaned.slice(2, -2);
-      } else {
-        cleaned = cleaned.slice(1, -1);
-      }
-    }
-
-    return cleaned.trim();
+    // Just trim - no need to remove delimiters as they're already extracted
+    return latex.trim();
   }
 
   /**
