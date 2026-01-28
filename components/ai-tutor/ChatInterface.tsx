@@ -1,17 +1,23 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Send, Loader2, Copy, Check, Trash2, User, Bot, Sparkles, Lightbulb, ListOrdered, BookOpen, Zap, Eye, MessageSquare } from "lucide-react";
+import { Send, Loader2, Copy, Check, Trash2, User, Bot, Sparkles, Lightbulb, ListOrdered, BookOpen, Zap, Eye, MessageSquare, FileText, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { MathRenderer } from "@/components/math/MathRenderer";
 import { AIThinkingLoader } from "@/components/ui/loading-message";
 import { EmptyState } from "@/components/ui/empty-state";
-import { ProblemDisplay } from "@/components/ai-tutor/ProblemDisplay";
 import { useAITutorStore } from "@/stores/useAITutorStore";
 import type { ChatMessage, Citation, TutoringMode } from "@/types";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 interface ChatInterfaceProps {
   className?: string;
@@ -98,6 +104,59 @@ function parseMessageContent(content: string): ContentBlock[] {
   flushParagraph();
 
   return blocks;
+}
+
+/**
+ * Inline Problem Display Component
+ * Shows problem text in header with truncation and click-to-expand
+ */
+function InlineProblemDisplay({ problem }: { problem?: string }) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  if (!problem?.trim()) return null;
+
+  // Strip LaTeX delimiters and get plain text for truncation
+  const plainText = problem.replace(/\$\$/g, '').replace(/\$/g, '').trim();
+  const truncated = plainText.length > 40 ? `${plainText.slice(0, 40)}...` : plainText;
+  const needsTruncation = plainText.length > 40;
+
+  return (
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger asChild>
+        <button
+          className={cn(
+            "flex items-center gap-2 px-3 py-1.5 rounded-md text-sm",
+            "bg-muted/50 hover:bg-muted transition-colors",
+            "border border-border/50 max-w-md truncate",
+            needsTruncation && "cursor-pointer"
+          )}
+          aria-label="View full problem"
+        >
+          <FileText className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0" aria-hidden="true" />
+          <span className="truncate font-medium text-muted-foreground">
+            {truncated}
+          </span>
+        </button>
+      </DialogTrigger>
+      <DialogContent className="max-w-2xl">
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2">
+            <FileText className="w-5 h-5 text-primary" />
+            Problem Statement
+          </DialogTitle>
+        </DialogHeader>
+        <div className="mt-4 p-6 rounded-lg border-2 border-border bg-muted/30">
+          <div className="prose prose-sm dark:prose-invert max-w-none">
+            <MathRenderer
+              latex={problem}
+              displayMode={true}
+              className="text-base leading-relaxed"
+            />
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
 }
 
 export function ChatInterface({ className = "" }: ChatInterfaceProps) {
@@ -458,40 +517,44 @@ export function ChatInterface({ className = "" }: ChatInterfaceProps) {
 
   return (
     <div className={cn("space-y-4", className)}>
-      {/* Problem Display - NEW */}
-      <ProblemDisplay
-        uploadedImage={currentSession.uploadedImage}
-        extractedProblem={currentSession.extractedProblem}
-        defaultCollapsed={messages.length > 2}
-      />
-
       {/* Chat Interface Card */}
       <Card className="flex flex-col border-2 shadow-lg animate-in fade-in duration-500">
-        {/* Header with Mode Toggle */}
+        {/* Header with Inline Problem Display */}
         <div className="flex flex-col gap-3 p-5 border-b-2 border-border flex-shrink-0 bg-muted/30">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="relative w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3 flex-1 min-w-0">
+              <div className="relative w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
                 <Bot className="w-6 h-6 text-primary" aria-hidden="true" />
                 <Sparkles className="w-3 h-3 text-yellow-500 absolute -top-1 -right-1 animate-pulse" />
               </div>
-              <div>
+              <div className="flex-shrink-0">
                 <h2 className="font-semibold text-base">AI Tutor Chat</h2>
                 <span className="text-xs text-muted-foreground">
                   {messages.length > 0 && `${messages.length} ${messages.length === 1 ? 'message' : 'messages'}`}
                 </span>
               </div>
+
+              {/* Inline Problem Display - in the header whitespace */}
+              <div className="hidden lg:flex flex-1 justify-center min-w-0">
+                <InlineProblemDisplay problem={currentSession?.extractedProblem} />
+              </div>
             </div>
+
             <Button
               size="sm"
               variant="ghost"
               onClick={handleClearConversation}
-              className="text-destructive hover:text-destructive hover:bg-destructive/10 min-h-[44px] btn-press"
+              className="text-destructive hover:text-destructive hover:bg-destructive/10 min-h-[44px] btn-press flex-shrink-0"
               aria-label="Clear conversation"
             >
               <Trash2 className="w-4 h-4 sm:mr-2" aria-hidden="true" />
               <span className="hidden sm:inline">Clear</span>
             </Button>
+          </div>
+
+          {/* Mobile Problem Display - below header on small screens */}
+          <div className="lg:hidden flex justify-center">
+            <InlineProblemDisplay problem={currentSession?.extractedProblem} />
           </div>
 
           {/* Inline Mode Toggle */}

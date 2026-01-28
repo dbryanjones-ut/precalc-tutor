@@ -97,8 +97,32 @@ export const useAITutorStore = create<AITutorStore>((set, get) => ({
         throw new Error("Failed to get response from AI tutor");
       }
 
+      console.log("\n=== FRONTEND DEBUG: STEP 1 - API RESPONSE RECEIVED ===");
       const responseData = await response.json();
+      console.log("Raw API response:", responseData);
+
       const data = responseData.data; // API wraps response in { data: {...} }
+      console.log("Data object:", {
+        contentLength: data.content?.length,
+        latexCount: data.latex?.length,
+        citationsCount: data.citations?.length,
+      });
+
+      console.log("\n=== FRONTEND DEBUG: STEP 2 - CONTENT RECEIVED ===");
+      console.log("Content preview (first 500 chars):", data.content?.substring(0, 500));
+      console.log("LaTeX array:", data.latex);
+
+      // Check for issues in received content
+      const hasPlainDot = data.content?.match(/\$[^$]*?·[^$]*?\$/g);
+      const hasPlainPlusMinus = data.content?.match(/\$[^$]*?±[^$]*?\$/g);
+      const hasPlainPi = data.content?.match(/\$[^$]*?π[^$]*?\$/g);
+      const hasQuestionMarks = data.content?.match(/\$[^$]*?\?[^$]*?\$/g);
+
+      console.log("RECEIVED CONTENT ISSUES:");
+      console.log("  - Contains plain · (middle dot):", hasPlainDot ? hasPlainDot.length : 0);
+      console.log("  - Contains plain ± (plus-minus):", hasPlainPlusMinus ? hasPlainPlusMinus.length : 0);
+      console.log("  - Contains plain π (pi):", hasPlainPi ? hasPlainPi.length : 0);
+      console.log("  - Contains ? (placeholders):", hasQuestionMarks ? hasQuestionMarks.length : 0);
 
       const assistantMessage: ChatMessage = {
         role: "assistant",
@@ -107,6 +131,14 @@ export const useAITutorStore = create<AITutorStore>((set, get) => ({
         latex: data.latex,
         citations: data.citations,
       };
+
+      console.log("\n=== FRONTEND DEBUG: STEP 3 - MESSAGE OBJECT CREATED ===");
+      console.log("Assistant message:", {
+        contentLength: assistantMessage.content?.length,
+        latexCount: assistantMessage.latex?.length,
+        citationsCount: assistantMessage.citations?.length,
+      });
+      console.log("=== END FRONTEND DEBUG ===\n");
 
       const session = get().currentSession;
       if (session) {
