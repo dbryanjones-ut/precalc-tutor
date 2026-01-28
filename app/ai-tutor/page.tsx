@@ -4,8 +4,6 @@ import { useState, useEffect, useRef } from "react";
 import { Bot, Settings, History as HistoryIcon } from "lucide-react";
 import { ProblemUploader } from "@/components/ai-tutor/ProblemUploader";
 import { ChatInterface } from "@/components/ai-tutor/ChatInterface";
-import { ModeToggle } from "@/components/ai-tutor/ModeToggle";
-import { QuickActions } from "@/components/ai-tutor/QuickActions";
 import { SessionHistory } from "@/components/ai-tutor/SessionHistory";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { Button } from "@/components/ui/button";
@@ -141,33 +139,31 @@ export default function AITutorPage() {
 
             {/* Tutor Tab */}
             <TabsContent value="tutor" className="mt-0">
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                {/* Left Column - Problem Upload & Mode */}
-                <div className="space-y-6 lg:col-span-1">
+              {!currentSession ? (
+                // No session - show problem uploader prominently
+                <div className="max-w-2xl mx-auto">
                   <ErrorBoundary>
                     <ProblemUploader />
                   </ErrorBoundary>
-
-                  {currentSession && (
-                    <>
-                      <ErrorBoundary>
-                        <ModeToggle />
-                      </ErrorBoundary>
-
-                      <ErrorBoundary>
-                        <QuickActions />
-                      </ErrorBoundary>
-                    </>
-                  )}
                 </div>
+              ) : (
+                // Session active - show chat in full width with optional side panel
+                <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                  {/* Optional Side Panel - Problem Context */}
+                  <div className="lg:col-span-1 space-y-4">
+                    <ErrorBoundary>
+                      <ProblemUploader />
+                    </ErrorBoundary>
+                  </div>
 
-                {/* Right Column - Chat Interface */}
-                <div className="lg:col-span-2">
-                  <ErrorBoundary>
-                    <ChatInterface />
-                  </ErrorBoundary>
+                  {/* Main Chat Interface */}
+                  <div className="lg:col-span-3">
+                    <ErrorBoundary>
+                      <ChatInterface />
+                    </ErrorBoundary>
+                  </div>
                 </div>
-              </div>
+              )}
             </TabsContent>
 
             {/* History Tab */}

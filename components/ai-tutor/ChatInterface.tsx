@@ -1,14 +1,14 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Send, Loader2, Copy, Check, Trash2, User, Bot, Sparkles } from "lucide-react";
+import { Send, Loader2, Copy, Check, Trash2, User, Bot, Sparkles, Lightbulb, ListOrdered, BookOpen, Zap, Eye, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { MathRenderer } from "@/components/math/MathRenderer";
 import { AIThinkingLoader } from "@/components/ui/loading-message";
 import { EmptyState } from "@/components/ui/empty-state";
 import { useAITutorStore } from "@/stores/useAITutorStore";
-import type { ChatMessage, Citation } from "@/types";
+import type { ChatMessage, Citation, TutoringMode } from "@/types";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
@@ -22,7 +22,7 @@ export function ChatInterface({ className = "" }: ChatInterfaceProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
-  const { currentSession, isLoading, sendMessage, endSession } = useAITutorStore();
+  const { currentSession, isLoading, sendMessage, endSession, mode, setMode } = useAITutorStore();
 
   const messages = currentSession?.messages || [];
 
@@ -80,6 +80,99 @@ export function ChatInterface({ className = "" }: ChatInterfaceProps) {
       toast.success("Conversation cleared");
     }
   };
+
+  const handleQuickAction = async (prompt: string) => {
+    if (!currentSession) {
+      toast.error("Please start a session first");
+      return;
+    }
+
+    try {
+      await sendMessage(prompt);
+    } catch (error) {
+      toast.error("Failed to send quick action");
+    }
+  };
+
+  const handleModeChange = (newMode: TutoringMode) => {
+    setMode(newMode);
+    toast.success(`Switched to ${newMode === "socratic" ? "Socratic" : "Explanation"} mode`, {
+      duration: 2000,
+    });
+  };
+
+  // Quick action definitions based on mode
+  const socraticActions = [
+    {
+      icon: Lightbulb,
+      label: "Give me a hint",
+      prompt: "Can you give me a hint to help me get started?",
+      color: "text-yellow-500",
+      bgColor: "bg-yellow-500/10 hover:bg-yellow-500/20",
+      borderColor: "border-yellow-500/20",
+    },
+    {
+      icon: ListOrdered,
+      label: "What's the first step?",
+      prompt: "What should be the first step to solve this problem?",
+      color: "text-blue-500",
+      bgColor: "bg-blue-500/10 hover:bg-blue-500/20",
+      borderColor: "border-blue-500/20",
+    },
+    {
+      icon: BookOpen,
+      label: "Explain this term",
+      prompt: "Can you explain any mathematical terms or concepts I need to understand?",
+      color: "text-purple-500",
+      bgColor: "bg-purple-500/10 hover:bg-purple-500/20",
+      borderColor: "border-purple-500/20",
+    },
+    {
+      icon: Zap,
+      label: "Common mistakes",
+      prompt: "What are common mistakes students make with this type of problem?",
+      color: "text-red-500",
+      bgColor: "bg-red-500/10 hover:bg-red-500/20",
+      borderColor: "border-red-500/20",
+    },
+  ];
+
+  const explanationActions = [
+    {
+      icon: ListOrdered,
+      label: "Show steps",
+      prompt: "Please show me the complete step-by-step solution.",
+      color: "text-blue-500",
+      bgColor: "bg-blue-500/10 hover:bg-blue-500/20",
+      borderColor: "border-blue-500/20",
+    },
+    {
+      icon: Eye,
+      label: "Show step 1",
+      prompt: "Show me just the first step of the solution.",
+      color: "text-green-500",
+      bgColor: "bg-green-500/10 hover:bg-green-500/20",
+      borderColor: "border-green-500/20",
+    },
+    {
+      icon: BookOpen,
+      label: "Explain concept",
+      prompt: "Explain the key mathematical concepts needed for this problem.",
+      color: "text-purple-500",
+      bgColor: "bg-purple-500/10 hover:bg-purple-500/20",
+      borderColor: "border-purple-500/20",
+    },
+    {
+      icon: Zap,
+      label: "Similar example",
+      prompt: "Can you show me a similar example problem?",
+      color: "text-orange-500",
+      bgColor: "bg-orange-500/10 hover:bg-orange-500/20",
+      borderColor: "border-orange-500/20",
+    },
+  ];
+
+  const quickActions = mode === "socratic" ? socraticActions : explanationActions;
 
   const renderCitation = (citation: Citation, index: number) => {
     const typeColors = {
@@ -237,30 +330,69 @@ export function ChatInterface({ className = "" }: ChatInterfaceProps) {
 
   return (
     <Card className={cn(className, "flex flex-col border-2 shadow-lg animate-in fade-in duration-500")}>
-      {/* Header */}
-      <div className="flex items-center justify-between p-5 border-b-2 border-border flex-shrink-0 bg-muted/30">
-        <div className="flex items-center gap-3">
-          <div className="relative w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-            <Bot className="w-6 h-6 text-primary" aria-hidden="true" />
-            <Sparkles className="w-3 h-3 text-yellow-500 absolute -top-1 -right-1 animate-pulse" />
+      {/* Header with Mode Toggle */}
+      <div className="flex flex-col gap-3 p-5 border-b-2 border-border flex-shrink-0 bg-muted/30">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="relative w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+              <Bot className="w-6 h-6 text-primary" aria-hidden="true" />
+              <Sparkles className="w-3 h-3 text-yellow-500 absolute -top-1 -right-1 animate-pulse" />
+            </div>
+            <div>
+              <h2 className="font-semibold text-base">AI Tutor Chat</h2>
+              <span className="text-xs text-muted-foreground">
+                {messages.length > 0 && `${messages.length} ${messages.length === 1 ? 'message' : 'messages'}`}
+              </span>
+            </div>
           </div>
-          <div>
-            <h2 className="font-semibold text-base">AI Tutor Chat</h2>
-            <span className="text-xs text-muted-foreground px-2 py-0.5 bg-muted rounded-full" aria-label={`Current mode: ${currentSession.mode === "socratic" ? "Socratic" : "Explanation"}`}>
-              {currentSession.mode === "socratic" ? "Socratic" : "Explanation"} mode
-            </span>
+          <Button
+            size="sm"
+            variant="ghost"
+            onClick={handleClearConversation}
+            className="text-destructive hover:text-destructive hover:bg-destructive/10 min-h-[44px] btn-press"
+            aria-label="Clear conversation"
+          >
+            <Trash2 className="w-4 h-4 sm:mr-2" aria-hidden="true" />
+            <span className="hidden sm:inline">Clear</span>
+          </Button>
+        </div>
+
+        {/* Inline Mode Toggle */}
+        <div className="flex items-center justify-between gap-3 p-1 bg-background/60 rounded-lg border border-border/50">
+          <span className="text-xs font-medium text-muted-foreground pl-2 hidden sm:inline">Mode:</span>
+          <div className="flex gap-1 flex-1">
+            <button
+              type="button"
+              onClick={() => handleModeChange("socratic")}
+              className={cn(
+                "flex-1 px-3 py-2 rounded-md text-xs font-semibold transition-all duration-200 flex items-center justify-center gap-2 min-h-[40px]",
+                mode === "socratic"
+                  ? "bg-blue-500/20 text-blue-600 dark:text-blue-400 border-2 border-blue-500/30 shadow-sm"
+                  : "text-muted-foreground hover:bg-muted/50 border-2 border-transparent"
+              )}
+              aria-label="Socratic mode"
+              aria-pressed={mode === "socratic"}
+            >
+              <MessageSquare className="w-3.5 h-3.5" aria-hidden="true" />
+              <span>Socratic</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => handleModeChange("explanation")}
+              className={cn(
+                "flex-1 px-3 py-2 rounded-md text-xs font-semibold transition-all duration-200 flex items-center justify-center gap-2 min-h-[40px]",
+                mode === "explanation"
+                  ? "bg-purple-500/20 text-purple-600 dark:text-purple-400 border-2 border-purple-500/30 shadow-sm"
+                  : "text-muted-foreground hover:bg-muted/50 border-2 border-transparent"
+              )}
+              aria-label="Explanation mode"
+              aria-pressed={mode === "explanation"}
+            >
+              <BookOpen className="w-3.5 h-3.5" aria-hidden="true" />
+              <span>Explanation</span>
+            </button>
           </div>
         </div>
-        <Button
-          size="sm"
-          variant="ghost"
-          onClick={handleClearConversation}
-          className="text-destructive hover:text-destructive hover:bg-destructive/10 min-h-[44px] btn-press"
-          aria-label="Clear conversation"
-        >
-          <Trash2 className="w-4 h-4 mr-2" aria-hidden="true" />
-          Clear
-        </Button>
       </div>
 
       {/* Messages */}
@@ -279,26 +411,14 @@ export function ChatInterface({ className = "" }: ChatInterfaceProps) {
               <div>
                 <h3 className="text-xl font-semibold mb-3">Ready to help you learn!</h3>
                 <p className="text-base text-muted-foreground leading-relaxed">
-                  Ask me anything about the problem you've uploaded. I'll guide you through the
-                  solution step by step.
+                  {mode === "socratic"
+                    ? "I'll guide you through questions to help you discover the solution."
+                    : "I'll provide clear explanations and step-by-step solutions."
+                  }
                 </p>
               </div>
               <div className="text-sm text-muted-foreground space-y-2 pt-4 border-t p-4 bg-muted/50 rounded-lg">
-                <p className="font-medium">Try asking:</p>
-                <ul className="space-y-2 list-none text-left">
-                  <li className="flex items-start gap-2">
-                    <span className="mt-1">💡</span>
-                    <span>"Where should I start?"</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="mt-1">📐</span>
-                    <span>"What formula applies here?"</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="mt-1">🎯</span>
-                    <span>"Can you give me a hint?"</span>
-                  </li>
-                </ul>
+                <p className="font-medium">Or use a quick action below to get started!</p>
               </div>
             </div>
           </div>
@@ -323,8 +443,34 @@ export function ChatInterface({ className = "" }: ChatInterfaceProps) {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input */}
+      {/* Input with Quick Actions */}
       <div className="p-5 border-t-2 border-border flex-shrink-0 bg-background">
+        {/* Quick Actions - Above Input */}
+        <div className="mb-3 overflow-x-auto pb-2 -mx-1 px-1">
+          <div className="flex gap-2 min-w-min">
+            {quickActions.map((action, index) => {
+              const Icon = action.icon;
+              return (
+                <button
+                  key={index}
+                  onClick={() => handleQuickAction(action.prompt)}
+                  disabled={isLoading}
+                  className={cn(
+                    "flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium whitespace-nowrap transition-all duration-200 border min-h-[36px]",
+                    action.bgColor,
+                    action.borderColor,
+                    "disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 active:scale-95"
+                  )}
+                  aria-label={action.label}
+                >
+                  <Icon className={cn("w-3.5 h-3.5", action.color)} aria-hidden="true" />
+                  <span className="hidden sm:inline">{action.label}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -359,19 +505,15 @@ export function ChatInterface({ className = "" }: ChatInterfaceProps) {
               className="h-[52px] w-[52px] flex-shrink-0 rounded-xl btn-press hover:scale-105 transition-transform"
               aria-label="Send message"
             >
-              <Send className="w-5 h-5" aria-hidden="true" />
+              {isLoading ? (
+                <Loader2 className="w-5 h-5 animate-spin" aria-hidden="true" />
+              ) : (
+                <Send className="w-5 h-5" aria-hidden="true" />
+              )}
             </Button>
           </div>
-          <div id="chat-hint" className="flex items-center justify-between text-xs text-muted-foreground">
+          <div id="chat-hint" className="text-xs text-muted-foreground">
             <span>Press Enter to send, Shift+Enter for new line</span>
-            <span className="font-medium flex items-center gap-1" aria-live="polite">
-              {messages.length > 0 && (
-                <>
-                  <Sparkles className="w-3 h-3" />
-                  {messages.length} {messages.length === 1 ? 'message' : 'messages'}
-                </>
-              )}
-            </span>
           </div>
         </form>
       </div>
