@@ -31,9 +31,13 @@ export class LaTeXPostProcessor {
    * This is the main entry point - applies all fixes in order
    */
   static processResponse(content: string): PostProcessResult {
-    let cleaned = content;
     const issues: LaTeXIssue[] = [];
     const initialContent = content;
+
+    // Protect code blocks from ALL pipeline steps so code examples
+    // (fenced ``` and inline `) are never modified.
+    const { protected: safeContent, restore } = this.protectCodeBlocks(content);
+    let cleaned = safeContent;
 
     // Step 1: Remove question marks from math expressions (CRITICAL FIX)
     const questionMarkResult = this.removeQuestionMarksFromMath(cleaned);
@@ -55,7 +59,10 @@ export class LaTeXPostProcessor {
     cleaned = displayResult.cleaned;
     issues.push(...displayResult.issues);
 
-    // Step 5: Final validation check
+    // Restore code blocks before final validation
+    cleaned = restore(cleaned);
+
+    // Step 5: Final validation check (already strips code blocks internally)
     const validationIssues = this.detectRemainingIssues(cleaned);
     issues.push(...validationIssues);
 
@@ -123,10 +130,45 @@ export class LaTeXPostProcessor {
   }
 
   /**
+   * Temporarily replace code blocks with placeholders so they are
+   * not touched by any Unicode or math-delimiter processing.
+   * Returns the modified string and a restore function.
+   */
+  private static protectCodeBlocks(content: string): { protected: string; restore: (s: string) => string } {
+    const placeholders: Array<{ placeholder: string; original: string }> = [];
+    let idx = 0;
+
+    // Replace fenced code blocks (``` ... ```) first, then inline code (` ... `)
+    let result = content.replace(/```[\s\S]*?```/g, (match) => {
+      const ph = `\x00CODEBLOCK_${idx++}\x00`;
+      placeholders.push({ placeholder: ph, original: match });
+      return ph;
+    });
+    result = result.replace(/`[^`]+`/g, (match) => {
+      const ph = `\x00CODEBLOCK_${idx++}\x00`;
+      placeholders.push({ placeholder: ph, original: match });
+      return ph;
+    });
+
+    const restore = (s: string): string => {
+      let restored = s;
+      for (const { placeholder, original } of placeholders) {
+        restored = restored.replace(placeholder, original);
+      }
+      return restored;
+    };
+
+    return { protected: result, restore };
+  }
+
+  /**
    * Replace Unicode symbols with LaTeX commands
-   * Handles both inside and outside math delimiters
+   * Handles both inside and outside math delimiters.
+   * Code blocks are protected via placeholder substitution so neither
+   * the inside-math nor outside-math passes can modify them.
    */
   private static replaceUnicodeSymbols(content: string): PostProcessResult {
+    // Code blocks are already protected at the pipeline level (processResponse)
     let cleaned = content;
     const issues: LaTeXIssue[] = [];
     let changesMade = false;
@@ -137,97 +179,23 @@ export class LaTeXPostProcessor {
       latex: string;
       name: string;
       insidePattern: RegExp;
-      outsidePattern: RegExp;
     }> = [
-      {
-        unicode: '·',
-        latex: '\\cdot',
-        name: 'middle dot',
-        insidePattern: /(\$[^$]*?)·([^$]*?\$)/g,
-        outsidePattern: /·/g,
-      },
-      {
-        unicode: '±',
-        latex: '\\pm',
-        name: 'plus-minus',
-        insidePattern: /(\$[^$]*?)±([^$]*?\$)/g,
-        outsidePattern: /±/g,
-      },
-      {
-        unicode: 'π',
-        latex: '\\pi',
-        name: 'pi',
-        insidePattern: /(\$[^$]*?)π([^$]*?\$)/g,
-        outsidePattern: /(?<!\$)π(?!\$)/g,
-      },
-      {
-        unicode: 'θ',
-        latex: '\\theta',
-        name: 'theta',
-        insidePattern: /(\$[^$]*?)θ([^$]*?\$)/g,
-        outsidePattern: /(?<!\$)θ(?!\$)/g,
-      },
-      {
-        unicode: 'α',
-        latex: '\\alpha',
-        name: 'alpha',
-        insidePattern: /(\$[^$]*?)α([^$]*?\$)/g,
-        outsidePattern: /(?<!\$)α(?!\$)/g,
-      },
-      {
-        unicode: 'β',
-        latex: '\\beta',
-        name: 'beta',
-        insidePattern: /(\$[^$]*?)β([^$]*?\$)/g,
-        outsidePattern: /(?<!\$)β(?!\$)/g,
-      },
-      {
-        unicode: '∞',
-        latex: '\\infty',
-        name: 'infinity',
-        insidePattern: /(\$[^$]*?)∞([^$]*?\$)/g,
-        outsidePattern: /(?<!\$)∞(?!\$)/g,
-      },
-      {
-        unicode: '≤',
-        latex: '\\leq',
-        name: 'less-than-or-equal',
-        insidePattern: /(\$[^$]*?)≤([^$]*?\$)/g,
-        outsidePattern: /(?<!\$)≤(?!\$)/g,
-      },
-      {
-        unicode: '≥',
-        latex: '\\geq',
-        name: 'greater-than-or-equal',
-        insidePattern: /(\$[^$]*?)≥([^$]*?\$)/g,
-        outsidePattern: /(?<!\$)≥(?!\$)/g,
-      },
-      {
-        unicode: '×',
-        latex: '\\times',
-        name: 'times',
-        insidePattern: /(\$[^$]*?)×([^$]*?\$)/g,
-        outsidePattern: /(?<!\$)×(?!\$)/g,
-      },
-      {
-        unicode: '÷',
-        latex: '\\div',
-        name: 'division',
-        insidePattern: /(\$[^$]*?)÷([^$]*?\$)/g,
-        outsidePattern: /(?<!\$)÷(?!\$)/g,
-      },
-      {
-        unicode: '≠',
-        latex: '\\neq',
-        name: 'not-equal',
-        insidePattern: /(\$[^$]*?)≠([^$]*?\$)/g,
-        outsidePattern: /(?<!\$)≠(?!\$)/g,
-      },
+      { unicode: '·', latex: '\\cdot', name: 'middle dot', insidePattern: /(\$[^$]*?)·([^$]*?\$)/g },
+      { unicode: '±', latex: '\\pm', name: 'plus-minus', insidePattern: /(\$[^$]*?)±([^$]*?\$)/g },
+      { unicode: 'π', latex: '\\pi', name: 'pi', insidePattern: /(\$[^$]*?)π([^$]*?\$)/g },
+      { unicode: 'θ', latex: '\\theta', name: 'theta', insidePattern: /(\$[^$]*?)θ([^$]*?\$)/g },
+      { unicode: 'α', latex: '\\alpha', name: 'alpha', insidePattern: /(\$[^$]*?)α([^$]*?\$)/g },
+      { unicode: 'β', latex: '\\beta', name: 'beta', insidePattern: /(\$[^$]*?)β([^$]*?\$)/g },
+      { unicode: '∞', latex: '\\infty', name: 'infinity', insidePattern: /(\$[^$]*?)∞([^$]*?\$)/g },
+      { unicode: '≤', latex: '\\leq', name: 'less-than-or-equal', insidePattern: /(\$[^$]*?)≤([^$]*?\$)/g },
+      { unicode: '≥', latex: '\\geq', name: 'greater-than-or-equal', insidePattern: /(\$[^$]*?)≥([^$]*?\$)/g },
+      { unicode: '×', latex: '\\times', name: 'times', insidePattern: /(\$[^$]*?)×([^$]*?\$)/g },
+      { unicode: '÷', latex: '\\div', name: 'division', insidePattern: /(\$[^$]*?)÷([^$]*?\$)/g },
+      { unicode: '≠', latex: '\\neq', name: 'not-equal', insidePattern: /(\$[^$]*?)≠([^$]*?\$)/g },
     ];
 
-    // Process each symbol type
+    // First pass: Replace inside math delimiters
     for (const symbol of symbolReplacements) {
-      // First: Replace inside math delimiters
       let iterationCount = 0;
       const maxIterations = 10;
 
@@ -245,21 +213,71 @@ export class LaTeXPostProcessor {
         });
         changesMade = true;
       }
+    }
 
-      // Second: Wrap standalone symbols with delimiters
-      if (symbol.outsidePattern.test(cleaned)) {
-        const beforeWrap = cleaned;
-        cleaned = cleaned.replace(symbol.outsidePattern, `$${symbol.latex}$`);
+    // Second pass: Wrap standalone symbols outside math delimiters.
+    // Split content into math vs non-math segments so mutations don't
+    // invalidate range indices (avoids stale-range bugs).
+    const allSymbolUnicodes = symbolReplacements.map(s => s.unicode);
+    const symbolMap = new Map(symbolReplacements.map(s => [s.unicode, s]));
 
-        if (cleaned !== beforeWrap) {
-          issues.push({
-            type: 'warning',
-            message: `Wrapped standalone ${symbol.name} symbol (${symbol.unicode}) with math delimiters`,
-          });
-          changesMade = true;
-        }
+    // Split on math delimiters, preserving them as segments
+    // Match $$...$$ first, then $...$
+    const segmentPattern = /(\$\$[\s\S]*?\$\$|\$[^$]+\$)/g;
+    const segments: Array<{ text: string; isMath: boolean }> = [];
+    let lastIndex = 0;
+
+    let segMatch;
+    while ((segMatch = segmentPattern.exec(cleaned)) !== null) {
+      if (segMatch.index > lastIndex) {
+        segments.push({ text: cleaned.slice(lastIndex, segMatch.index), isMath: false });
+      }
+      segments.push({ text: segMatch[0], isMath: true });
+      lastIndex = segMatch.index + segMatch[0].length;
+    }
+    if (lastIndex < cleaned.length) {
+      segments.push({ text: cleaned.slice(lastIndex), isMath: false });
+    }
+
+    // Only apply outside-pass replacements to non-math segments
+    const unicodePattern = new RegExp(`[${allSymbolUnicodes.join('')}]`, 'g');
+    for (let i = 0; i < segments.length; i++) {
+      if (segments[i].isMath) continue;
+
+      const original = segments[i].text;
+      const replaced = original.replace(unicodePattern, (match) => {
+        const sym = symbolMap.get(match);
+        if (!sym) return match;
+        return `$${sym.latex}$`;
+      });
+
+      if (replaced !== original) {
+        segments[i].text = replaced;
+        changesMade = true;
       }
     }
+
+    if (changesMade) {
+      // Collect which symbols were wrapped for issue reporting
+      const wrappedSymbols = new Set<string>();
+      for (const seg of segments) {
+        if (!seg.isMath) {
+          for (const sym of symbolReplacements) {
+            if (seg.text.includes(`$${sym.latex}$`)) {
+              wrappedSymbols.add(sym.name);
+            }
+          }
+        }
+      }
+      for (const name of wrappedSymbols) {
+        issues.push({
+          type: 'warning',
+          message: `Wrapped standalone ${name} symbol with math delimiters`,
+        });
+      }
+    }
+
+    cleaned = segments.map(s => s.text).join('');
 
     return { cleaned, issues, changed: changesMade };
   }
@@ -333,13 +351,20 @@ export class LaTeXPostProcessor {
   }
 
   /**
-   * Detect any remaining issues that couldn't be auto-fixed
+   * Detect any remaining issues that couldn't be auto-fixed.
+   * Code blocks are stripped before checking so that LaTeX examples
+   * inside code fences or inline code don't trigger false errors.
    */
   private static detectRemainingIssues(content: string): LaTeXIssue[] {
     const issues: LaTeXIssue[] = [];
 
+    // Strip code blocks so we only validate actual math content
+    const stripped = content
+      .replace(/```[\s\S]*?```/g, '')
+      .replace(/`[^`]+`/g, '');
+
     // Check for remaining question marks in math
-    const questionMarksInMath = content.match(/\$[^$]*?\?[^$]*?\$/g);
+    const questionMarksInMath = stripped.match(/\$[^$]*?\?[^$]*?\$/g);
     if (questionMarksInMath && questionMarksInMath.length > 0) {
       issues.push({
         type: 'error',
@@ -350,7 +375,7 @@ export class LaTeXPostProcessor {
 
     // Check for remaining Unicode symbols
     const unicodeSymbolsRegex = /\$[^$]*?[·±π≤≥×÷∞θαβ≠][^$]*?\$/g;
-    const remainingUnicode = content.match(unicodeSymbolsRegex);
+    const remainingUnicode = stripped.match(unicodeSymbolsRegex);
     if (remainingUnicode && remainingUnicode.length > 0) {
       issues.push({
         type: 'error',
@@ -360,14 +385,14 @@ export class LaTeXPostProcessor {
     }
 
     // Check for wrong delimiters
-    if (content.includes('\\(') || content.includes('\\)')) {
+    if (stripped.includes('\\(') || stripped.includes('\\)')) {
       issues.push({
         type: 'error',
         message: 'Still found \\( \\) delimiters after post-processing',
       });
     }
 
-    if (content.includes('\\[') || content.includes('\\]')) {
+    if (stripped.includes('\\[') || stripped.includes('\\]')) {
       issues.push({
         type: 'error',
         message: 'Still found \\[ \\] delimiters after post-processing',

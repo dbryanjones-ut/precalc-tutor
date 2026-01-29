@@ -210,12 +210,6 @@ export async function POST(request: NextRequest) {
       referenceMaterials: validatedData.context?.referenceMaterials as any,
     });
 
-    console.log("\n=== LATEX PIPELINE DEBUG: STEP 1 - PROMPT SENT TO AI ===");
-    console.log("System prompt length:", systemPrompt.length);
-    console.log("System prompt includes LaTeX rules:", systemPrompt.includes("LATEX FORMATTING"));
-    console.log("System prompt includes Unicode warning:", systemPrompt.includes("plain text Unicode symbols"));
-    console.log("System prompt includes placeholder warning:", systemPrompt.includes("NEVER use (?) in LaTeX"));
-
     // 5. Prepare messages for Claude API
     const userMessage = contextString
       ? `${contextString}\n\nStudent's Question: ${validatedData.message}`
@@ -266,84 +260,43 @@ export async function POST(request: NextRequest) {
       throw new InternalServerError("No response from AI");
     }
 
-    console.log("\n=== LATEX PIPELINE DEBUG: STEP 2 - RAW AI RESPONSE ===");
-    console.log("Response length:", assistantResponse.length);
-    console.log("Response preview (first 500 chars):", assistantResponse.substring(0, 500));
-
-    // Check for problematic patterns in raw response
-    const hasPlainDot = assistantResponse.match(/\$[^$]*?·[^$]*?\$/g);
-    const hasPlainPlusMinus = assistantResponse.match(/\$[^$]*?±[^$]*?\$/g);
-    const hasPlainPi = assistantResponse.match(/\$[^$]*?π[^$]*?\$/g);
-    const hasQuestionMarks = assistantResponse.match(/\$[^$]*?\?[^$]*?\$/g);
-
-    console.log("RAW RESPONSE ISSUES:");
-    console.log("  - Contains plain · (middle dot):", hasPlainDot ? hasPlainDot.length : 0, hasPlainDot ? hasPlainDot : "none");
-    console.log("  - Contains plain ± (plus-minus):", hasPlainPlusMinus ? hasPlainPlusMinus.length : 0, hasPlainPlusMinus ? hasPlainPlusMinus : "none");
-    console.log("  - Contains plain π (pi):", hasPlainPi ? hasPlainPi.length : 0, hasPlainPi ? hasPlainPi : "none");
-    console.log("  - Contains ? (placeholders):", hasQuestionMarks ? hasQuestionMarks.length : 0, hasQuestionMarks ? hasQuestionMarks : "none");
-
     // 7. Post-process LaTeX in the response
-    console.log("\n=== LATEX PIPELINE DEBUG: STEP 3 - POST-PROCESSING ===");
     const postProcessResult = LaTeXPostProcessor.processResponse(assistantResponse);
 
-    console.log("Post-processing changed content:", postProcessResult.changed);
-    console.log("Post-processing issues found:", postProcessResult.issues.length);
-    if (postProcessResult.issues.length > 0) {
-      console.log("Issues:", postProcessResult.issues);
-    }
-
     if (postProcessResult.changed) {
-      console.log("LaTeX Post-Processing Applied:", {
-        issuesFound: postProcessResult.issues.length,
-        report: LaTeXPostProcessor.generateReport(postProcessResult),
-      });
-
-      // Use the cleaned version
       assistantResponse = postProcessResult.cleaned;
-
-      console.log("Cleaned response preview (first 500 chars):", assistantResponse.substring(0, 500));
     }
 
     // 8. Extract LaTeX and citations
-    console.log("\n=== LATEX PIPELINE DEBUG: STEP 4 - EXTRACTION ===");
     const latex = extractLatex(assistantResponse);
     const citations = extractCitations(assistantResponse);
 
-    console.log("Extracted LaTeX expressions:", latex.length);
-    latex.forEach((expr, idx) => {
-      console.log(`  Expression ${idx + 1}:`, expr.substring(0, 100));
-      // Check for issues in extracted latex
-      const hasPlainSymbols = /[·±π≤≥×÷∞θα]/.test(expr);
-      const hasQuestionMark = expr.includes('?');
-      if (hasPlainSymbols) {
-        console.log(`    WARNING: Contains plain Unicode symbols!`);
-      }
-      if (hasQuestionMark) {
-        console.log(`    WARNING: Contains question mark!`);
-      }
-    });
-
     // 9. Validate LaTeX expressions
-    console.log("\n=== LATEX PIPELINE DEBUG: STEP 5 - VALIDATION ===");
     const latexValidationErrors: string[] = [];
     const latexValidationWarnings: string[] = [];
 
+    // Track per-expression validity for accuracy calculation
+    let validLatexCount = 0;
+
     for (const latexExpr of latex) {
-      // Validate with KaTeX
-      const validation = LatexValidator.validate(latexExpr);
-      if (!validation.valid) {
-        console.warn(`Invalid LaTeX in AI response: ${latexExpr}`, validation.errors);
-        latexValidationErrors.push(`LaTeX "${latexExpr.substring(0, 50)}...": ${validation.errors[0]}`);
+      const katexValidation = LatexValidator.validate(latexExpr);
+      const expressionIssues = LaTeXPostProcessor.validateExpression(latexExpr);
+      const hasErrors = expressionIssues.some(i => i.type === 'error');
+
+      if (!katexValidation.valid) {
+        latexValidationErrors.push(`LaTeX "${latexExpr.substring(0, 50)}...": ${katexValidation.errors[0]}`);
       }
 
-      // Check for problematic patterns
-      const expressionIssues = LaTeXPostProcessor.validateExpression(latexExpr);
       for (const issue of expressionIssues) {
         if (issue.type === 'error') {
           latexValidationErrors.push(issue.message);
         } else {
           latexValidationWarnings.push(issue.message);
         }
+      }
+
+      if (katexValidation.valid && !hasErrors) {
+        validLatexCount++;
       }
     }
 
@@ -356,15 +309,6 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    console.log("Validation errors:", latexValidationErrors.length);
-    console.log("Validation warnings:", latexValidationWarnings.length);
-    if (latexValidationErrors.length > 0) {
-      console.log("Errors:", latexValidationErrors);
-    }
-    if (latexValidationWarnings.length > 0) {
-      console.log("Warnings:", latexValidationWarnings);
-    }
-
     // 10. Validate AI response quality
     const validation = await AIResponseValidator.validate({
       content: assistantResponse,
@@ -372,36 +316,12 @@ export async function POST(request: NextRequest) {
       citations,
     });
 
-    // Log validation issues
-    if (!validation.valid || validation.requiresHumanReview || latexValidationErrors.length > 0) {
-      console.warn("AI Response Validation Issues:", {
-        valid: validation.valid,
-        requiresHumanReview: validation.requiresHumanReview,
-        errors: validation.errors,
-        warnings: validation.warnings,
-        latexErrors: latexValidationErrors,
-        latexWarnings: latexValidationWarnings,
-        confidence: validation.confidence,
-        riskLevel: validation.riskLevel,
-      });
-    }
-
-    // 11. Calculate LaTeX accuracy
-    const totalLatexExpressions = latex.length;
-    const validLatexExpressions = latex.filter(expr => {
-      const val = LatexValidator.validate(expr);
-      const issues = LaTeXPostProcessor.validateExpression(expr);
-      return val.valid && issues.filter(i => i.type === 'error').length === 0;
-    }).length;
-
-    const latexAccuracy = totalLatexExpressions > 0
-      ? (validLatexExpressions / totalLatexExpressions) * 100
+    // 11. Calculate LaTeX accuracy (using cached results from validation loop)
+    const latexAccuracy = latex.length > 0
+      ? (validLatexCount / latex.length) * 100
       : 100;
 
-    console.log(`\nLaTeX Accuracy: ${latexAccuracy.toFixed(1)}% (${validLatexExpressions}/${totalLatexExpressions} valid)`);
-
     // 12. Prepare response data
-    console.log("\n=== LATEX PIPELINE DEBUG: STEP 6 - FINAL DATA SENT TO FRONTEND ===");
     const responseData = {
       content: assistantResponse,
       latex,
@@ -416,10 +336,6 @@ export async function POST(request: NextRequest) {
         postProcessingApplied: postProcessResult.changed,
       },
     };
-
-    console.log("Final content preview (first 500 chars):", responseData.content.substring(0, 500));
-    console.log("Final latex array:", responseData.latex.map(l => l.substring(0, 50)));
-    console.log("=== END LATEX PIPELINE DEBUG ===\n");
 
     // 12. Return response
     return NextResponse.json(

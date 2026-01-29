@@ -142,38 +142,51 @@ export class StreamHandler {
   /**
    * Extract LaTeX expressions from buffer
    * UPDATED: Only use $ and $$ delimiters (consistent with prompts)
+   * Scans the full buffer each time using a Set for O(1) dedup.
+   * AI responses are bounded in length so full-buffer regex is acceptable.
    */
   private extractLatexFromBuffer(): void {
-    // Clear existing latex to re-extract from full buffer
-    const extractedLatex: string[] = [];
+    const seen = new Set(this.latex);
+    const result: string[] = [...this.latex];
+    let match;
 
     // Pattern 1: Display math $$...$$
-    const displayPattern = /\$\$((?:(?!\$\$).)+)\$\$/gs;
-    let match;
+    const displayPattern = /\$\$((?:(?!\$\$)[\s\S])+)\$\$/g;
 
     while ((match = displayPattern.exec(this.buffer)) !== null) {
       if (match[1]) {
         const latexExpr = match[1].trim();
-        if (!extractedLatex.includes(latexExpr)) {
-          extractedLatex.push(latexExpr);
+        if (!seen.has(latexExpr)) {
+          seen.add(latexExpr);
+          result.push(latexExpr);
         }
       }
     }
 
     // Pattern 2: Inline math $...$
-    // But NOT if it's part of $$...$$
-    const inlinePattern = /(?<!\$)\$(?!\$)((?:(?!\$).)+)\$(?!\$)/gs;
+    // Avoid matching $$ by checking surrounding characters (compatible with older browsers)
+    // Use [^$] to prevent spanning across multiple $...$ segments
+    const inlinePattern = /\$([^$]+)\$/g;
 
     while ((match = inlinePattern.exec(this.buffer)) !== null) {
       if (match[1]) {
+        const idx = match.index;
+        // Skip if part of $$...$$ (check char before and after)
+        if (
+          (idx > 0 && this.buffer[idx - 1] === '$') ||
+          (idx + match[0].length < this.buffer.length && this.buffer[idx + match[0].length] === '$')
+        ) {
+          continue;
+        }
         const latexExpr = match[1].trim();
-        if (!extractedLatex.includes(latexExpr)) {
-          extractedLatex.push(latexExpr);
+        if (!seen.has(latexExpr)) {
+          seen.add(latexExpr);
+          result.push(latexExpr);
         }
       }
     }
 
-    this.latex = extractedLatex;
+    this.latex = result;
   }
 
   /**
